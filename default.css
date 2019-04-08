@@ -1,0 +1,118 @@
+#top, #bottom, #left, #right {
+	background: #00ff88;
+	position: fixed;
+	}
+	#left, #right {
+		top: 0; bottom: 0;
+		width: 0px;
+		}
+		#left { left: 0; }
+		#right { right: 0; }
+		
+	#top, #bottom {
+		left: 0; right: 0;
+		height: 0px;
+		}
+		#top { top: 0; }
+		#bottom { bottom: 0; }
+
+
+
+a { color: #aaaaaa; }
+
+a:hover { 
+	color: #00ff88 !important;
+ 	text-decoration: none;	
+}
+
+::selection {
+  background: #00ff88; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #00ff88; /* Gecko Browsers */
+}
+
+::-webkit-scrollbar
+{
+  width: 5px;  /* for vertical scrollbars */
+  height: 5px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: #000;
+}
+
+.container {
+	width: 50%;
+	margin-top: 11%;
+	margin-bottom: 5%;
+	overflow: auto;
+}
+
+@media only screen and (max-width: 479px){
+    .container { width: 90%; }
+    .logo {
+	margin-top: 10%;
+	margin-left: 40%;
+	margin-bottom: 10%;
+	}
+	h3{
+		text-align: center;
+	}
+}
+
+img {
+	margin-top: 10%;
+	margin-left: 11%;
+}
+
+body {
+	font-family: 'CMUSerifRoman';
+	font-size: 20px; 
+	color: white;
+	line-height: 2em;
+	background-color: black;
+}
+
+h1{
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 30px; 
+	line-height: 1.em;
+}
+
+h3{
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-size: 14px; 
+	font-weight: bold;
+}
+
+h4{
+	font-style: italic; 
+	font-weight: italic; 
+}
+
+
+p{
+	text-align: left;
+}
+
+table, th, td {
+	border: solid black 1px;
+	border-collapse: collapse;
+	text-align: left;
+	padding: 10px;
+}
+
+.menuItem {
+	color: black !important;
+	line-height: 2em;
+}
+
+
