@@ -18,11 +18,16 @@
 
 
 
-a { color: #aaaaaa; }
+a { 
+	color: white;
+	text-decoration: none;
+    border-bottom: 3px solid white;
+}
 
 a:hover { 
-	color: #00ff88 !important;
- 	text-decoration: none;	
+ 	color: white;
+	text-decoration: none;
+    border-bottom: 3px solid #00ff88;	
 }
 
 ::selection {
@@ -49,8 +54,8 @@ a:hover {
 }
 
 .container {
-	width: 95%;
-	margin-top: 10%;
+	width: 93%;
+	margin-top: 5%;
 	margin-bottom: 5%;
 	overflow: auto;
 }
@@ -84,7 +89,7 @@ h1{
 	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	font-size: 60px; 
-	line-height: 1.5em;
+	line-height: 1.4em;
 }
 
 h3{
