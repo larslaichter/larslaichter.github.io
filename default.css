@@ -114,6 +114,8 @@ img {
 
 #topMenuItem{
 	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 18px;
 	color: white;
 	text-decoration: none;
 }
