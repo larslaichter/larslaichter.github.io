@@ -72,15 +72,41 @@ a:hover {
 
 .container {
 	width: 93%;
-	margin-top: 5%;
-	margin-bottom: 5%;
-	overflow: auto;
 }
 
 .navbar {
-  max-height: 80px;
-  background-color: black;
-  border: none;
+	margin-top: 5%;
+	max-height: 80px;
+	background-color: black;
+	border: none;
+}
+
+.navbar-toggle {
+	background-color: black;
+	border-color: black !important;
+}
+
+.navbar-toggle:hover {
+	background-color: black !important;;
+	border-color: black !important;
+	border-radius: 0px;
+}
+
+.navbar-collapse {
+	text-align: center;
+	background-color: black;
+}
+
+.icon-bar {
+	background-color: white !important;
+    border-radius: 0px !important;
+}
+
+.mainContent{
+	margin-top: 5%;
+	margin-bottom: 5%;
+	vertical-align: center;
+	overflow: auto;
 }
 
 @media only screen and (max-width: 479px){
@@ -93,11 +119,6 @@ a:hover {
 	h3{
 		text-align: center;
 	}
-}
-
-img {
-	margin-top: 5%;
-	margin-left: 5%;
 }
 
 .menuItem { 
@@ -118,11 +139,35 @@ img {
 	font-size: 18px;
 	color: white;
 	text-decoration: none;
+	padding-bottom: 5px;
+    padding-left: 5px; 
+    padding-right: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 #topMenuItem:hover { 
  	color: white;
 	text-decoration: none;
-    border-bottom: 2px solid white;	
+    border-bottom: 1px solid  #00ff88;	
+    padding-bottom: 5px;
+    padding-left: 5px; 
+    padding-right: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+@media only screen and (max-width: 768px){
+    .navbar-default .navbar-collapse { 
+    	border: 3px solid white; 
+    }
+    #topMenuItem{
+    	font-size: 30px;
+    	padding-bottom: 20px;
+    	padding-top: 20px;
+    }
+    #topMenuItem:hover{
+    	border-bottom: 0px solid #00ff88;
+    }
 }
 
