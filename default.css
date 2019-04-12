@@ -76,7 +76,7 @@ a:hover {
 
 .navbar {
 	margin-top: 5%;
-	max-height: 80px;
+	max-height: 10%;
 	background-color: black;
 	border: none;
 }
@@ -103,7 +103,7 @@ a:hover {
 }
 
 .mainContent{
-	margin-top: 5%;
+	margin-top: 8%;
 	margin-bottom: 5%;
 	vertical-align: center;
 	overflow: auto;
