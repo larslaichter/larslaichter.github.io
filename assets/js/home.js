@@ -1,3 +1,5 @@
+console.log("connected!!!")
+
 window.alert("YES!");
 
 $("menuItem").hover(function(event){
