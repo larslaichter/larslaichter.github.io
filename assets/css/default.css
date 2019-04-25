@@ -113,10 +113,82 @@ a:hover {
 .portfolio-cell {
 	background-color: black !important;
     border: none !important;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.portfolio-cell:hover {
+	transform: translate(-2px, -5px);
 }
 
 #portfolio-grid {
 	margin: 2%;
+}
+
+#research-grid {
+	margin: 2%;
+}
+
+#about-grid {
+	margin: 2%;
+}
+
+.research-cell {
+	background-color: black !important;
+    border: 3px solid white;
+    padding: 1.5vw;
+    min-height: 50vh;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.research-cell:hover {
+	transform: translate(-2px, -5px);
+	box-shadow: 2px 3px white;
+}
+
+.paper-title {
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-size: 25px; 
+	font-weight: bold;
+	text-align: left;
+	line-height: 1.5em;
+}
+
+.research-date {
+	position: absolute;
+  	bottom: 40px;
+}
+
+.about-cell {
+	background-color: black !important;
+    border: none;
+    padding: 1.5vw;
+    min-height: 50vh;
+    position: relative;
+}
+
+.btn-primary {
+	border: 2px solid white;
+	background-color: black;
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-size: 20px; 
+	font-weight: bold;
+	 transition: transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+	border: 2px solid #00ff88;
+	background-color: black;
+	transform: translate(-1px, -2px);
+	box-shadow: 1px 1px #00ff88;
+}
+
+.btn-primary:focus{
+	background-color: black;
+	border: 2px solid white;
 }
 
 @media only screen and (max-width: 479px){
