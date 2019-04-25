@@ -43,7 +43,7 @@ a {
 }
 
 a:hover { 
- 	color: white;
+ 	color: #00ff88;
 	text-decoration: none;
 }
 
@@ -70,7 +70,7 @@ a:hover {
   background: #000;
 }
 
-.container {
+.navbar-container{
 	width: 93%;
 }
 
@@ -103,10 +103,20 @@ a:hover {
 }
 
 .mainContent{
+	width: 93%;
 	margin-top: 14vh;
 	margin-bottom: 5%;
 	vertical-align: center;
 	overflow: auto;
+}
+
+.portfolio-cell {
+	background-color: black !important;
+    border: none !important;
+}
+
+#portfolio-grid {
+	margin: 2%;
 }
 
 @media only screen and (max-width: 479px){

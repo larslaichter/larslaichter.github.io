@@ -10,39 +10,56 @@
 
   <link href="assets/css/default.css" rel="stylesheet" type="text/css" />
 
-  <script type="text/javascript" href="assets/js/lib/jquery/jquery-3.4.0.min.js"></script>
-
-  
-
+  <script type="text/javascript" href="assets/js/lib/jquery/jquery-3.4.0.min.js"></script> 
 </head>
 <body>
   
   <nav class="navbar navbar-default">
-         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-  
-                <a class="navbar-brand" class="logo" href="index.html"><img src="assets/img/logo.png" width="22.88px" /></a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-              <ul class="nav navbar-nav navbar-right">
-          <li><a id="topMenuItem" href="about.html">About</a></li>
-          <li><a id="topMenuItem" href="research.html">Research</a></li>
-          <li><a id="topMenuItem" href="portfolio.html">Portfolio</a></li>
-              </ul>
-            </div>
-        </div>
-    </nav>   
-  
+       <div class="container navbar-container">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
 
+              <a class="navbar-brand" class="logo" href="index.html"><img src="assets/img/logo.png" width="22.88px" /></a>
+          </div>
+          <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+        <li><a id="topMenuItem" href="about.html">About</a></li>
+        <li><a id="topMenuItem" href="research.html">Research</a></li>
+        <li><a id="topMenuItem" href="portfolio.html">Portfolio</a></li>
+            </ul>
+          </div>
+      </div>
+  </nav>   
+  
   <div class="container mainContent">
     <h1>Research</h1>
+    <p>⟵<i><a href="index.html" id="plainLink"> return to homepage</a></i></p>
   </div>
+
+
+  <div class="row text-center flex-wrap" id="portfolio-grid">
+    <div class="col-md-4 col-sm-6">
+        <div class="thumbnail portfolio-cell">
+           <img src="assets/img/portfolio/utopia.gif">
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="thumbnail portfolio-cell">
+           <img src="assets/img/portfolio/noema.png">
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="thumbnail portfolio-cell">
+           <img src="assets/img/portfolio/speakers.gif">
+        </div>
+    </div>
+  </div>
+
 
    </div><!-- /.container -->
         <footer class="footer">
