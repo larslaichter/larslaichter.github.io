@@ -239,7 +239,7 @@ a:hover {
     margin-right: 10px;
 }
 
-@media only screen and (max-width: 768px){
+@media only screen and (max-width: 767px){
     .navbar-default .navbar-collapse { 
     	border: 3px solid white; 
     }
