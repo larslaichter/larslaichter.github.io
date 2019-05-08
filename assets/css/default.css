@@ -240,14 +240,13 @@ a:hover {
     	border-bottom: 0px solid #00ff88;
     }
     .mainContent{
-    	margin-top: 5vh;
+    	margin-top: 9vh;
     }
     h1{
 		font-size: 30px; 
 		line-height: 1.4em;
 	}
 }
-
 
 @media only screen and (max-width: 479px){
     .container { width: 90%; }
