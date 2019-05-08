@@ -227,18 +227,6 @@ a:hover {
     margin-right: 10px;
 }
 
-@media only screen and (max-width: 479px){
-    .container { width: 90%; }
-    .logo {
-	margin-top: 10%;
-	margin-left: 40%;
-	margin-bottom: 10%;
-	}
-	h3{
-		text-align: center;
-	}
-}
-
 @media only screen and (max-width: 767px){
     .navbar-default .navbar-collapse { 
     	border: 3px solid white; 
@@ -255,8 +243,29 @@ a:hover {
     	margin-top: 5vh;
     }
     h1{
+		font-size: 30px; 
+		line-height: 1.4em;
+	}
+}
+
+
+@media only screen and (max-width: 479px){
+    .container { width: 90%; }
+    .logo {
+	margin-top: 10%;
+	margin-left: 40%;
+	margin-bottom: 10%;
+	}
+	h3{
+		text-align: center;
+	}
+	.mainContent{
+    	margin-top: 5vh;
+    }
+    h1{
 		font-size: 26px; 
 		line-height: 1.35em;
 	}
 }
+
 
