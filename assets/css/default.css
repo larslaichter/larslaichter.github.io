@@ -191,18 +191,6 @@ a:hover {
 	border: 2px solid white;
 }
 
-@media only screen and (max-width: 479px){
-    .container { width: 90%; }
-    .logo {
-	margin-top: 10%;
-	margin-left: 40%;
-	margin-bottom: 10%;
-	}
-	h3{
-		text-align: center;
-	}
-}
-
 .menuItem { 
 	color: white;
 	text-decoration: none;
@@ -239,6 +227,18 @@ a:hover {
     margin-right: 10px;
 }
 
+@media only screen and (max-width: 479px){
+    .container { width: 90%; }
+    .logo {
+	margin-top: 10%;
+	margin-left: 40%;
+	margin-bottom: 10%;
+	}
+	h3{
+		text-align: center;
+	}
+}
+
 @media only screen and (max-width: 767px){
     .navbar-default .navbar-collapse { 
     	border: 3px solid white; 
@@ -251,5 +251,9 @@ a:hover {
     #topMenuItem:hover{
     	border-bottom: 0px solid #00ff88;
     }
+    h1{
+		font-size: 30px; 
+		line-height: 1.4em;
+	}
 }
 
