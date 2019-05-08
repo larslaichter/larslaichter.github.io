@@ -240,10 +240,10 @@ a:hover {
     	border-bottom: 0px solid #00ff88;
     }
     .mainContent{
-    	margin-top: 9vh;
+    	margin-top: 10vh;
     }
     h1{
-		font-size: 30px; 
+		font-size: 40px; 
 		line-height: 1.4em;
 	}
 }
@@ -262,7 +262,7 @@ a:hover {
     	margin-top: 5vh;
     }
     h1{
-		font-size: 26px; 
+		font-size: 25px; 
 		line-height: 1.35em;
 	}
 }
