@@ -251,6 +251,9 @@ a:hover {
     #topMenuItem:hover{
     	border-bottom: 0px solid #00ff88;
     }
+    .mainContent{
+    	margin-top: 5vh;
+    }
     h1{
 		font-size: 26px; 
 		line-height: 1.25em;
