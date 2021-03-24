@@ -17,9 +17,9 @@ $(".menuItem#face").hover(function(){
   	});
 });
 
-$(".menuItem#topic").hover(function(){
+$(".menuItem#vera").hover(function(){
   $("body").css({
-  		"background-image": "url('assets/img/brain.jpg')",
+  		"background-image": "url('assets/img/vera.jpg')",
   		"background-repeat": "no-repeat",
   		"background-attachment": "fixed",
   		"background-position": "center",
@@ -33,9 +33,9 @@ $(".menuItem#topic").hover(function(){
   	});
 });
 
-$(".menuItem#event").hover(function(){
+$(".menuItem#house").hover(function(){
   $("body").css({
-  		"background-image": "url('assets/img/event.jpg')",
+  		"background-image": "url('assets/img/house.jpg')",
   		"background-repeat": "no-repeat",
   		"background-attachment": "fixed",
   		"background-position": "center",
