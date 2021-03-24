@@ -7,7 +7,7 @@ $(".menuItem#face").hover(function(){
   		"background-repeat": "no-repeat",
   		"background-attachment": "fixed",
   		"background-position": "center",
-  		"background-size": "65%",
+  		"background-size": "35%",
   		"background-opacity": "65%",
   	});
   }, function(){
@@ -23,7 +23,7 @@ $(".menuItem#vera").hover(function(){
   		"background-repeat": "no-repeat",
   		"background-attachment": "fixed",
   		"background-position": "center",
-  		"background-size": "65%",
+  		"background-size": "45%",
   		"background-opacity": "65%",
   	});
   }, function(){
@@ -39,7 +39,7 @@ $(".menuItem#house").hover(function(){
   		"background-repeat": "no-repeat",
   		"background-attachment": "fixed",
   		"background-position": "center",
-  		"background-size": "65%",
+  		"background-size": "35%",
   		"background-opacity": "65%",
   	});
   }, function(){
