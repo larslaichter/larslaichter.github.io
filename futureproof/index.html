@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Future Proof — develop and test ideas that survive</title>
+  <title>Future Proof — Ideas That Survive</title>
   <meta name="description" content="A network of artists, scholars and technologists that tinker with ideas that will survive and scale.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -16,10 +16,12 @@
     }
 
     :root {
-      --black: #000;
-      --white: #fff;
-      --gray-90: #1a1a1a;
-      --gray-80: #2a2a2a;
+      --black: #0a0a0a;
+      --white: #f5f5f5;
+      --accent: #00ff88;
+      --accent-dim: rgba(0, 255, 136, 0.15);
+      --gray: #666;
+      --dark-gray: #1a1a1a;
     }
 
     html {
@@ -27,14 +29,22 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--black);
       color: var(--white);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* Password Gate */
+    ::selection {
+      background: var(--accent);
+      color: var(--black);
+    }
+
+    /* ═══════════════════════════════════════════
+       PASSWORD GATE
+    ═══════════════════════════════════════════ */
     #gate {
       position: fixed;
       inset: 0;
@@ -43,7 +53,8 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      transition: opacity 0.5s, visibility 0.5s;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                  visibility 0.8s;
     }
 
     #gate.hidden {
@@ -52,42 +63,112 @@
       pointer-events: none;
     }
 
-    #gate form {
-      text-align: center;
+    #gate::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, var(--accent-dim) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 100, 100, 0.1) 0%, transparent 50%);
+      animation: bgPulse 8s ease-in-out infinite;
     }
 
-    #gate .logo {
-      font-size: 20vw;
-      font-weight: 200;
-      color: rgba(255,255,255,0.1);
+    @keyframes bgPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .gate-content {
+      position: relative;
+      text-align: center;
+      z-index: 1;
+    }
+
+    .gate-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(4rem, 20vw, 12rem);
+      font-weight: 700;
       letter-spacing: -0.05em;
       line-height: 1;
       margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .gate-logo .main {
+      display: block;
+      background: linear-gradient(135deg, var(--white) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gate-logo .glitch {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      color: var(--accent);
+      animation: glitch 3s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% { 
+        opacity: 0;
+        transform: translate(0);
+      }
+      92% { 
+        opacity: 0.8;
+        transform: translate(-2px, 2px);
+      }
+      94% { 
+        opacity: 0.8;
+        transform: translate(2px, -2px);
+      }
+      96% { 
+        opacity: 0.8;
+        transform: translate(-1px, -1px);
+      }
+    }
+
+    .gate-tagline {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-bottom: 4rem;
+    }
+
+    #gate form {
+      position: relative;
     }
 
     #gate input {
       background: transparent;
-      border: none;
-      border-bottom: 2px solid rgba(255,255,255,0.2);
+      border: 2px solid rgba(255, 255, 255, 0.1);
       color: white;
-      font-size: 1.5rem;
-      padding: 1rem 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 1.25rem;
+      padding: 1.25rem 2rem;
       text-align: center;
       outline: none;
-      width: 16rem;
-      transition: border-color 0.3s;
+      width: min(20rem, 80vw);
+      transition: all 0.3s;
     }
 
     #gate input:focus {
-      border-color: rgba(255,255,255,0.5);
+      border-color: var(--accent);
+      box-shadow: 0 0 30px var(--accent-dim);
     }
 
     #gate input::placeholder {
-      color: rgba(255,255,255,0.2);
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 0.5em;
     }
 
     #gate input.error {
-      border-color: #e53935;
+      border-color: #ff4444;
       animation: shake 0.5s;
     }
 
@@ -97,258 +178,511 @@
       75% { transform: translateX(10px); }
     }
 
-    #gate .hint {
-      color: rgba(255,255,255,0.3);
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
+    .gate-hint {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
+      opacity: 0.3;
       margin-top: 1.5rem;
     }
 
-    /* Main content */
+    .gate-decoration {
+      position: absolute;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      opacity: 0.15;
+      letter-spacing: 0.1em;
+    }
+
+    .gate-decoration.top-left { top: 2rem; left: 2rem; }
+    .gate-decoration.top-right { top: 2rem; right: 2rem; text-align: right; }
+    .gate-decoration.bottom-left { bottom: 2rem; left: 2rem; }
+    .gate-decoration.bottom-right { bottom: 2rem; right: 2rem; text-align: right; }
+
+    /* ═══════════════════════════════════════════
+       MAIN CONTENT
+    ═══════════════════════════════════════════ */
     #content {
       display: none;
     }
 
     #content.visible {
       display: block;
+      animation: fadeIn 1s ease-out;
     }
 
-    /* Hero */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
     .hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: 2rem;
       position: relative;
       overflow: hidden;
     }
 
-    @media (min-width: 768px) {
-      .hero { padding: 4rem; }
-    }
-
-    .hero-bg {
+    .hero-grid {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(30,30,40,0.8) 0%, rgba(0,0,0,1) 70%);
-      z-index: -1;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
     }
 
-    .hero-bg::after {
-      content: '';
+    .hero-glow {
       position: absolute;
-      inset: 0;
-      background: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
-      pointer-events: none;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: heroGlow 10s ease-in-out infinite;
     }
 
-    .hero-top {
+    @keyframes heroGlow {
+      0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+    }
+
+    .hero-nav {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 10;
     }
 
-    .hero-top span {
-      font-size: 0.875rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      opacity: 0.5;
+    @media (min-width: 768px) {
+      .hero-nav { padding: 3rem 4rem; }
     }
 
-    .hero-center {
-      flex: 1;
+    .hero-nav .logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-nav .status {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.6;
     }
 
-    .hero h1 {
-      font-size: clamp(3rem, 12vw, 10rem);
-      font-weight: 200;
+    .hero-nav .status::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 15vw, 12rem);
+      font-weight: 700;
       letter-spacing: -0.04em;
       line-height: 0.85;
       text-align: center;
+      text-transform: uppercase;
     }
 
-    .hero h1 .italic {
-      font-style: italic;
-      font-weight: 300;
-      opacity: 0.7;
+    .hero-title .line {
+      display: block;
+      overflow: hidden;
     }
 
-    .hero-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+    .hero-title .line span {
+      display: inline-block;
+      animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: calc(var(--i) * 0.1s);
+      transform: translateY(100%);
     }
 
-    .hero-bottom p {
-      font-size: 0.875rem;
-      max-width: 18rem;
-      opacity: 0.7;
-      line-height: 1.6;
+    @keyframes slideUp {
+      to { transform: translateY(0); }
     }
 
-    .scroll-hint {
+    .hero-title .accent {
+      color: var(--accent);
+    }
+
+    .hero-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.75rem, 2vw, 1rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-top: 3rem;
       text-align: center;
     }
 
-    .scroll-hint span {
-      display: block;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
+    .hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    @media (min-width: 768px) {
+      .hero-footer { padding: 3rem 4rem; }
+    }
+
+    .hero-footer .tagline {
+      max-width: 20rem;
+      font-size: 1rem;
+      opacity: 0.6;
+      line-height: 1.6;
+    }
+
+    .hero-footer .scroll {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-footer .scroll span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       opacity: 0.4;
-      margin-bottom: 0.5rem;
+      writing-mode: vertical-rl;
     }
 
-    .scroll-hint::after {
-      content: '';
-      display: block;
+    .hero-footer .scroll-line {
       width: 1px;
-      height: 3rem;
-      background: rgba(255,255,255,0.3);
-      margin: 0 auto;
-      animation: pulse 2s infinite;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 0.8; }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.5); opacity: 0.5; }
     }
 
-    /* Manifesto */
+    /* ═══════════════════════════════════════════
+       MANIFESTO
+    ═══════════════════════════════════════════ */
     .manifesto {
       min-height: 100vh;
       display: flex;
       align-items: center;
       padding: 4rem 2rem;
+      position: relative;
     }
 
     @media (min-width: 768px) {
       .manifesto { padding: 8rem 4rem; }
     }
 
-    .manifesto-text {
-      max-width: 72rem;
+    .manifesto-content {
+      max-width: 1200px;
       margin: 0 auto;
-      font-size: clamp(1.5rem, 4vw, 3.5rem);
-      font-weight: 200;
-      line-height: 1.4;
+    }
+
+    .manifesto-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .manifesto-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      max-width: 200px;
+    }
+
+    .manifesto-text {
+      font-size: clamp(1.5rem, 5vw, 4rem);
+      font-weight: 500;
+      line-height: 1.3;
       letter-spacing: -0.02em;
     }
 
     .manifesto-text .dim {
-      opacity: 0.4;
+      opacity: 0.3;
     }
 
-    .manifesto-text em {
-      font-style: italic;
+    .manifesto-text .highlight {
+      color: var(--accent);
     }
 
-    /* Why Section */
-    .why {
-      padding: 8rem 2rem;
+    .manifesto-text .block {
+      display: block;
+      margin-top: 0.5em;
+    }
+
+    /* ═══════════════════════════════════════════
+       STATS BAR
+    ═══════════════════════════════════════════ */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
     @media (min-width: 768px) {
-      .why { padding: 8rem 4rem; }
+      .stats-bar { grid-template-columns: repeat(4, 1fr); }
     }
 
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      opacity: 0.4;
-      margin-bottom: 4rem;
+    .stat {
+      padding: 3rem 2rem;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s;
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat:hover {
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    @media (min-width: 768px) {
+      .stat { padding: 4rem; }
+    }
+
+    .stat-number {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      opacity: 0.5;
+      margin-top: 0.5rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       WHY SECTION
+    ═══════════════════════════════════════════ */
+    .why {
+      padding: 8rem 2rem;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .why { padding: 12rem 4rem; }
+    }
+
+    .why-header {
+      max-width: 1200px;
+      margin: 0 auto 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .why-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+
+    .why-header h2 {
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+    }
+
+    .why-header h2 .accent { color: var(--accent); }
+
+    .why-header p {
+      max-width: 400px;
+      opacity: 0.6;
+      line-height: 1.7;
     }
 
     .why-grid {
       display: grid;
-      gap: 4rem;
-      max-width: 80rem;
+      gap: 1px;
+      background: rgba(255,255,255,0.1);
+      max-width: 1200px;
       margin: 0 auto;
     }
 
     @media (min-width: 768px) {
-      .why-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 4rem 6rem;
-      }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    .why-item .number {
-      font-size: clamp(4rem, 10vw, 6rem);
-      font-weight: 200;
-      opacity: 0.15;
-      line-height: 1;
+    .why-item {
+      background: var(--black);
+      padding: 3rem 2rem;
+      display: flex;
+      gap: 2rem;
+      transition: background 0.3s;
     }
 
-    .why-item p {
-      font-size: 1.25rem;
-      font-weight: 300;
-      margin-top: 1rem;
-      line-height: 1.5;
+    .why-item:hover {
+      background: var(--dark-gray);
     }
 
     @media (min-width: 768px) {
-      .why-item p { font-size: 1.5rem; }
+      .why-item { padding: 4rem; }
     }
 
-    /* Pillars */
+    .why-item .number {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .why-item p {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* ═══════════════════════════════════════════
+       PILLARS
+    ═══════════════════════════════════════════ */
     .pillars {
       background: var(--white);
       color: var(--black);
       padding: 8rem 2rem;
+      position: relative;
+      overflow: hidden;
     }
 
     @media (min-width: 768px) {
-      .pillars { padding: 8rem 4rem; }
+      .pillars { padding: 12rem 4rem; }
+    }
+
+    .pillars::before {
+      content: 'FP';
+      position: absolute;
+      font-family: 'Space Mono', monospace;
+      font-size: 60vw;
+      font-weight: 700;
+      color: rgba(0,0,0,0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .pillars-header {
+      text-align: center;
+      margin-bottom: 6rem;
+      position: relative;
+    }
+
+    .pillars-header .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-bottom: 1rem;
+    }
+
+    .pillars-header h2 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
     }
 
     .pillars-grid {
       display: grid;
-      gap: 4rem;
-      max-width: 80rem;
+      gap: 2rem;
+      max-width: 1200px;
       margin: 0 auto;
+      position: relative;
     }
 
     @media (min-width: 768px) {
-      .pillars-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 2rem;
-      }
+      .pillars-grid { grid-template-columns: repeat(4, 1fr); }
     }
 
     .pillar {
       text-align: center;
+      padding: 3rem 1.5rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      background: white;
     }
 
-    .pillar .symbol {
-      font-size: 3rem;
+    .pillar:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+      border-color: var(--accent);
+    }
+
+    .pillar .icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      border: 2px solid currentColor;
       opacity: 0.3;
-      transition: opacity 0.5s;
+      transition: all 0.4s;
     }
 
-    @media (min-width: 768px) {
-      .pillar .symbol { font-size: 4rem; }
-    }
-
-    .pillar:hover .symbol {
+    .pillar:hover .icon {
       opacity: 1;
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
     .pillar h3 {
       font-size: 1.5rem;
-      font-weight: 300;
-      margin: 1.5rem 0 0.75rem;
-    }
-
-    @media (min-width: 768px) {
-      .pillar h3 { font-size: 2rem; }
+      font-weight: 600;
+      margin-bottom: 0.75rem;
     }
 
     .pillar p {
@@ -356,59 +690,86 @@
       opacity: 0.6;
     }
 
-    /* Topics */
+    /* ═══════════════════════════════════════════
+       TOPICS
+    ═══════════════════════════════════════════ */
     .topics {
       padding: 8rem 2rem;
+      background: var(--dark-gray);
     }
 
     @media (min-width: 768px) {
-      .topics { padding: 8rem 4rem; }
+      .topics { padding: 12rem 4rem; }
     }
 
-    .topics-list {
-      max-width: 48rem;
+    .topics-header {
+      max-width: 800px;
+      margin: 0 auto 4rem;
+      text-align: center;
+    }
+
+    .topics-header .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .topics-header h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .topics-grid {
+      display: grid;
+      gap: 0;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
+    @media (min-width: 768px) {
+      .topics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     .topic {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      transition: border-color 0.3s;
       cursor: default;
+      transition: all 0.3s;
     }
 
     .topic:hover {
-      border-color: rgba(255,255,255,0.3);
+      background: rgba(0, 255, 136, 0.05);
+      padding-left: 3rem;
     }
 
     .topic span:first-child {
-      font-size: 1.25rem;
-      font-weight: 300;
-      transition: transform 0.3s;
+      font-size: 1.125rem;
+      font-weight: 500;
     }
 
-    @media (min-width: 768px) {
-      .topic span:first-child { font-size: 1.5rem; }
-    }
-
-    .topic:hover span:first-child {
-      transform: translateX(1rem);
-    }
-
-    .topic span:last-child {
-      font-size: 0.75rem;
+    .topic .arrow {
+      font-family: 'Space Mono', monospace;
+      color: var(--accent);
       opacity: 0;
-      transition: opacity 0.3s;
+      transform: translateX(-10px);
+      transition: all 0.3s;
     }
 
-    .topic:hover span:last-child {
-      opacity: 0.4;
+    .topic:hover .arrow {
+      opacity: 1;
+      transform: translateX(0);
     }
 
-    /* Locations */
+    /* ═══════════════════════════════════════════
+       LOCATIONS
+    ═══════════════════════════════════════════ */
     .locations {
       display: grid;
       min-height: 100vh;
@@ -419,11 +780,13 @@
     }
 
     .location {
-      padding: 4rem 3rem;
+      padding: 4rem 2rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 50vh;
+      min-height: 60vh;
+      position: relative;
+      overflow: hidden;
     }
 
     @media (min-width: 768px) {
@@ -434,23 +797,45 @@
     }
 
     .location:first-child {
-      background: var(--gray-90);
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
     }
 
     .location:last-child {
-      background: var(--gray-80);
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    .location::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 30% 70%, var(--accent-dim) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .location:hover::before {
+      opacity: 1;
+    }
+
+    .location-content {
+      position: relative;
+      z-index: 1;
     }
 
     .location .label {
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
-      opacity: 0.4;
+      color: var(--accent);
+      margin-bottom: 3rem;
     }
 
     .location h3 {
-      font-size: clamp(2.5rem, 8vw, 4rem);
-      font-weight: 200;
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
       margin-bottom: 1rem;
     }
 
@@ -458,15 +843,21 @@
       font-size: 1.125rem;
       opacity: 0.6;
       max-width: 20rem;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     .location .coord {
-      font-size: 0.875rem;
-      opacity: 0.4;
+      font-family: 'Space Mono', monospace;
+      font-size: 3rem;
+      font-weight: 700;
+      opacity: 0.1;
+      position: relative;
+      z-index: 1;
     }
 
-    /* CTA */
+    /* ═══════════════════════════════════════════
+       CTA
+    ═══════════════════════════════════════════ */
     .cta {
       min-height: 100vh;
       display: flex;
@@ -474,224 +865,354 @@
       justify-content: center;
       padding: 4rem 2rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .cta-inner {
-      max-width: 48rem;
+    .cta::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at center, var(--accent-dim) 0%, transparent 50%);
+      animation: ctaPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes ctaPulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.2); opacity: 0.6; }
+    }
+
+    .cta-content {
+      max-width: 800px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 2rem;
     }
 
     .cta p {
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-      font-weight: 200;
-      line-height: 1.5;
-      opacity: 0.7;
-      margin-bottom: 4rem;
+      font-size: 1.25rem;
+      opacity: 0.6;
+      margin-bottom: 3rem;
+      line-height: 1.7;
     }
 
-    .cta a {
-      display: inline-block;
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: 'Space Mono', monospace;
       font-size: 0.875rem;
-      letter-spacing: 0.3em;
+      font-weight: 700;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       text-decoration: none;
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 1.25rem 3rem;
-      transition: all 0.3s;
-    }
-
-    .cta a:hover {
-      background: var(--white);
       color: var(--black);
+      background: var(--accent);
+      padding: 1.5rem 3rem;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Footer */
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+    }
+
+    .cta-button .arrow {
+      transition: transform 0.3s;
+    }
+
+    .cta-button:hover .arrow {
+      transform: translateX(5px);
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
     footer {
       padding: 3rem 2rem;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
     @media (min-width: 768px) {
-      footer { padding: 3rem 4rem; }
+      footer { padding: 4rem; }
     }
 
-    .footer-inner {
-      max-width: 80rem;
+    .footer-content {
+      max-width: 1200px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 2rem;
       align-items: center;
     }
 
     @media (min-width: 768px) {
-      .footer-inner {
+      .footer-content {
         flex-direction: row;
         justify-content: space-between;
       }
     }
 
-    footer span {
-      font-size: 0.875rem;
-      opacity: 0.4;
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 1.5rem;
     }
 
-    /* Progress dots */
-    .progress {
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      opacity: 0.3;
+    }
+
+    /* ═══════════════════════════════════════════
+       NAV DOTS
+    ═══════════════════════════════════════════ */
+    .nav-dots {
       position: fixed;
       right: 2rem;
       top: 50%;
       transform: translateY(-50%);
       display: none;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
       z-index: 100;
     }
 
-    @media (min-width: 768px) {
-      .progress { display: flex; }
+    @media (min-width: 1024px) {
+      .nav-dots { display: flex; }
     }
 
-    .progress-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: transparent;
       transition: all 0.3s;
+      cursor: pointer;
     }
 
-    .progress-dot.active {
-      background: var(--white);
-      transform: scale(1.5);
+    .nav-dot:hover {
+      border-color: var(--accent);
+    }
+
+    .nav-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
     }
   </style>
 </head>
 <body>
 
-  <!-- Password Gate -->
+  <!-- ═══════════════════════════════════════════
+       PASSWORD GATE
+  ═══════════════════════════════════════════ -->
   <div id="gate">
-    <form id="gate-form">
-      <div class="logo">FP</div>
-      <input type="password" id="password" placeholder="•••••••••" autocomplete="off" autofocus>
-      <p class="hint">Enter to continue</p>
-    </form>
+    <div class="gate-decoration top-left">NETWORK<br>PROTOCOL<br>v2.0</div>
+    <div class="gate-decoration top-right">ENCRYPTED<br>ACCESS<br>REQUIRED</div>
+    <div class="gate-decoration bottom-left">LAT 50.0755°N<br>LNG 14.4378°E</div>
+    <div class="gate-decoration bottom-right">SYSTEM<br>STATUS<br>ACTIVE</div>
+    
+    <div class="gate-content">
+      <div class="gate-logo">
+        <span class="main">FP</span>
+        <span class="glitch" aria-hidden="true">FP</span>
+      </div>
+      <p class="gate-tagline">Authorized Access Only</p>
+      <form id="gate-form">
+        <input type="password" id="password" placeholder="••••••••••••" autocomplete="off" autofocus>
+        <p class="gate-hint">Enter passphrase to continue</p>
+      </form>
+    </div>
   </div>
 
-  <!-- Main Content -->
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
   <div id="content">
     
-    <!-- Progress Dots -->
-    <div class="progress" id="progress"></div>
+    <!-- Nav Dots -->
+    <nav class="nav-dots" id="navDots"></nav>
 
     <!-- Hero -->
     <section class="hero" data-section>
-      <div class="hero-bg"></div>
-      <div class="hero-top">
-        <span>Future Proof</span>
-        <span>2026—</span>
-      </div>
-      <div class="hero-center">
-        <h1>
-          Ideas<br>
-          <span class="italic">that survive</span>
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+      
+      <header class="hero-nav">
+        <div class="logo">Future Proof</div>
+        <div class="status">Active Network</div>
+      </header>
+      
+      <div class="hero-main">
+        <h1 class="hero-title">
+          <span class="line"><span style="--i: 0">Ideas</span></span>
+          <span class="line"><span style="--i: 1">That</span></span>
+          <span class="line"><span style="--i: 2" class="accent">Survive</span></span>
         </h1>
+        <p class="hero-subtitle">Artists · Scholars · Technologists</p>
       </div>
-      <div class="hero-bottom">
-        <p>A network for those who build what lasts beyond them.</p>
-        <div class="scroll-hint">
+      
+      <div class="hero-footer">
+        <p class="tagline">A network for those who build what lasts beyond them.</p>
+        <div class="scroll">
           <span>Scroll</span>
+          <div class="scroll-line"></div>
         </div>
       </div>
     </section>
 
     <!-- Manifesto -->
     <section class="manifesto" data-section>
-      <p class="manifesto-text">
-        <span class="dim">Most technologies we create are </span>doing harm.<br><br>
-        <span class="dim">Most of us are </span>no longer safe<span class="dim"> from those harms—</span><br><br>
-        <em>isolated</em><span class="dim"> and </span><em>unprepared</em><span class="dim"> for the next pandemic, drone strike, or power outage.</span>
-      </p>
+      <div class="manifesto-content">
+        <div class="manifesto-label">The Problem</div>
+        <p class="manifesto-text">
+          <span class="dim">Most technologies we create are</span> <span class="highlight">doing harm.</span>
+          <span class="block"><span class="dim">Most of us are</span> no longer safe <span class="dim">from those harms—</span></span>
+          <span class="block"><em>isolated</em> <span class="dim">and</span> <em>unprepared</em> <span class="dim">for the next pandemic, drone strike, or power outage.</span></span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-bar" data-section>
+      <div class="stat">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Locations</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Ideas</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">01</div>
+        <div class="stat-label">Network</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">26</div>
+        <div class="stat-label">Year Founded</div>
+      </div>
     </section>
 
     <!-- Why -->
     <section class="why" data-section>
-      <div class="section-label">Why now</div>
+      <div class="why-header">
+        <h2>Why<br><span class="accent">Now?</span></h2>
+        <p>The time for passive observation has passed. We need active preparation, meaningful connection, and sustainable creation.</p>
+      </div>
       <div class="why-grid">
         <div class="why-item">
-          <div class="number">01</div>
-          <p>Global risk is at an all-time high</p>
+          <span class="number">[01]</span>
+          <p>Global risk is at an all-time high. We need better tools for navigating uncertainty.</p>
         </div>
         <div class="why-item">
-          <div class="number">02</div>
-          <p>We don't cohabit sustainably with diverse intelligences</p>
+          <span class="number">[02]</span>
+          <p>We don't cohabit sustainably with diverse intelligences—human, artificial, or ecological.</p>
         </div>
         <div class="why-item">
-          <div class="number">03</div>
-          <p>Most of us don't live meaningfully, connected, or healthy</p>
+          <span class="number">[03]</span>
+          <p>Most of us don't live meaningfully, connected, or healthy. That needs to change.</p>
         </div>
         <div class="why-item">
-          <div class="number">04</div>
-          <p>Not paralysing pessimism. Not aggressive progressivism.</p>
+          <span class="number">[04]</span>
+          <p>Not paralysing pessimism. Not aggressive progressivism. A third way forward.</p>
         </div>
       </div>
     </section>
 
     <!-- Pillars -->
     <section class="pillars" data-section>
+      <div class="pillars-header">
+        <div class="label">Our Approach</div>
+        <h2>Four Pillars of Resilience</h2>
+      </div>
       <div class="pillars-grid">
         <div class="pillar">
-          <div class="symbol">◯</div>
+          <div class="icon">◯</div>
           <h3>Survive</h3>
-          <p>Practices for this century</p>
+          <p>Practices for navigating this century</p>
         </div>
         <div class="pillar">
-          <div class="symbol">◇</div>
+          <div class="icon">◇</div>
           <h3>Community</h3>
-          <p>Physical and psychological safety</p>
+          <p>Physical and psychological safety nets</p>
         </div>
         <div class="pillar">
-          <div class="symbol">△</div>
+          <div class="icon">△</div>
           <h3>Places</h3>
           <p>Norway retreat + Prague hub</p>
         </div>
         <div class="pillar">
-          <div class="symbol">□</div>
+          <div class="icon">□</div>
           <h3>Make</h3>
-          <p>Write, draw, code, sweat</p>
+          <p>Write, draw, code, build, sweat</p>
         </div>
       </div>
     </section>
 
     <!-- Topics -->
     <section class="topics" data-section>
-      <div class="section-label">What we explore</div>
-      <div class="topics-list">
-        <div class="topic"><span>Model evaluations</span><span>→</span></div>
-        <div class="topic"><span>Adaptation practices</span><span>→</span></div>
-        <div class="topic"><span>Living off the land</span><span>→</span></div>
-        <div class="topic"><span>Art in times of war</span><span>→</span></div>
-        <div class="topic"><span>Resilient infrastructure</span><span>→</span></div>
-        <div class="topic"><span>Survival skills</span><span>→</span></div>
-        <div class="topic"><span>Off-grid systems</span><span>→</span></div>
-        <div class="topic"><span>Community resilience</span><span>→</span></div>
+      <div class="topics-header">
+        <div class="label">Research Areas</div>
+        <h2>What We Explore</h2>
+      </div>
+      <div class="topics-grid">
+        <div class="topic"><span>Model Evaluations</span><span class="arrow">→</span></div>
+        <div class="topic"><span>Adaptation Practices</span><span class="arrow">→</span></div>
+        <div class="topic"><span>Living Off the Land</span><span class="arrow">→</span></div>
+        <div class="topic"><span>Art in Times of War</span><span class="arrow">→</span></div>
+        <div class="topic"><span>Resilient Infrastructure</span><span class="arrow">→</span></div>
+        <div class="topic"><span>Survival Skills</span><span class="arrow">→</span></div>
+        <div class="topic"><span>Off-Grid Systems</span><span class="arrow">→</span></div>
+        <div class="topic"><span>Community Resilience</span><span class="arrow">→</span></div>
       </div>
     </section>
 
     <!-- Locations -->
     <section class="locations" data-section>
       <div class="location">
-        <span class="label">Retreat</span>
-        <div>
+        <div class="location-content">
+          <span class="label">The Retreat</span>
           <h3>Sellanraa</h3>
-          <p>Remote location in Norway for deep work and safety. Named after the farm in Hamsun's novel.</p>
+          <p>Remote location in Norway for deep work and safety. Named after the farm in Hamsun's novel—where growth comes from the land.</p>
         </div>
         <span class="coord">69°N</span>
       </div>
       <div class="location">
-        <span class="label">Hub</span>
-        <div>
+        <div class="location-content">
+          <span class="label">The Hub</span>
           <h3>Praha</h3>
-          <p>Urban center for events, collaboration, and community. Where ideas become tangible.</p>
+          <p>Urban center for events, collaboration, and community building. Where ideas become tangible projects.</p>
         </div>
         <span class="coord">50°N</span>
       </div>
@@ -699,24 +1220,31 @@
 
     <!-- CTA -->
     <section class="cta" data-section>
-      <div class="cta-inner">
-        <p>We need imagination and community<br>to develop better tools<br>and a better way of life.</p>
-        <a href="mailto:lars@laichter.house?subject=Future Proof">Get in touch</a>
+      <div class="cta-content">
+        <h2>Ready to Build Something That Lasts?</h2>
+        <p>We need imagination and community to develop better tools and a better way of life. Join the network.</p>
+        <a href="mailto:lars@laichter.house?subject=Future%20Proof%20Inquiry" class="cta-button">
+          Get In Touch
+          <span class="arrow">→</span>
+        </a>
       </div>
     </section>
 
     <!-- Footer -->
     <footer data-section>
-      <div class="footer-inner">
-        <span>Future Proof · 2026</span>
-        <span>Risk · Art · Technology</span>
+      <div class="footer-content">
+        <div class="footer-logo">FP</div>
+        <div class="footer-links">
+          <a href="mailto:lars@laichter.house">Contact</a>
+        </div>
+        <div class="footer-copy">© 2026 Future Proof · Risk · Art · Technology</div>
       </div>
     </footer>
 
   </div>
 
   <script>
-    // Password handling
+    // Password Gate
     const gate = document.getElementById('gate');
     const content = document.getElementById('content');
     const form = document.getElementById('gate-form');
@@ -726,7 +1254,7 @@
     if (sessionStorage.getItem('fp-unlocked') === 'true') {
       gate.classList.add('hidden');
       content.classList.add('visible');
-      initProgress();
+      initNavDots();
     }
 
     form.addEventListener('submit', (e) => {
@@ -735,27 +1263,32 @@
         sessionStorage.setItem('fp-unlocked', 'true');
         gate.classList.add('hidden');
         content.classList.add('visible');
-        initProgress();
+        initNavDots();
       } else {
         input.classList.add('error');
+        input.value = '';
         setTimeout(() => input.classList.remove('error'), 500);
       }
     });
 
-    // Progress dots
-    function initProgress() {
+    // Navigation Dots
+    function initNavDots() {
       const sections = document.querySelectorAll('[data-section]');
-      const progressContainer = document.getElementById('progress');
+      const nav = document.getElementById('navDots');
       
-      sections.forEach((_, i) => {
-        const dot = document.createElement('div');
-        dot.className = 'progress-dot';
-        progressContainer.appendChild(dot);
+      sections.forEach((section, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'nav-dot';
+        dot.setAttribute('aria-label', `Go to section ${i + 1}`);
+        dot.addEventListener('click', () => {
+          section.scrollIntoView({ behavior: 'smooth' });
+        });
+        nav.appendChild(dot);
       });
 
-      const dots = progressContainer.querySelectorAll('.progress-dot');
+      const dots = nav.querySelectorAll('.nav-dot');
 
-      function updateProgress() {
+      function updateDots() {
         sections.forEach((section, i) => {
           const rect = section.getBoundingClientRect();
           const inView = rect.top < window.innerHeight / 2 && rect.bottom > window.innerHeight / 2;
@@ -763,8 +1296,40 @@
         });
       }
 
-      window.addEventListener('scroll', updateProgress);
-      updateProgress();
+      window.addEventListener('scroll', updateDots, { passive: true });
+      updateDots();
+    }
+
+    // Animate elements on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe animatable elements after content is visible
+    document.addEventListener('DOMContentLoaded', () => {
+      if (content.classList.contains('visible')) {
+        initScrollAnimations();
+      }
+    });
+
+    function initScrollAnimations() {
+      const animatables = document.querySelectorAll('.why-item, .pillar, .topic, .stat');
+      animatables.forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = `opacity 0.6s ease ${i * 0.05}s, transform 0.6s ease ${i * 0.05}s`;
+        observer.observe(el);
+      });
     }
   </script>
 
