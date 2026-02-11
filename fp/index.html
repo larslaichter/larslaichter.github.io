@@ -716,6 +716,11 @@
       .topics-grid { columns: 2; }
     }
 
+    a.topic-item {
+      text-decoration: none;
+      color: inherit;
+    }
+
     .topic-item {
       padding: 1.25rem 0;
       border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -724,7 +729,7 @@
       align-items: center;
       break-inside: avoid;
       transition: all 0.3s;
-      cursor: default;
+      cursor: pointer;
     }
 
     .topic-item:hover {
@@ -1088,14 +1093,14 @@
       </div>
       
       <div class="topics-grid">
-        <div class="topic-item"><span>Model Evaluations</span><span class="arrow">→</span></div>
-        <div class="topic-item"><span>Adaptation Practices</span><span class="arrow">→</span></div>
-        <div class="topic-item"><span>Living Off the Land</span><span class="arrow">→</span></div>
-        <div class="topic-item"><span>Art in Times of War</span><span class="arrow">→</span></div>
-        <div class="topic-item"><span>Resilient Infrastructure</span><span class="arrow">→</span></div>
-        <div class="topic-item"><span>Survival Skills</span><span class="arrow">→</span></div>
-        <div class="topic-item"><span>Off-Grid Systems</span><span class="arrow">→</span></div>
-        <div class="topic-item"><span>Community Building</span><span class="arrow">→</span></div>
+        <a href="#contact" class="topic-item"><span>Model Evaluations</span><span class="arrow">→</span></a>
+        <a href="#contact" class="topic-item"><span>Adaptation Practices</span><span class="arrow">→</span></a>
+        <a href="#contact" class="topic-item"><span>Living Off the Land</span><span class="arrow">→</span></a>
+        <a href="#contact" class="topic-item"><span>Art in Times of War</span><span class="arrow">→</span></a>
+        <a href="#contact" class="topic-item"><span>Resilient Infrastructure</span><span class="arrow">→</span></a>
+        <a href="#contact" class="topic-item"><span>Survival Skills</span><span class="arrow">→</span></a>
+        <a href="#contact" class="topic-item"><span>Off-Grid Systems</span><span class="arrow">→</span></a>
+        <a href="#contact" class="topic-item"><span>Community Building</span><span class="arrow">→</span></a>
       </div>
     </section>
 
@@ -1106,7 +1111,7 @@
       </div>
     </section>
 
-    <section class="cta">
+    <section class="cta" id="contact">
       <div class="cta-content">
         <h2 class="cta-title">Build something<br>that <em>lasts</em></h2>
         <p class="cta-text">We need imagination and community to develop better tools and a better way of life. Join the network.</p>
