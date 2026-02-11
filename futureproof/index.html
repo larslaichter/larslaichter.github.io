@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Future Proof</title>
+  <meta name="description" content="A network of artists, scholars and technologists that tinker with ideas that will survive and scale.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --fg: #fafafa;
+      --muted: #666;
+      --accent: #e8ff47;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ═══════════════════════════════════════════
+       PASSWORD GATE — THE QUESTION
+    ═══════════════════════════════════════════ */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0, 1),
+                  transform 1.2s cubic-bezier(0.4, 0, 0, 1);
+    }
+
+    #gate.unlocked {
+      opacity: 0;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+
+    .gate-wrapper {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    .gate-question {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 4rem;
+      opacity: 0;
+      animation: fadeInSlow 2s 0.5s forwards;
+    }
+
+    @keyframes fadeInSlow {
+      to { opacity: 1; }
+    }
+
+    .gate-question .highlight {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .gate-input-wrapper {
+      position: relative;
+      display: inline-block;
+      opacity: 0;
+      animation: fadeInSlow 1.5s 1.5s forwards;
+    }
+
+    #gate input {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--muted);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 0.5em;
+      text-transform: lowercase;
+      padding: 1rem 0;
+      width: min(400px, 80vw);
+      text-align: center;
+      outline: none;
+      transition: border-color 0.4s;
+    }
+
+    #gate input:focus {
+      border-color: var(--accent);
+    }
+
+    #gate input::placeholder {
+      color: var(--muted);
+      letter-spacing: 0.3em;
+      text-transform: none;
+    }
+
+    .gate-hint {
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeInSlow 1s 2.5s forwards;
+    }
+
+    .gate-error {
+      position: absolute;
+      bottom: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: #ff4444;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gate-error.visible { opacity: 1; }
+
+    .gate-corner {
+      position: fixed;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeInSlow 1s 3s forwards;
+    }
+
+    .gate-corner.tl { top: 2rem; left: 2rem; }
+    .gate-corner.tr { top: 2rem; right: 2rem; text-align: right; }
+    .gate-corner.bl { bottom: 2rem; left: 2rem; }
+    .gate-corner.br { bottom: 2rem; right: 2rem; text-align: right; }
+
+    /* ═══════════════════════════════════════════
+       MAIN CONTENT
+    ═══════════════════════════════════════════ */
+    #content {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s 0.5s, visibility 1s 0.5s;
+    }
+
+    #content.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO — THE OPENING
+    ═══════════════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .hero { padding: 3rem 4rem; }
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% 120%, rgba(232, 255, 71, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-style: italic;
+    }
+
+    .hero-status {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-title-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(4rem, 20vw, 20rem);
+      font-weight: 400;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      text-align: center;
+    }
+
+    .hero-title .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-title .word {
+      display: inline-block;
+      transform: translateY(110%);
+      animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-title .line:nth-child(1) .word { animation-delay: 0.1s; }
+    .hero-title .line:nth-child(2) .word { animation-delay: 0.2s; }
+
+    @keyframes slideUp {
+      to { transform: translateY(0); }
+    }
+
+    .hero-title .italic {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tagline {
+      max-width: 280px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hero-scroll {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero-scroll span {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollLine 2s infinite;
+    }
+
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      50.01% { transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ═══════════════════════════════════════════
+       STATEMENT — THE MANIFESTO
+    ═══════════════════════════════════════════ */
+    .statement {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .statement { padding: 8rem 4rem; }
+    }
+
+    .statement-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .statement-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 3rem;
+    }
+
+    .statement-text {
+      font-family: var(--serif);
+      font-size: clamp(1.75rem, 5vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .statement-text .dim {
+      color: var(--muted);
+    }
+
+    .statement-text em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .statement-text .break {
+      display: block;
+      margin-top: 0.8em;
+    }
+
+    /* ═══════════════════════════════════════════
+       WORDS — THE PILLARS
+    ═══════════════════════════════════════════ */
+    .words {
+      padding: 10rem 0;
+      overflow: hidden;
+    }
+
+    .words-row {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 30s linear infinite;
+    }
+
+    .words-row:nth-child(2) {
+      animation-direction: reverse;
+      animation-duration: 35s;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .word-item {
+      font-family: var(--serif);
+      font-size: clamp(4rem, 12vw, 12rem);
+      font-weight: 400;
+      padding: 0 2rem;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--muted);
+      transition: all 0.5s;
+    }
+
+    .word-item:hover {
+      color: var(--accent);
+      -webkit-text-stroke: 1px var(--accent);
+    }
+
+    .word-item .dot {
+      display: inline-block;
+      width: 0.15em;
+      height: 0.15em;
+      background: var(--accent);
+      border-radius: 50%;
+      margin: 0 1rem;
+      vertical-align: middle;
+    }
+
+    /* ═══════════════════════════════════════════
+       GRID — THE FRAMEWORK
+    ═══════════════════════════════════════════ */
+    .grid-section {
+      padding: 8rem 2rem;
+      background: #050505;
+    }
+
+    @media (min-width: 768px) {
+      .grid-section { padding: 12rem 4rem; }
+    }
+
+    .grid-header {
+      max-width: 1400px;
+      margin: 0 auto 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+
+    .grid-title {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 10vw, 8rem);
+      font-weight: 400;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+    }
+
+    .grid-title .number {
+      font-family: var(--sans);
+      font-size: 0.15em;
+      vertical-align: super;
+      color: var(--accent);
+      margin-left: 0.5em;
+    }
+
+    .grid-subtitle {
+      max-width: 320px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .grid-items {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    @media (min-width: 640px) {
+      .grid-items { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .grid-items { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .grid-item {
+      background: #050505;
+      padding: 3rem 2rem;
+      min-height: 350px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.5s;
+    }
+
+    .grid-item:hover {
+      background: #0a0a0a;
+    }
+
+    .grid-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .grid-item:hover::before {
+      transform: scaleX(1);
+    }
+
+    .grid-item-number {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+
+    .grid-item-content h3 {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .grid-item-content p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════
+       PLACES — THE LOCATIONS
+    ═══════════════════════════════════════════ */
+    .places {
+      display: grid;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+      .places { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .place {
+      position: relative;
+      min-height: 50vh;
+      padding: 4rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    @media (min-width: 768px) {
+      .place {
+        min-height: 100vh;
+        padding: 5rem;
+      }
+    }
+
+    .place:first-child {
+      background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 100%);
+    }
+
+    .place:last-child {
+      background: linear-gradient(135deg, #1a0a0a 0%, #0a1a1a 100%);
+    }
+
+    .place::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), 
+        rgba(232, 255, 71, 0.15) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .place:hover::before {
+      opacity: 1;
+    }
+
+    .place-coord {
+      position: absolute;
+      top: 3rem;
+      right: 3rem;
+      font-family: var(--serif);
+      font-size: clamp(4rem, 15vw, 10rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+    }
+
+    .place-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .place-name {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 0.9;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .place-desc {
+      max-width: 320px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ═══════════════════════════════════════════
+       TOPICS — THE INQUIRIES
+    ═══════════════════════════════════════════ */
+    .topics {
+      padding: 10rem 2rem;
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    @media (min-width: 768px) {
+      .topics { padding: 14rem 4rem; }
+    }
+
+    .topics-header {
+      max-width: 800px;
+      margin: 0 auto 6rem;
+      text-align: center;
+    }
+
+    .topics-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .topics-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .topics-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      columns: 1;
+      gap: 0;
+    }
+
+    @media (min-width: 640px) {
+      .topics-grid { columns: 2; }
+    }
+
+    .topic-item {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      break-inside: avoid;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .topic-item:hover {
+      padding-left: 1.5rem;
+      border-color: var(--bg);
+    }
+
+    .topic-item span:first-child {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+    }
+
+    .topic-item .arrow {
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s;
+    }
+
+    .topic-item:hover .arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ═══════════════════════════════════════════
+       CTA — THE INVITATION
+    ═══════════════════════════════════════════ */
+    .cta {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, 
+        rgba(232, 255, 71, 0.1) 0%, transparent 70%);
+      animation: breathe 8s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .cta-content {
+      max-width: 900px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+
+    .cta-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .cta-text {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 1.25rem 2.5rem;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(232, 255, 71, 0.25);
+    }
+
+    .cta-button .arrow {
+      transition: transform 0.3s;
+    }
+
+    .cta-button:hover .arrow {
+      transform: translateX(6px);
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER — THE END
+    ═══════════════════════════════════════════ */
+    footer {
+      padding: 4rem 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    @media (min-width: 768px) {
+      footer { padding: 5rem 4rem; }
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      align-items: center;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    .footer-middle {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-middle a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-middle a:hover {
+      color: var(--accent);
+    }
+
+    .footer-copy {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       CURSOR
+    ═══════════════════════════════════════════ */
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s, opacity 0.15s;
+      mix-blend-mode: difference;
+      display: none;
+    }
+
+    @media (hover: hover) {
+      .cursor { display: block; }
+    }
+
+    .cursor.active {
+      transform: scale(2);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- ═══════════════════════════════════════════
+       PASSWORD GATE
+  ═══════════════════════════════════════════ -->
+  <div id="gate">
+    <div class="gate-corner tl">Future<br>Proof</div>
+    <div class="gate-corner tr">Network<br>Active</div>
+    <div class="gate-corner bl">Prague<br>Oslo</div>
+    <div class="gate-corner br">Est.<br>2026</div>
+
+    <div class="gate-wrapper">
+      <h1 class="gate-question">
+        What is <span class="highlight">the good life</span>?
+      </h1>
+      
+      <form id="gate-form">
+        <div class="gate-input-wrapper">
+          <input 
+            type="text" 
+            id="password" 
+            placeholder="speak..." 
+            autocomplete="off" 
+            autofocus
+            spellcheck="false"
+          >
+          <span class="gate-error" id="gate-error">not quite</span>
+        </div>
+      </form>
+      
+      <p class="gate-hint">The answer is the question</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
+  <div id="content">
+    
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      
+      <header class="hero-header">
+        <div class="hero-logo">Future Proof</div>
+        <div class="hero-status">Building</div>
+      </header>
+
+      <div class="hero-title-container">
+        <h1 class="hero-title">
+          <span class="line"><span class="word">Ideas</span></span>
+          <span class="line"><span class="word">that <span class="italic">survive</span></span></span>
+        </h1>
+      </div>
+
+      <div class="hero-footer">
+        <p class="hero-tagline">A network of artists, scholars and technologists tinkering with ideas that will survive and scale.</p>
+        <div class="hero-scroll">
+          <span>Scroll</span>
+          <div class="hero-scroll-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statement -->
+    <section class="statement">
+      <div class="statement-content">
+        <div class="statement-label">The Problem</div>
+        <p class="statement-text">
+          <span class="dim">Most technologies we create are</span> doing harm.
+          <span class="break"><span class="dim">Most of us are</span> no longer safe<span class="dim">—</span></span>
+          <span class="break"><em>isolated</em> <span class="dim">and</span> <em>unprepared</em></span>
+          <span class="break"><span class="dim">for the next pandemic, drone strike, or power outage.</span></span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Words Marquee -->
+    <section class="words">
+      <div class="words-row">
+        <span class="word-item">Survive<span class="dot"></span></span>
+        <span class="word-item">Create<span class="dot"></span></span>
+        <span class="word-item">Connect<span class="dot"></span></span>
+        <span class="word-item">Adapt<span class="dot"></span></span>
+        <span class="word-item">Survive<span class="dot"></span></span>
+        <span class="word-item">Create<span class="dot"></span></span>
+        <span class="word-item">Connect<span class="dot"></span></span>
+        <span class="word-item">Adapt<span class="dot"></span></span>
+      </div>
+      <div class="words-row">
+        <span class="word-item">Think<span class="dot"></span></span>
+        <span class="word-item">Build<span class="dot"></span></span>
+        <span class="word-item">Question<span class="dot"></span></span>
+        <span class="word-item">Endure<span class="dot"></span></span>
+        <span class="word-item">Think<span class="dot"></span></span>
+        <span class="word-item">Build<span class="dot"></span></span>
+        <span class="word-item">Question<span class="dot"></span></span>
+        <span class="word-item">Endure<span class="dot"></span></span>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+      <div class="grid-header">
+        <h2 class="grid-title">
+          Four<br>Pillars<span class="number">04</span>
+        </h2>
+        <p class="grid-subtitle">Not paralysing pessimism. Not aggressive progressivism. A third way forward.</p>
+      </div>
+
+      <div class="grid-items">
+        <div class="grid-item">
+          <span class="grid-item-number">01</span>
+          <div class="grid-item-content">
+            <h3>Survive</h3>
+            <p>Practices and tools for navigating this century. Preparation without paranoia.</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <span class="grid-item-number">02</span>
+          <div class="grid-item-content">
+            <h3>Community</h3>
+            <p>Physical and psychological safety nets. People who show up when it matters.</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <span class="grid-item-number">03</span>
+          <div class="grid-item-content">
+            <h3>Places</h3>
+            <p>Retreat and hub. Remote resilience and urban collaboration.</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <span class="grid-item-number">04</span>
+          <div class="grid-item-content">
+            <h3>Make</h3>
+            <p>Write, draw, code, build, sweat. Creation as resistance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Places -->
+    <section class="places">
+      <div class="place" id="place1">
+        <span class="place-coord">69°N</span>
+        <span class="place-label">The Retreat</span>
+        <h2 class="place-name">Sellanraa</h2>
+        <p class="place-desc">Remote location in Norway for deep work and safety. Named after the farm in Hamsun's novel—where growth comes from the land.</p>
+      </div>
+      <div class="place" id="place2">
+        <span class="place-coord">50°N</span>
+        <span class="place-label">The Hub</span>
+        <h2 class="place-name">Praha</h2>
+        <p class="place-desc">Urban center for events, collaboration, and community building. Where ideas become tangible projects.</p>
+      </div>
+    </section>
+
+    <!-- Topics -->
+    <section class="topics">
+      <div class="topics-header">
+        <div class="topics-label">Areas of Inquiry</div>
+        <h2 class="topics-title">What we explore</h2>
+      </div>
+      
+      <div class="topics-grid">
+        <div class="topic-item"><span>Model Evaluations</span><span class="arrow">→</span></div>
+        <div class="topic-item"><span>Adaptation Practices</span><span class="arrow">→</span></div>
+        <div class="topic-item"><span>Living Off the Land</span><span class="arrow">→</span></div>
+        <div class="topic-item"><span>Art in Times of War</span><span class="arrow">→</span></div>
+        <div class="topic-item"><span>Resilient Infrastructure</span><span class="arrow">→</span></div>
+        <div class="topic-item"><span>Survival Skills</span><span class="arrow">→</span></div>
+        <div class="topic-item"><span>Off-Grid Systems</span><span class="arrow">→</span></div>
+        <div class="topic-item"><span>Community Building</span><span class="arrow">→</span></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="cta-content">
+        <h2 class="cta-title">Build something<br>that <em>lasts</em></h2>
+        <p class="cta-text">We need imagination and community to develop better tools and a better way of life. Join the network.</p>
+        <a href="mailto:lars@laichter.house?subject=Future%20Proof" class="cta-button">
+          Get in touch
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-logo">Future Proof</div>
+        <div class="footer-middle">
+          <a href="mailto:lars@laichter.house">lars@laichter.house</a>
+        </div>
+        <div class="footer-copy">© 2026 — Risk · Art · Technology</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Password Gate
+    const gate = document.getElementById('gate');
+    const content = document.getElementById('content');
+    const form = document.getElementById('gate-form');
+    const input = document.getElementById('password');
+    const error = document.getElementById('gate-error');
+
+    // Check if already unlocked
+    if (sessionStorage.getItem('fp-unlocked') === 'true') {
+      gate.classList.add('unlocked');
+      content.classList.add('visible');
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = input.value.toLowerCase().trim().replace(/\s+/g, '');
+      
+      if (val === 'thegoodlife') {
+        sessionStorage.setItem('fp-unlocked', 'true');
+        gate.classList.add('unlocked');
+        setTimeout(() => content.classList.add('visible'), 200);
+      } else {
+        error.classList.add('visible');
+        input.value = '';
+        setTimeout(() => error.classList.remove('visible'), 2000);
+      }
+    });
+
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    let cursorX = 0, cursorY = 0;
+    let targetX = 0, targetY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+
+    function animateCursor() {
+      cursorX += (targetX - cursorX) * 0.15;
+      cursorY += (targetY - cursorY) * 0.15;
+      cursor.style.left = cursorX - 10 + 'px';
+      cursor.style.top = cursorY - 10 + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Cursor hover states
+    document.querySelectorAll('a, button, input, .grid-item, .topic-item').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+    });
+
+    // Place hover effect (spotlight)
+    document.querySelectorAll('.place').forEach(place => {
+      place.addEventListener('mousemove', (e) => {
+        const rect = place.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        place.style.setProperty('--mx', x + '%');
+        place.style.setProperty('--my', y + '%');
+      });
+    });
+  </script>
+
+</body>
+</html>
+<!-- rebuild 1770805859 -->
