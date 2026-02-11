@@ -201,8 +201,38 @@
       position: absolute;
       inset: 0;
       background: 
-        radial-gradient(ellipse 80% 50% at 50% 120%, rgba(232, 255, 71, 0.08) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 50% at 50% 120%, rgba(0, 255, 136, 0.08) 0%, transparent 60%);
       pointer-events: none;
+    }
+
+    .hero-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    .polycam-section {
+      padding: 6rem 2rem;
+      background: #050505;
+    }
+
+    .polycam-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      aspect-ratio: 16/9;
+    }
+
+    .polycam-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
     }
 
     .hero-header {
@@ -929,6 +959,9 @@
     <!-- Hero -->
     <section class="hero">
       <div class="hero-bg"></div>
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="video.mp4" type="video/mp4">
+      </video>
       
       <header class="hero-header">
         <div class="hero-logo">Future Proof</div>
@@ -1065,6 +1098,12 @@
     </section>
 
     <!-- CTA -->
+    <section class="polycam-section">
+      <div class="polycam-wrapper">
+        <iframe src="https://poly.cam/capture/f86e8831-d196-45c0-a96f-bd5df5802d31/embed" title="Polycam capture viewer" frameborder="0"></iframe>
+      </div>
+    </section>
+
     <section class="cta">
       <div class="cta-content">
         <h2 class="cta-title">Build something<br>that <em>lasts</em></h2>
