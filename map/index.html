@@ -19,10 +19,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #map { flex: 1; z-index: 1; }
 
 /* Sidebar as bottom sheet on mobile */
-.sidebar { position: absolute; bottom: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); max-height: 60vh; overflow-y: auto; transform: translateY(calc(100% - 48px)); transition: transform 0.3s ease; }
+.sidebar { position: absolute; bottom: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); max-height: 70vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; }
 .sidebar.open { transform: translateY(0); }
-.sidebar-handle { display: flex; justify-content: center; padding: 12px; cursor: pointer; flex-shrink: 0; }
+.sidebar-handle { display: flex; justify-content: center; padding: 14px; cursor: pointer; flex-shrink: 0; position: sticky; top: 0; background: #fff; border-radius: 16px 16px 0 0; z-index: 1; }
 .sidebar-handle::before { content: ''; width: 40px; height: 4px; background: #d1d5db; border-radius: 2px; }
+/* Info button floating on map for mobile */
+.info-btn { display: none; position: absolute; bottom: 64px; right: 12px; z-index: 999; width: 44px; height: 44px; border-radius: 50%; background: #fff; border: 2px solid #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-size: 1.2rem; cursor: pointer; align-items: center; justify-content: center; }
+@media (max-width: 767px) { .info-btn { display: flex; } }
 .sidebar-content { padding: 0 16px 20px; }
 
 /* Desktop: sidebar on the right */
@@ -87,8 +90,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     </div>
     <span style="color:#9ca3af">10% → 25%+</span>
   </div>
+  <button class="info-btn" id="info-btn" onclick="toggleSidebar()">📊</button>
   <div class="sidebar" id="sidebar">
-    <div class="sidebar-handle" onclick="toggleSidebar()"></div>
+    <div class="sidebar-handle" onclick="closeSidebar()"></div>
     <div class="sidebar-content">
       <div id="selected-card" class="card card-yellow">
         <button class="close-btn" onclick="deselectDistrict()">&times;</button>
@@ -159,8 +163,24 @@ let selectedDistrict = null, map, geoLayer;
 
 // Sidebar toggle for mobile
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('open');
 }
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+}
+// Close sidebar when tapping map on mobile
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('map').addEventListener('click', (e) => {
+    // Only close if not clicking a district (popup handles that)
+    if (window.innerWidth < 768 && !e.target.closest('.leaflet-popup')) {
+      // Small delay to let district click fire first
+      setTimeout(() => {
+        if (!selectedDistrict) closeSidebar();
+      }, 50);
+    }
+  });
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   map = L.map('map', { zoomControl: false }).setView([50.073, 14.432], 14);
