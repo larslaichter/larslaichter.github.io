@@ -67,6 +67,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 /* Better popups on mobile */
 .leaflet-popup-content { font-size: 13px; line-height: 1.4; }
 .leaflet-popup-content b { font-weight: 600; }
+
+.toggle-btn { position: absolute; top: 12px; left: 12px; z-index: 1000; background: #fff; border: 2px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+.toggle-btn:hover { background: #f9fafb; }
+.issue-legend { position: absolute; top: 52px; left: 12px; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); border-radius: 8px; padding: 8px 12px; font-size: 0.7rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.issue-legend-item { display: flex; align-items: center; gap: 6px; padding: 1px 0; }
+.issue-legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -80,6 +86,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 
 <div class="main">
   <div id="map"></div>
+<button class="toggle-btn" id="toggle-issues-btn" onclick="toggleIssues()">📌 Skrýt problémy</button>
+<div class="issue-legend" id="issue-legend">
+  <div class="issue-legend-item"><div class="issue-legend-dot" style="background:#3b82f6"></div>Doprava</div>
+  <div class="issue-legend-item"><div class="issue-legend-dot" style="background:#f59e0b"></div>Bydlení</div>
+  <div class="issue-legend-item"><div class="issue-legend-dot" style="background:#ef4444"></div>Bezpečnost</div>
+  <div class="issue-legend-item"><div class="issue-legend-dot" style="background:#22c55e"></div>Prostředí</div>
+  <div class="issue-legend-item"><div class="issue-legend-dot" style="background:#8b5cf6"></div>Výstavba</div>
+  <div class="issue-legend-item"><div class="issue-legend-dot" style="background:#06b6d4"></div>Služby</div>
+  <div style="margin-top:4px;color:#9ca3af;font-size:0.6rem">Větší bod = vyšší relevance</div>
+</div>
+
   <div class="legend-bar">
     <span style="color:#6b7280">P2S podpora:</span>
     <div class="legend-colors">
@@ -199,6 +216,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderMap();
   renderSidebar();
+
+const ISSUES = [{"id": 1, "title": "Riegrovy sady: nelegální stavby, hluk z komerčních akcí a nedostatek participace obyvatel", "description": "Obyvatelé okolí Riegrových sadů si stěžují na hluk z komerčních akcí (ledové sochy, koncerty Mirai), nelegální stavby v parku a nedostatečné zapojení do rozhodování o budoucnosti parku. Praha 2 začala v roce 2025 řešit novou koncepci parku včetně odstranění nelegálních staveb.", "location": "Riegrovy sady, Vinohrady, Praha 2", "lat": 50.0787, "lng": 14.4378, "sources": ["https://www.irozhlas.cz/zpravy-domov/prazske-riegrovy-sady-cekaji-zmeny-resi-se-nelegalni-stavby-hluk-ale-i-oprava_2509050600_kma", "https://www.seznamzpravy.cz/clanek/regiony-zpravy-praha-z-riegrovych-sadu-se-stava-cirkus-casti-mistnich-vadi-ledove-sochy-i-mirai-273255", "https://www.nasepraha.cz/praha-2-prinasi-prvni-vysledky-nove-koncepce-parku-riegrovy-sady/"], "category": "environment", "type": "complaint", "relevance": 5}, {"id": 2, "title": "Penta/CR-City chtějí zastavět kolejiště Hlavního nádraží přes Prahu 2", "description": "Společnost CR-City (propojená s Pentou a Českými drahami) chce prostřednictvím MČ Praha 2 protlačit změnu územního plánu nad kolejištěm Hlavního nádraží. Arnika a AutoMat varují před netransparentním procesem bez veřejné diskuse, který by umožnil masivní komerční zástavbu.", "location": "Kolejiště Hlavního nádraží, hranice Vinohrady/Nové Město, Praha 2", "lat": 50.0831, "lng": 14.4351, "sources": ["https://arnika.org/o-nas/tiskove-zpravy/penta-chce-narychlo-protlacit-zmenu-pres-prahu-2-kolejiste-hlavniho-nadrazi-se-ma-stat-stavenistem"], "category": "development", "type": "complaint", "relevance": 5}, {"id": 3, "title": "Přestavba nádraží Vyšehrad na mikrobyty a penthousy", "description": "Zchátralé secesní nádraží Vyšehrad kupuje developer Karlin Port Real Estate a plánuje 170 mikrobytů (později upraveno na penthousy v horních patrech). Investice cca 700 mil. Kč. Občanská iniciativa 'Zachráníme nádraží Vyšehrad' sleduje projekt. Kontroverzní je koncept mikrobytů vs. potřeba dostupného bydlení.", "location": "Nádraží Vyšehrad, Svobodova ul., Praha 2 - Vyšehrad", "lat": 50.0639, "lng": 14.4224, "sources": ["https://zachranimenadrazivysehrad.cz/", "https://www.irozhlas.cz/zpravy-domov/nadrazi-vysehrad-mikrobyty-karlin-port-real-estate_2402141754_jud", "https://cc.cz/prestavba-nadrazi-vysehrad-se-blizi-mikrobytu-v-nem-ale-bude-min-pod-strechou-je-nahradi-penthousy/", "https://www.seznamzpravy.cz/clanek/ekonomika-byznys-reality-misto-nadrazi-vysehrad-budou-mikrobyty-do-ceska-zamiril-novy-koncept-221283"], "category": "development", "type": "complaint", "relevance": 5}, {"id": 4, "title": "Parkování v Praze 2 – chronický nedostatek míst, drahé zóny", "description": "Parkování je v celé Praze 2 extrémně obtížné. Nejčastější přestupek městské policie v roce 2024 (43 425 dopravních přestupků) je porušení zákazu zastavení a stání na chodníku. Rezidentní parkování je drahé a míst je stále málo, zejména ve Vinohradech a Nuslích.", "location": "Celá Praha 2, zejména Vinohrady a Nusle", "lat": 50.0755, "lng": 14.431, "sources": ["https://www.praha2.cz/pripravuji-se-zony-placeneho-stani/d-26627", "https://autotrip.cz/parkovani-praha-2/", "https://www.prazskypatriot.cz/kriminalita-v-praze-2-klesla/"], "category": "transport", "type": "complaint", "relevance": 5}, {"id": 5, "title": "Havlíčkovy sady (Grébovka): vandalismus, ničení zeleně, rušení nočního klidu", "description": "V Havlíčkových sadech po setmění dochází k alkoholovým dýchánkům, vandalismu (poškozené stromy, zničený mobiliář) a rušení nočního klidu. Přestože park prošel nákladnou revitalizací (366 mil. Kč), opakovaně dochází k poškozování. Praha 2 zavedla zákaz alkoholu po 22. hodině.", "location": "Havlíčkovy sady (Grébovka), Vinohrady, Praha 2", "lat": 50.0712, "lng": 14.4421, "sources": ["https://www.prazskypatriot.cz/historicky-park-se-stal-po-setmeni-mistem-alkoholovych-dychanku-stromy-a-mobiliar-nici-vandalove/"], "category": "safety", "type": "complaint", "relevance": 4}, {"id": 6, "title": "Magistrála (Legerova/Sokolská) – hluk, emise, bariéra v území", "description": "Severojižní magistrála (ulice Legerova a Sokolská) trvale zatěžuje obyvatele Prahy 2 hlukem a emisemi. Legerova byla historicky nejznečištěnější ulicí v ČR. Dlouhodobě se diskutuje o zakrytí či přeložení do tunelu, ale řešení je v nedohlednu.", "location": "Legerova/Sokolská ulice, Nové Město/Vinohrady, Praha 2", "lat": 50.0762, "lng": 14.4295, "sources": ["https://www.lidovky.cz/domov/nejvice-prachu-v-zemi-legerova-ulice-v-praze.A080514_184922_ln_praha_nev", "https://www.casopisstavebnictvi.cz/clanky-reseni-dopravy-na-sj-magistrale-v-useku-praha-hlavni-nadrazi-nuselsky-most.html"], "category": "transport", "type": "complaint", "relevance": 5}, {"id": 7, "title": "Karlovo náměstí – bezpečnost po setmění, drogy, bezdomovectví", "description": "Karlovo náměstí je dlouhodobě vnímáno jako nebezpečné místo po setmění. Pocitové mapy ukazují obavy z dealerů drog, bezdomovců a celkové atmosféry. Přestože kriminalita v Praze 2 celkově klesá, subjektivní pocit nebezpečí přetrvává.", "location": "Karlovo náměstí, Nové Město, Praha 2", "lat": 50.0753, "lng": 14.4189, "sources": ["https://prazsky.denik.cz/zpravy_region/pocitove-mapy-oznacily-subjektivne-nebezpecna-mista-20220112.html", "https://www.praha2.cz/muzeme-se-citit-bezpecne/d-25899"], "category": "safety", "type": "complaint", "relevance": 4}, {"id": 8, "title": "I.P. Pavlova – nebezpečný dopravní uzel a nepříjemné prostředí", "description": "Náměstí I.P. Pavlova je mimořádně dopravně zatížený uzel na křížení magistrály. Pro pěší nepřátelské prostředí, hluk, znečištění. Jeden z nejkritičtějších bodů severojižní magistrály v Praze 2.", "location": "Náměstí I.P. Pavlova, Nové Město, Praha 2", "lat": 50.0747, "lng": 14.4302, "sources": ["https://www.casopisstavebnictvi.cz/clanky-reseni-dopravy-na-sj-magistrale-v-useku-praha-hlavni-nadrazi-nuselsky-most.html"], "category": "transport", "type": "complaint", "relevance": 4}, {"id": 9, "title": "Krátkodobé pronájmy (Airbnb/Booking) vytlačují rezidenty a zvyšují nájmy", "description": "Praha 2 je jednou z nejvíce zasažených městských částí krátkodobými pronájmy. Tisíce bytů slouží turistům místo rezidentům, což zvyšuje ceny nájmů a narušuje sousedské vztahy. Od 2025 platí systém eTurista, ale účinná regulace stále chybí. EU nařízení od 2026 by mělo přinést lepší data.", "location": "Vinohrady a Nové Město, Praha 2", "lat": 50.075, "lng": 14.434, "sources": ["https://ekonom.cz/c1-67321590-kratkodobe-pronajmy-se-opet-vraceji-regulace-stale-chybi", "https://forbes.cz/kladivo-na-airbnb-pribyvaji-regulace-cilene-na-problemove-kratkodobe-pronajmy/", "https://www.ceska-justice.cz/2025/10/bytova-krize-airbnb-roste-tlak-na-celoevropsky-zakaz/"], "category": "housing", "type": "complaint", "relevance": 5}, {"id": 10, "title": "Rekonstrukce Václavského náměstí – rozsáhlé staveniště a omezení", "description": "Velká rekonstrukce Václavského náměstí (návrat tramvaje, rozšíření prostoru pro pěší, stromy) přináší rozsáhlá dopravní omezení a stavební ruch. Pro obyvatele i podnikatele Nového Města znamená měsíce komplikací.", "location": "Václavské náměstí, Nové Město, Praha 2/Praha 1", "lat": 50.0808, "lng": 14.4268, "sources": ["https://www.novinky.cz/clanek/domaci-staveniste-vaclavak-jak-vypada-nejznamejsi-prazske-namesti-rozkopane-40519015", "https://prazsky.denik.cz/zpravy_region/praha-tramvajove-trate-opravy-metro-uzavirky-vaclavske-namesti.html"], "category": "transport", "type": "complaint", "relevance": 3}, {"id": 11, "title": "Výluky metra C (Kačerov–Vyšehrad) a dopravní komplikace", "description": "Pravidelné výluky metra C kvůli modernizaci zabezpečovacích zařízení zasahují stanice Vyšehrad a okolí. Náhradní autobusová doprava je přeplněná. Pro obyvatele Vyšehradu a jižní části Prahy 2 to znamená výrazné komplikace v dojíždění.", "location": "Stanice metra Vyšehrad, Praha 2", "lat": 50.065, "lng": 14.4198, "sources": ["https://www.sons.cz/Uzavirky-a-komunikace-P4019910.html", "https://techsvet.cz/zajimavosti/praha-rekonstrukce-metra-vyluky/petrakadlecova/"], "category": "transport", "type": "complaint", "relevance": 3}, {"id": 12, "title": "Nedostatek stromů a zeleně v uličním prostoru – výsadba 31 nových stromů", "description": "Praha 2 v roce 2025 vysadila 31 nových stromů v parcích (Riegrovy sady, Folimanka, Havlíčkovy sady aj.), ale uliční stromořadí jsou stále nedostatečná. Pilotní projekt obnovy stromořadí v ulicích Budečská a Blanická s prokořenitelnými buňkami ukazuje cestu, ale rozsah je malý.", "location": "Vinohrady – ul. Budečská, Blanická; parky Riegrovy sady, Folimanka", "lat": 50.077, "lng": 14.437, "sources": ["https://www.metro.cz/praha/praha-2-vysadi-31-novych-stromu-zazelenaji-se-riegrovy-sady-i-folimanka.A251021_143944_metro-praha_hala", "https://doparku.cz/mapa-webu/"], "category": "environment", "type": "idea", "relevance": 4}, {"id": 13, "title": "Kriminalita v Praze 2 klesá, ale přetrvávají problémy s drobnými krádežemi a drogami v parcích", "description": "V roce 2024 bylo evidováno 2 947 trestných činů (pokles o 193). Přesto přetrvávají problémy s narkomany v parcích, použitými stříkačkami a non-stop zastavárny jako překupiště kradených věcí. Městská policie uložila 8 736 pokut za 7,4 mil. Kč.", "location": "Celá Praha 2, zejména parky a okolí Karlova náměstí", "lat": 50.074, "lng": 14.425, "sources": ["https://www.prazskypatriot.cz/kriminalita-v-praze-2-klesla/", "https://www.praha2.cz/muzeme-se-citit-bezpecne/d-25899"], "category": "safety", "type": "complaint", "relevance": 4}, {"id": 14, "title": "Obecní byty Praha 2 – elektronické aukce místo spravedlivého přidělování", "description": "Praha 2 nabízí obecní byty v Novém Městě, Vinohradech a Nuslích přes elektronické aukce (4. aukce v září 2025, 15 bytů). Systém aukcí zvýhodňuje bohatší zájemce a neřeší sociální potřeby dlouhodobých rezidentů ani mladých rodin.", "location": "Nové Město, Vinohrady, Nusle – obecní bytový fond Praha 2", "lat": 50.0745, "lng": 14.43, "sources": ["https://www.praha2.cz/tiskove-zpravy/ds-2139"], "category": "housing", "type": "complaint", "relevance": 4}, {"id": 15, "title": "Světelné znečištění – petice za ochranu pražské noci", "description": "Na portálu gov.cz běží petice 'Chráňme pražskou noc!' s 69 podpisy požadující opatření proti škodlivému bílému světlu v ulicích. Problém se týká i rezidenčních čtvrtí Prahy 2, kde nové LED osvětlení ruší spánek obyvatel.", "location": "Celá Praha, včetně Praha 2", "lat": 50.0755, "lng": 14.431, "sources": ["https://portal.gov.cz/epetice/api/v1/petice/stahnout?format=CSV"], "category": "environment", "type": "idea", "relevance": 3}, {"id": 16, "title": "Analytická mapa kriminality – bezpečnostní kamery a prořez v parcích", "description": "Praha 2 využívá analytickou mapu kriminality pro nastavení umístění bezpečnostních kamer a prořez zeleně v rizikových parcích. Spolupráce s Prahou 5 na řešení toxikomanie. Nástroj je pozitivní, ale obyvatelé žádají více transparentnosti a prevence.", "location": "Parky Praha 2 – Havlíčkovy sady, Folimanka, Karlovo náměstí", "lat": 50.073, "lng": 14.43, "sources": ["https://www.tmapy.cz/mapa-kriminality-praha-2-zkusenosti"], "category": "safety", "type": "idea", "relevance": 3}, {"id": 17, "title": "Blokové čištění komunikací – nedostatečná frekvence a problémy s přeparkováním", "description": "TSK provádí komplexní úklid komunikací v Praze 2 (jarní od 14.4.2025, podzimní plánovaný). Obyvatelé si stěžují na nedostatečnou frekvenci, problémy s přeparkováním aut a špínu v ulicích mezi čištěními, zejména ve Vinohradech.", "location": "Vinohrady – Španělská, Mánesova, Londýnská, Balbínova aj.", "lat": 50.0773, "lng": 14.4385, "sources": ["https://www.praha2.cz/blokove-cisteni-komunikaci/ms-28298", "https://www.praha2.cz/komplexni-uklid-komunikaci-v-praze-2-pro-podzim-roku-2025/d-124387"], "category": "services", "type": "complaint", "relevance": 3}, {"id": 18, "title": "Vinohradské železniční tunely – zástavba nad kolejištěm (Penta/Správa železnic)", "description": "Nad vinohradskými železničními tunely plánuje Penta Investments ve spolupráci se Správou železnic zástavbu. Studie proveditelnosti Nové spojení II (Metro S, potvrzená v lednu 2025) mění perspektivu celého území. Dopad na rezidenční charakter Vinohrad.", "location": "Vinohradské tunely, oblast mezi Hlavním nádražím a Vršovicemi", "lat": 50.078, "lng": 14.442, "sources": ["https://cs.wikipedia.org/wiki/Vinohradsk%C3%A9_%C5%BEelezni%C4%8Dn%C3%AD_tunely"], "category": "development", "type": "complaint", "relevance": 4}, {"id": 19, "title": "Nusle – intenzivní developerská činnost a proměna charakteru čtvrti", "description": "Nusle procházejí intenzivní revitalizací s novými rezidenčními projekty (Rezidence Maroldka aj.). Starousedlíci se obávají ztráty charakteru čtvrti, tlaku na infrastrukturu a vytlačování sociálně slabších obyvatel gentrifikací.", "location": "Nusle, Praha 2/4", "lat": 50.066, "lng": 14.431, "sources": ["https://novostavby.com/pcategory/nusle/", "https://novostavby.com/pcategory/novostavby-praha-2/"], "category": "development", "type": "complaint", "relevance": 4}, {"id": 20, "title": "Park Folimanka – potenciál pro lepší využití a propojení čtvrtí", "description": "Folimanka na pomezí Vinohrad, Nuslí a Nového Města má potenciál stát se lépe využívaným veřejným prostorem. V roce 2025 zde bylo vysazeno 5 nových stromů. Park potřebuje lepší propojení s okolními čtvrtěmi a kvalitnější vybavení.", "location": "Park Folimanka, Praha 2", "lat": 50.07, "lng": 14.428, "sources": ["https://www.metro.cz/praha/praha-2-vysadi-31-novych-stromu-zazelenaji-se-riegrovy-sady-i-folimanka.A251021_143944_metro-praha_hala", "https://prague.eu/cs/objevujte/park-folimanka/"], "category": "environment", "type": "idea", "relevance": 3}];
+
+const CAT_COLORS = {
+  transport: '#3b82f6',
+  housing: '#f59e0b', 
+  safety: '#ef4444',
+  environment: '#22c55e',
+  development: '#8b5cf6',
+  services: '#06b6d4',
+  culture: '#ec4899'
+};
+const CAT_LABELS = {
+  transport: '🚗 Doprava',
+  housing: '🏠 Bydlení',
+  safety: '🔒 Bezpečnost', 
+  environment: '🌳 Prostředí',
+  development: '🏗️ Výstavba',
+  services: '🔧 Služby',
+  culture: '🎭 Kultura'
+};
+
+let issueMarkers = [];
+let issuesVisible = true;
+
+function createIssueMarkers() {
+  ISSUES.forEach(issue => {
+    const color = CAT_COLORS[issue.category] || '#666';
+    const rel = issue.relevance;
+    const size = rel >= 5 ? 14 : rel >= 4 ? 11 : 9;
+    
+    const icon = L.divIcon({
+      className: 'issue-pin',
+      html: '<div style="width:'+size+'px;height:'+size+'px;background:'+color+';border:2px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.4);"></div>',
+      iconSize: [size, size],
+      iconAnchor: [size/2, size/2]
+    });
+    
+    const sourcesHtml = issue.sources.map((s, i) => 
+      '<a href="'+s+'" target="_blank" rel="noopener" style="color:#3b82f6;font-size:11px;word-break:break-all;">[zdroj '+(i+1)+']</a>'
+    ).join(' ');
+    
+    const marker = L.marker([issue.lat, issue.lng], { icon: icon })
+      .bindPopup(
+        '<div style="max-width:260px">'+
+        '<b style="color:'+color+'">'+CAT_LABELS[issue.category]+'</b>'+
+        ' <span style="color:#9ca3af;font-size:10px">relevance '+issue.relevance+'/5</span>'+
+        '<br><b>'+issue.title+'</b>'+
+        '<p style="font-size:12px;margin:6px 0;color:#374151">'+issue.description+'</p>'+
+        '<div style="font-size:11px;color:#6b7280">📍 '+issue.location+'</div>'+
+        '<div style="margin-top:4px">'+sourcesHtml+'</div>'+
+        '</div>',
+        { maxWidth: 280 }
+      );
+    issueMarkers.push(marker);
+    marker.addTo(map);
+  });
+}
+
+function toggleIssues() {
+  issuesVisible = !issuesVisible;
+  issueMarkers.forEach(m => {
+    if (issuesVisible) m.addTo(map);
+    else map.removeLayer(m);
+  });
+  document.getElementById('toggle-issues-btn').textContent = issuesVisible ? '📌 Skrýt problémy' : '📌 Zobrazit problémy';
+}
+
+createIssueMarkers();
 });
 
 function renderMap() {
