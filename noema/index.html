@@ -499,6 +499,50 @@
         document.addEventListener('touchend', handleEnd);
         window.addEventListener('resize', renderThoughts);
 
+        // ── Pinch to go deeper ────────────────────────────────────────────────
+        let pinchStartDist = null;
+        let pinchTriggered = false;
+
+        function pinchDist(e) {
+            const t = e.touches;
+            const dx = t[0].clientX - t[1].clientX;
+            const dy = t[0].clientY - t[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                pinchStartDist = pinchDist(e);
+                pinchTriggered = false;
+                isDragging = false; // cancel single-finger drag
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length !== 2 || pinchTriggered) return;
+            e.preventDefault();
+            const dist = pinchDist(e);
+            const delta = pinchStartDist - dist; // positive = pinching in
+            if (delta > 40) {
+                pinchTriggered = true;
+                // Navigate down into focused sub-thought
+                const t = currentThoughts[focusedIndex];
+                if (t?.children?.length && unlockedSet.has(t.id)) {
+                    navigationStack.push({ root: currentRoot, rotation, focusedIndex });
+                    currentRoot = t; rotation = 0;
+                    renderThoughts();
+                    playSeed();
+                }
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) {
+                pinchStartDist = null;
+                pinchTriggered = false;
+            }
+        });
+
         // ── Breadcrumb ────────────────────────────────────────────────────────
         function updateBreadcrumb() {
             const bc = document.getElementById('breadcrumb');
