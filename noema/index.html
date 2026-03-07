@@ -59,13 +59,8 @@
         }
         .sub-thought.focused { width: 32px; height: 32px; }
 
-        /* Listened dot */
-        .listened-dot {
-            position: absolute; width: 5px; height: 5px;
-            background: #fff; border-radius: 50%;
-            bottom: -2px; right: -2px;
-            pointer-events: none; z-index: 15;
-        }
+        .sub-thought.listened { opacity: 0.35 !important; }
+        .sub-thought.listened.focused { opacity: 1 !important; }
 
         /* Progress arc — SVG circle that fills as audio plays */
         .playing-arc {
@@ -233,11 +228,7 @@
                 circle.style.top = `calc(${SEED_TOP}% + ${y}px)`;
                 circle.style.transform = 'translate(-50%, -50%)';
 
-                if (listenedSet.has(t.id)) {
-                    const dot = document.createElement('div');
-                    dot.className = 'listened-dot';
-                    circle.appendChild(dot);
-                }
+                if (listenedSet.has(t.id)) circle.classList.add('listened');
 
                 ci.appendChild(circle);
 
@@ -319,11 +310,7 @@
                     // Mark as listened immediately on play start
                     if (!listenedSet.has(thought.id)) {
                         listenedSet.add(thought.id);
-                        if (!el.querySelector('.listened-dot')) {
-                            const dot = document.createElement('div');
-                            dot.className = 'listened-dot';
-                            el.appendChild(dot);
-                        }
+                        el.classList.add('listened');
                     }
                 }
             }).catch(() => {});
@@ -395,11 +382,7 @@
             // Add dot to circle
             const el = document.querySelector(`.sub-thought.focused`) ||
                        document.querySelector(`[data-thought-id="${nodeId}"]`);
-            if (el && !el.querySelector('.listened-dot')) {
-                const dot = document.createElement('div');
-                dot.className = 'listened-dot';
-                el.appendChild(dot);
-            }
+            if (el) el.classList.add('listened');
 
             // If this is the current root (seed), unlock its children
             if (nodeId === currentRoot.id && currentRoot.children?.length && !unlockedSet.has(nodeId)) {
