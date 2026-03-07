@@ -1,0 +1,265 @@
+{
+  "seed": {
+    "id": "0",
+    "text": "Memory is not merely storage, but an act of creation — each time we remember, we rewrite the story, choosing which threads to strengthen and which to let fade into the fabric of forgetting.",
+    "children": ["1-1", "1-2", "1-3", "1-4", "1-5"]
+  },
+  "thoughts": {
+    "1-1": {
+      "id": "1-1",
+      "text": "We preserve what wounds us as readily as what heals us, as if pain itself were a treasure worth keeping, a teacher we're afraid to dismiss from our inner classroom.",
+      "children": ["2-1", "2-2", "2-3"]
+    },
+    "1-2": {
+      "id": "1-2",
+      "text": "The digital age promises perfect memory, yet we curate our lives into highlights, preferring the polished story to the messy truth, Instagram moments over ordinary Tuesdays.",
+      "children": ["2-4", "2-5", "2-6", "2-7"]
+    },
+    "1-3": {
+      "id": "1-3",
+      "text": "Some memories we inherit like heirlooms — our grandparents' war stories, our parents' cautionary tales — carrying the weight of experiences we never lived but somehow remember.",
+      "children": ["2-8", "2-9"]
+    },
+    "1-4": {
+      "id": "1-4",
+      "text": "The body keeps its own memories in scars and muscle, in the way we flinch at certain sounds or find comfort in forgotten fragrances — a parallel archive written in flesh.",
+      "children": ["2-10", "2-11", "2-12", "2-13", "2-14"]
+    },
+    "1-5": {
+      "id": "1-5",
+      "text": "We are archaeologists of our own lives, deciding which artifacts deserve preservation, which moments merit monuments, and which should return to dust.",
+      "children": ["2-15"]
+    },
+    "2-1": {
+      "id": "2-1",
+      "text": "The scar reminds us we survived, and survival itself becomes a story worth telling, even when the wound has long since healed.",
+      "children": ["3-1", "3-2"]
+    },
+    "2-2": {
+      "id": "2-2",
+      "text": "We rehearse our traumas like actors preparing for a play that never ends, each repetition both deepening the groove and wearing away the original edges.",
+      "children": ["3-3"]
+    },
+    "2-3": {
+      "id": "2-3",
+      "text": "Sometimes the lesson is simply that we endured, and endurance itself becomes the memory we choose to keep.",
+      "children": ["3-4", "3-5", "3-6", "3-7"]
+    },
+    "2-4": {
+      "id": "2-4",
+      "text": "The camera roll tells one story, but the deleted photos tell another — a shadow narrative of moments we decided weren't worth preserving.",
+      "children": ["3-8"]
+    },
+    "2-5": {
+      "id": "2-5",
+      "text": "We archive our happiness in high resolution while our sorrows pixelate and fade, creating a false history of perpetual joy.",
+      "children": ["3-9", "3-10", "3-11"]
+    },
+    "2-6": {
+      "id": "2-6",
+      "text": "The mundane moments — morning coffee, familiar commutes, quiet evenings — slip through our fingers like water, too ordinary to photograph, too precious to forget.",
+      "children": ["3-12", "3-13"]
+    },
+    "2-7": {
+      "id": "2-7",
+      "text": "Every status update is a choice about which version of ourselves deserves immortality in the digital amber of social media.",
+      "children": ["3-14", "3-15", "3-16", "3-17"]
+    },
+    "2-8": {
+      "id": "2-8",
+      "text": "We carry our ancestors' fears in our DNA, their survival instincts encoded in our reflexes, their memories living on in our unconscious reactions.",
+      "children": ["3-18", "3-19"]
+    },
+    "2-9": {
+      "id": "2-9",
+      "text": "Family stories become myths through repetition, each telling adding layers until we can no longer separate fact from the beautiful fiction we've collectively authored.",
+      "children": ["3-20", "3-21", "3-22", "3-23"]
+    },
+    "2-10": {
+      "id": "2-10",
+      "text": "The body remembers the first time it was held, though the mind has long forgotten — touch as the most ancient form of memory.",
+      "children": ["3-24", "3-25", "3-26"]
+    },
+    "2-11": {
+      "id": "2-11",
+      "text": "A familiar song can collapse decades in an instant, the body responding before the mind catches up, dancing to a rhythm it never truly forgot.",
+      "children": ["3-27"]
+    },
+    "2-12": {
+      "id": "2-12",
+      "text": "Trauma lives in the tensed shoulder, the clenched jaw, the shallow breath — the body keeping score when the mind prefers to forget.",
+      "children": ["3-28", "3-29", "3-30", "3-31"]
+    },
+    "2-13": {
+      "id": "2-13",
+      "text": "We recognize our mother's heartbeat from the womb, our first memory preceding consciousness itself, written in the language of rhythm and warmth.",
+      "children": ["3-32"]
+    },
+    "2-14": {
+      "id": "2-14",
+      "text": "The taste of childhood returns unbidden — grandmother's soup, summer berries, birthday cake — each flavor a time machine on the tongue.",
+      "children": ["3-33", "3-34", "3-35"]
+    },
+    "2-15": {
+      "id": "2-15",
+      "text": "In choosing what to remember, we become the authors of our own mythology, crafting a narrative that explains who we are and why we matter.",
+      "children": ["3-36", "3-37", "3-38", "3-39"]
+    },
+    "3-1": {
+      "id": "3-1",
+      "text": "The body bears witness when words fail, each mark a testament to a moment when we chose to continue despite everything."
+    },
+    "3-2": {
+      "id": "3-2",
+      "text": "We trace old scars like reading braille, each ridge and valley spelling out a story of resilience we sometimes forget we possess."
+    },
+    "3-3": {
+      "id": "3-3",
+      "text": "The hundredth telling dulls the sharp edges, until the story becomes safer than the experience, a domesticated version of wild pain."
+    },
+    "3-4": {
+      "id": "3-4",
+      "text": "Endurance is its own form of courage, quiet and unremarkable, the simple act of waking up again tomorrow."
+    },
+    "3-5": {
+      "id": "3-5",
+      "text": "We survived things we thought would destroy us, and that knowledge becomes a quiet power we carry forward."
+    },
+    "3-6": {
+      "id": "3-6",
+      "text": "The memory of surviving becomes a lighthouse in future storms, proof that we have weathered darkness before."
+    },
+    "3-7": {
+      "id": "3-7",
+      "text": "Sometimes the only lesson is that we are stronger than we knew, more resilient than we believed possible."
+    },
+    "3-8": {
+      "id": "3-8",
+      "text": "In the space between the kept and the discarded lies the truth of who we think we should be versus who we actually are."
+    },
+    "3-9": {
+      "id": "3-9",
+      "text": "We become archivists of joy, desperately documenting happiness as if we could store it for winter like squirrels with acorns."
+    },
+    "3-10": {
+      "id": "3-10",
+      "text": "The feed scrolls endlessly with smiles, while tears dry unwitnessed, creating a collective amnesia about the full spectrum of being human."
+    },
+    "3-11": {
+      "id": "3-11",
+      "text": "Perhaps we photograph happiness because we know how fleeting it is, trying to catch lightning in a digital bottle."
+    },
+    "3-12": {
+      "id": "3-12",
+      "text": "The ordinary moments are the ones we miss most deeply — the weight of a cat on our lap, the particular creak of a familiar stair."
+    },
+    "3-13": {
+      "id": "3-13",
+      "text": "We remember the special occasions but live in the spaces between them, in the beautiful mundane that makes up most of life."
+    },
+    "3-14": {
+      "id": "3-14",
+      "text": "Each post is a small fiction, a careful edit of the messier truth, a story we tell about ourselves until we believe it."
+    },
+    "3-15": {
+      "id": "3-15",
+      "text": "We perform our lives for an invisible audience, curating memories before they're even fully formed."
+    },
+    "3-16": {
+      "id": "3-16",
+      "text": "The online self becomes a parallel life, a cleaner version running alongside the complicated original."
+    },
+    "3-17": {
+      "id": "3-17",
+      "text": "In the gap between the lived moment and the posted version lies a peculiar modern loneliness."
+    },
+    "3-18": {
+      "id": "3-18",
+      "text": "We startle at sounds our ancestors learned to fear, our bodies remembering dangers we've never personally faced."
+    },
+    "3-19": {
+      "id": "3-19",
+      "text": "The past lives in us whether we acknowledge it or not, a genetic inheritance of both wisdom and trauma."
+    },
+    "3-20": {
+      "id": "3-20",
+      "text": "Each retelling polishes the story like a stone in a river, wearing away the sharp truths until only smooth myth remains."
+    },
+    "3-21": {
+      "id": "3-21",
+      "text": "We become characters in our own family legends, playing roles written before we were born."
+    },
+    "3-22": {
+      "id": "3-22",
+      "text": "The truth matters less than the meaning we've assigned to it, the lesson more important than the literal facts."
+    },
+    "3-23": {
+      "id": "3-23",
+      "text": "Family stories are how we teach each other who we are, a curriculum passed down through generations."
+    },
+    "3-24": {
+      "id": "3-24",
+      "text": "Before words, before sight, there was touch — the first language we learned and the last we forget."
+    },
+    "3-25": {
+      "id": "3-25",
+      "text": "The body remembers safety in the curve of certain embraces, danger in the quality of a grip."
+    },
+    "3-26": {
+      "id": "3-26",
+      "text": "We carry the memory of every loving touch, a invisible armor against the coldness of the world."
+    },
+    "3-27": {
+      "id": "3-27",
+      "text": "Music bypasses the conscious mind, reaching directly into the body's memory, making us move before we remember why."
+    },
+    "3-28": {
+      "id": "3-28",
+      "text": "The body holds what the mind cannot bear to remember, storing trauma in muscle and bone."
+    },
+    "3-29": {
+      "id": "3-29",
+      "text": "We carry our histories in our posture, our fears in our breathing patterns, our pain in the way we hold ourselves."
+    },
+    "3-30": {
+      "id": "3-30",
+      "text": "Healing means teaching the body new memories, convincing it that the danger has passed."
+    },
+    "3-31": {
+      "id": "3-31",
+      "text": "The body's memory is honest in ways the mind's cannot be, remembering without judgment or story."
+    },
+    "3-32": {
+      "id": "3-32",
+      "text": "We knew love before we knew ourselves, recognized by a rhythm that called us home before we understood the concept of home."
+    },
+    "3-33": {
+      "id": "3-33",
+      "text": "Taste is time travel, each familiar flavor a portal to a self we used to be, a world that no longer exists."
+    },
+    "3-34": {
+      "id": "3-34",
+      "text": "The foods of childhood comfort us not with nutrition but with memory, feeding a hunger that isn't physical."
+    },
+    "3-35": {
+      "id": "3-35",
+      "text": "We seek our grandmother's recipes not for the food but for the feeling, trying to cook our way back to being loved."
+    },
+    "3-36": {
+      "id": "3-36",
+      "text": "In selecting our memories, we become both artist and curator of our own existence."
+    },
+    "3-37": {
+      "id": "3-37",
+      "text": "The stories we tell about ourselves become the truth, repeated until even we believe them completely."
+    },
+    "3-38": {
+      "id": "3-38",
+      "text": "We are mythmakers by necessity, creating meaning from the random scatter of experiences that comprise a life."
+    },
+    "3-39": {
+      "id": "3-39",
+      "text": "The final edit of our lives will be made by others, but until then, we are the authors of our own remembering."
+    }
+  }
+}
