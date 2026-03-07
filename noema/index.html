@@ -187,6 +187,7 @@
             audioEl.play().then(() => {
                 const seedEl = document.querySelector('.seed-thought');
                 if (seedEl) seedEl.classList.add('playing');
+                listenedSet.add(currentRoot.id);
             }).catch(() => {});
         }
 
@@ -313,7 +314,18 @@
             audioEl.src = `./audio/thought-${thought.id}.mp3`;
             audioEl.play().then(() => {
                 const el = document.querySelector('.sub-thought.focused');
-                if (el) createArc(el);
+                if (el) {
+                    createArc(el);
+                    // Mark as listened immediately on play start
+                    if (!listenedSet.has(thought.id)) {
+                        listenedSet.add(thought.id);
+                        if (!el.querySelector('.listened-dot')) {
+                            const dot = document.createElement('div');
+                            dot.className = 'listened-dot';
+                            el.appendChild(dot);
+                        }
+                    }
+                }
             }).catch(() => {});
         }
 
