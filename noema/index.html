@@ -154,8 +154,9 @@
         let audioEl = document.getElementById('audio-player');
         let isDragging = false, lastAngle = 0, rotation = 0;
         let currentArc = null;
-        const listenedSet = new Set();   // nodes listened >80%, resets on reload
-        const unlockedSet = new Set();   // nodes whose children are revealed
+        const listenedSet = new Set();
+        const unlockedSet = new Set();
+        let seedTapped = false;  // tracks if seed has been played once this level
 
         const ORBIT_RADIUS = 108;
         const SEED_TOP = 40;
@@ -195,25 +196,26 @@
             const seed = document.createElement('div');
             seed.className = 'thought-circle seed-thought';
             seed.addEventListener('click', () => {
-                // If not at top level, go up
+                // If nested, go up a level
                 if (navigationStack.length > 0) {
                     const p = navigationStack.pop();
                     currentRoot = p.root; rotation = p.rotation; focusedIndex = p.focusedIndex;
+                    seedTapped = true; // was already revealed
                     renderThoughts();
-                    if (unlockedSet.has(currentRoot.id)) updateFocus();
                     return;
                 }
-                // Top level behaviour
-                if (unlockedSet.has(currentRoot.id)) {
+                // Top level: 1st tap = play, 2nd tap = reveal sub-thoughts
+                if (!seedTapped) {
+                    seedTapped = true;
                     playSeed();
-                } else if (listenedSet.has(currentRoot.id) || audioEl.paused) {
+                } else if (!unlockedSet.has(currentRoot.id)) {
                     if (currentRoot.children?.length) {
                         unlockedSet.add(currentRoot.id);
                         listenedSet.add(currentRoot.id);
                         revealChildren();
                     }
                 } else {
-                    playSeed();
+                    playSeed(); // already revealed — replay
                 }
             });
             ci.appendChild(seed);
@@ -299,7 +301,7 @@
             document.getElementById('thought-text').textContent = node.text;
             document.getElementById('content-card').classList.add('visible');
             document.getElementById('back-button').style.display = navigationStack.length ? 'flex' : 'none';
-            const canGoDown = node.children && node.children.length && unlockedSet.has(node.id);
+            const canGoDown = node.children && node.children.length > 0;
             document.getElementById('branch-button').style.display = canGoDown ? 'flex' : 'none';
         }
 
@@ -428,6 +430,7 @@
             if (!unlockedSet.has(playingId) && currentRoot.children?.length) {
                 listenedSet.add(playingId);
                 unlockedSet.add(playingId);
+                seedTapped = true;
                 revealChildren();
             }
         });
@@ -439,9 +442,10 @@
         // ── Navigation ────────────────────────────────────────────────────────
         document.getElementById('branch-button').addEventListener('click', () => {
             const t = currentThoughts[focusedIndex];
-            if (!t?.children?.length || !unlockedSet.has(t.id)) return;
+            if (!t?.children?.length) return;
             navigationStack.push({ root: currentRoot, rotation, focusedIndex });
             currentRoot = t; rotation = 0;
+            seedTapped = false;
             renderThoughts();
             playSeed();
         });
