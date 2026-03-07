@@ -1,265 +1,433 @@
 {
   "seed": {
     "id": "0",
-    "text": "Memory is not merely storage, but an act of creation — each time we remember, we rewrite the story, choosing which threads to strengthen and which to let fade into the fabric of forgetting.",
-    "children": ["1-1", "1-2", "1-3", "1-4", "1-5"]
+    "title": "The Coming Storm",
+    "text": "We stand at the edge of the greatest employment disruption in human history. Unlike past revolutions that displaced muscle, AI threatens to displace minds — and this time, there may be nowhere left to run.",
+    "children": ["1-1", "1-2", "1-3", "1-4", "1-5", "1-6"]
   },
   "thoughts": {
     "1-1": {
       "id": "1-1",
-      "text": "We preserve what wounds us as readily as what heals us, as if pain itself were a treasure worth keeping, a teacher we're afraid to dismiss from our inner classroom.",
-      "children": ["2-1", "2-2", "2-3"]
+      "title": "Speed Kills",
+      "text": "The Industrial Revolution took generations to unfold. AI is rewriting entire industries in months. Our social safety nets, designed for gradual change, are tissue paper against this hurricane of disruption.",
+      "children": ["2-1", "2-2", "2-3", "2-4"]
     },
     "1-2": {
       "id": "1-2",
-      "text": "The digital age promises perfect memory, yet we curate our lives into highlights, preferring the polished story to the messy truth, Instagram moments over ordinary Tuesdays.",
-      "children": ["2-4", "2-5", "2-6", "2-7"]
+      "title": "Who Owns Tomorrow?",
+      "text": "As algorithms generate wealth without workers, we face a stark choice: will the profits of automation enrich the few who own the machines, or will we find new ways to share the abundance?",
+      "children": ["2-5", "2-6", "2-7"]
     },
     "1-3": {
       "id": "1-3",
-      "text": "Some memories we inherit like heirlooms — our grandparents' war stories, our parents' cautionary tales — carrying the weight of experiences we never lived but somehow remember.",
-      "children": ["2-8", "2-9"]
+      "title": "The Last Human Jobs",
+      "text": "We comfort ourselves that creativity, care, and human connection are irreplaceable. But what happens when AI writes better novels, diagnoses with more empathy, and never tires of listening?",
+      "children": ["2-8", "2-9", "2-10", "2-11"]
     },
     "1-4": {
       "id": "1-4",
-      "text": "The body keeps its own memories in scars and muscle, in the way we flinch at certain sounds or find comfort in forgotten fragrances — a parallel archive written in flesh.",
-      "children": ["2-10", "2-11", "2-12", "2-13", "2-14"]
+      "title": "Identity Crisis",
+      "text": "For centuries, we've defined ourselves by our work — 'I am a teacher,' 'I am an engineer.' When the machines do it better, who are we? The psychological reckoning may cut deeper than the economic one.",
+      "children": ["2-12", "2-13", "2-14", "2-15"]
     },
     "1-5": {
       "id": "1-5",
-      "text": "We are archaeologists of our own lives, deciding which artifacts deserve preservation, which moments merit monuments, and which should return to dust.",
-      "children": ["2-15"]
+      "title": "History's False Comfort",
+      "text": "Yes, the Luddites were wrong. New jobs always emerged. But past patterns assumed human adaptability outpaced technological change. This time, the machines learn faster than we do.",
+      "children": ["2-16", "2-17", "2-18"]
+    },
+    "1-6": {
+      "id": "1-6",
+      "title": "The Political Powder Keg",
+      "text": "Mass unemployment breeds extremism. When millions lose purpose alongside paychecks, democracies crumble. The tech utopians building our future seem dangerously naive about the past.",
+      "children": ["2-19", "2-20", "2-21", "2-22"]
     },
     "2-1": {
       "id": "2-1",
-      "text": "The scar reminds us we survived, and survival itself becomes a story worth telling, even when the wound has long since healed.",
-      "children": ["3-1", "3-2"]
+      "title": "Exponential vs Linear",
+      "text": "Human institutions evolve linearly while AI improves exponentially. By the time Congress debates retraining programs, the jobs they're training for will already be obsolete.",
+      "children": ["3-1", "3-2", "3-3"]
     },
     "2-2": {
       "id": "2-2",
-      "text": "We rehearse our traumas like actors preparing for a play that never ends, each repetition both deepening the groove and wearing away the original edges.",
-      "children": ["3-3"]
+      "title": "The Overnight Collapse",
+      "text": "When GPT-4 launched, copywriters discovered their profession evaporating not over years, but weeks. Every knowledge worker should study that canary in the coal mine.",
+      "children": ["3-4", "3-5"]
     },
     "2-3": {
       "id": "2-3",
-      "text": "Sometimes the lesson is simply that we endured, and endurance itself becomes the memory we choose to keep.",
-      "children": ["3-4", "3-5", "3-6", "3-7"]
+      "title": "Regulatory Paralysis",
+      "text": "Lawmakers who struggle with email attempt to regulate neural networks. The gap between technological reality and political comprehension has never been wider — or more dangerous.",
+      "children": ["3-6", "3-7", "3-8", "3-9"]
     },
     "2-4": {
       "id": "2-4",
-      "text": "The camera roll tells one story, but the deleted photos tell another — a shadow narrative of moments we decided weren't worth preserving.",
-      "children": ["3-8"]
+      "title": "The Skill Cliff",
+      "text": "Traditional education assumes decades of relevance. But why master radiology when AI reads scans better? The half-life of human expertise shrinks toward zero.",
+      "children": ["3-10", "3-11"]
     },
     "2-5": {
       "id": "2-5",
-      "text": "We archive our happiness in high resolution while our sorrows pixelate and fade, creating a false history of perpetual joy.",
-      "children": ["3-9", "3-10", "3-11"]
+      "title": "The New Feudalism",
+      "text": "A handful of companies control the AI that controls everything else. Without intervention, we're building a world where Bezos and Zuckerberg's successors own the means of cognition.",
+      "children": ["3-12", "3-13", "3-14"]
     },
     "2-6": {
       "id": "2-6",
-      "text": "The mundane moments — morning coffee, familiar commutes, quiet evenings — slip through our fingers like water, too ordinary to photograph, too precious to forget.",
-      "children": ["3-12", "3-13"]
+      "title": "UBI's False Promise",
+      "text": "Universal Basic Income sounds humane until you realize it might become universal basic irrelevance — a pittance to keep the obsolete masses docile while the AI-owning class ascends to godhood.",
+      "children": ["3-15", "3-16"]
     },
     "2-7": {
       "id": "2-7",
-      "text": "Every status update is a choice about which version of ourselves deserves immortality in the digital amber of social media.",
-      "children": ["3-14", "3-15", "3-16", "3-17"]
+      "title": "Data as Labor",
+      "text": "Every click, every photo, every conversation trains the AIs that replace us. We're not just the product; we're unwitting collaborators in our own obsolescence.",
+      "children": ["3-17", "3-18", "3-19", "3-20"]
     },
     "2-8": {
       "id": "2-8",
-      "text": "We carry our ancestors' fears in our DNA, their survival instincts encoded in our reflexes, their memories living on in our unconscious reactions.",
-      "children": ["3-18", "3-19"]
+      "title": "The Empathy Illusion",
+      "text": "An AI therapist never judges, never tires, remembers everything. When machines simulate care better than humans provide it, what happens to the caring professions?",
+      "children": ["3-21", "3-22"]
     },
     "2-9": {
       "id": "2-9",
-      "text": "Family stories become myths through repetition, each telling adding layers until we can no longer separate fact from the beautiful fiction we've collectively authored.",
-      "children": ["3-20", "3-21", "3-22", "3-23"]
+      "title": "Creative Obsolescence",
+      "text": "We said AI could never create, only imitate. Then it started winning art contests and writing better poetry. The last human refuge is crumbling.",
+      "children": ["3-23", "3-24", "3-25"]
     },
     "2-10": {
       "id": "2-10",
-      "text": "The body remembers the first time it was held, though the mind has long forgotten — touch as the most ancient form of memory.",
-      "children": ["3-24", "3-25", "3-26"]
+      "title": "Touch Hunger",
+      "text": "Perhaps human connection remains irreplaceable. But in a world of deepfakes and perfect AI companions, will we even trust that the human we're touching is real?",
+      "children": ["3-26", "3-27", "3-28"]
     },
     "2-11": {
       "id": "2-11",
-      "text": "A familiar song can collapse decades in an instant, the body responding before the mind catches up, dancing to a rhythm it never truly forgot.",
-      "children": ["3-27"]
+      "title": "The Experience Economy",
+      "text": "If AI handles production, humans might shift to pure experience — travel, adventure, relationships. But this assumes wealth to purchase experiences, which requires... jobs.",
+      "children": ["3-29"]
     },
     "2-12": {
       "id": "2-12",
-      "text": "Trauma lives in the tensed shoulder, the clenched jaw, the shallow breath — the body keeping score when the mind prefers to forget.",
-      "children": ["3-28", "3-29", "3-30", "3-31"]
+      "title": "Protestant Work Collapse",
+      "text": "The Protestant work ethic built modern capitalism. Without work as virtue, moral purpose, and social organizing principle, do our societies simply... dissolve?",
+      "children": ["3-30", "3-31", "3-32"]
     },
     "2-13": {
       "id": "2-13",
-      "text": "We recognize our mother's heartbeat from the womb, our first memory preceding consciousness itself, written in the language of rhythm and warmth.",
-      "children": ["3-32"]
+      "title": "The Leisure Trap",
+      "text": "Keynes predicted 15-hour work weeks and worried about excess leisure. He never imagined leisure forced upon us while a lucky few work 80-hour weeks managing the machines.",
+      "children": ["3-33", "3-34"]
     },
     "2-14": {
       "id": "2-14",
-      "text": "The taste of childhood returns unbidden — grandmother's soup, summer berries, birthday cake — each flavor a time machine on the tongue.",
-      "children": ["3-33", "3-34", "3-35"]
+      "title": "Status Without Work",
+      "text": "Stripped of job titles, how do we signal status? Instagram followers? Gaming achievements? The new hierarchies might make the old ones look dignified.",
+      "children": ["3-35", "3-36"]
     },
     "2-15": {
       "id": "2-15",
-      "text": "In choosing what to remember, we become the authors of our own mythology, crafting a narrative that explains who we are and why we matter.",
-      "children": ["3-36", "3-37", "3-38", "3-39"]
+      "title": "The Dignity Deficit",
+      "text": "There's deep human dignity in being needed, in contributing. No amount of VR entertainment can fill the void of feeling fundamentally unnecessary.",
+      "children": ["3-37"]
+    },
+    "2-16": {
+      "id": "2-16",
+      "title": "The Centaur Myth",
+      "text": "Human-AI collaboration sounds nice — until you realize the AI does 95% while the human becomes a rubber stamp. Centaurs were mythical for a reason.",
+      "children": ["3-38", "3-39", "3-40"]
+    },
+    "2-17": {
+      "id": "2-17",
+      "title": "Winner-Take-All Acceleration",
+      "text": "Technology already concentrates wealth; AI supercharges this. The gap between AI-haves and have-nots makes today's inequality look like a rounding error.",
+      "children": ["3-41", "3-42"]
+    },
+    "2-18": {
+      "id": "2-18",
+      "title": "The Retraining Delusion",
+      "text": "'Learn to code' became a cruel joke when AI started coding. Every proposed retraining solution assumes a stable target, but the ground won't stop shifting.",
+      "children": ["3-43"]
+    },
+    "2-19": {
+      "id": "2-19",
+      "title": "Weimar 2.0",
+      "text": "Economic desperation plus technological disruption equals political extremism. We're one mass layoff away from movements that make current populism look tame.",
+      "children": ["3-44", "3-45", "3-46"]
+    },
+    "2-20": {
+      "id": "2-20",
+      "title": "The Blame Game",
+      "text": "When jobs vanish, humans need scapegoats. Immigrants, elites, the 'other' — history shows where this leads. AI unemployment could unleash humanity's darkest impulses.",
+      "children": ["3-47", "3-48"]
+    },
+    "2-21": {
+      "id": "2-21",
+      "title": "Tech Bro Blindness",
+      "text": "Silicon Valley's solution to everything: 'just build an app.' They're optimizing humanity out of the equation while living in bubbles that insulate them from consequences.",
+      "children": ["3-49", "3-50"]
+    },
+    "2-22": {
+      "id": "2-22",
+      "title": "Democracy's Death Spiral",
+      "text": "Democracy assumes an informed, employed citizenry with skin in the game. Mass unemployment plus AI-generated propaganda equals the perfect storm for authoritarianism.",
+      "children": ["3-51"]
     },
     "3-1": {
       "id": "3-1",
-      "text": "The body bears witness when words fail, each mark a testament to a moment when we chose to continue despite everything."
+      "title": "The 18-Month Rule",
+      "text": "Every capability you think AI won't have for a decade, it gains in 18 months. Planning for gradual change is planning for extinction."
     },
     "3-2": {
       "id": "3-2",
-      "text": "We trace old scars like reading braille, each ridge and valley spelling out a story of resilience we sometimes forget we possess."
+      "title": "Institutional Lag",
+      "text": "Universities still teach 4-year degrees for jobs that AI will eliminate before graduation. The mismatch between educational and technological timescales is tragic comedy."
     },
     "3-3": {
       "id": "3-3",
-      "text": "The hundredth telling dulls the sharp edges, until the story becomes safer than the experience, a domesticated version of wild pain."
+      "title": "The Boiling Frog",
+      "text": "Each AI advance seems incremental — just a better chatbot, just faster image generation. We won't notice we're cooked until we're served for dinner."
     },
     "3-4": {
       "id": "3-4",
-      "text": "Endurance is its own form of courage, quiet and unremarkable, the simple act of waking up again tomorrow."
+      "title": "Content Farm Collapse",
+      "text": "SEO writers, stock photographers, voice actors — entire cottage industries evaporated overnight. They were the test cases; we're all next."
     },
     "3-5": {
       "id": "3-5",
-      "text": "We survived things we thought would destroy us, and that knowledge becomes a quiet power we carry forward."
+      "title": "The Quality Paradox",
+      "text": "Ironically, AI often produces better work than the humans it replaces. Hard to argue for human jobs when the machine writes clearer, thinks faster, never sleeps."
     },
     "3-6": {
       "id": "3-6",
-      "text": "The memory of surviving becomes a lighthouse in future storms, proof that we have weathered darkness before."
+      "title": "Fax Machine Governance",
+      "text": "Congress still uses fax machines while debating AI regulation. The technological IQ gap between rulers and ruled has never been more dangerous."
     },
     "3-7": {
       "id": "3-7",
-      "text": "Sometimes the only lesson is that we are stronger than we knew, more resilient than we believed possible."
+      "title": "Lobbying Supremacy",
+      "text": "Tech companies spending billions on lobbying face lawmakers who need staffers to open PDFs. Guess who wins that fight?"
     },
     "3-8": {
       "id": "3-8",
-      "text": "In the space between the kept and the discarded lies the truth of who we think we should be versus who we actually are."
+      "title": "International Race",
+      "text": "Even if one nation slows AI to protect jobs, others won't. The choice: embrace unemployment or become economically irrelevant."
     },
     "3-9": {
       "id": "3-9",
-      "text": "We become archivists of joy, desperately documenting happiness as if we could store it for winter like squirrels with acorns."
+      "title": "The Union Collapse",
+      "text": "Labor unions assume human workers to organize. What leverage do you have when your entire profession can be downloaded?"
     },
     "3-10": {
       "id": "3-10",
-      "text": "The feed scrolls endlessly with smiles, while tears dry unwitnessed, creating a collective amnesia about the full spectrum of being human."
+      "title": "Medical School Folly",
+      "text": "Eight years training to diagnose worse than an AI that trains in eight seconds. Medical education is preparing students for a world that won't exist."
     },
     "3-11": {
       "id": "3-11",
-      "text": "Perhaps we photograph happiness because we know how fleeting it is, trying to catch lightning in a digital bottle."
+      "title": "The Apprenticeship End",
+      "text": "Master-apprentice knowledge transfer assumes the master's skills matter. When AI surpasses masters, what's left to teach?"
     },
     "3-12": {
       "id": "3-12",
-      "text": "The ordinary moments are the ones we miss most deeply — the weight of a cat on our lap, the particular creak of a familiar stair."
+      "title": "Compute Inequality",
+      "text": "In the AI age, computational power equals economic power. The rich don't just have more money; they have more intelligence at their disposal."
     },
     "3-13": {
       "id": "3-13",
-      "text": "We remember the special occasions but live in the spaces between them, in the beautiful mundane that makes up most of life."
+      "title": "API Aristocracy",
+      "text": "Access to advanced AI APIs becomes the new class divider. Those with keys to GPT-X rule; everyone else serves or starves."
     },
     "3-14": {
       "id": "3-14",
-      "text": "Each post is a small fiction, a careful edit of the messier truth, a story we tell about ourselves until we believe it."
+      "title": "The Subscription Trap",
+      "text": "You'll own nothing and be happy — because the AI you need to survive requires monthly payments you can't afford without the job it took."
     },
     "3-15": {
       "id": "3-15",
-      "text": "We perform our lives for an invisible audience, curating memories before they're even fully formed."
+      "title": "Digital Breadcrumbs",
+      "text": "UBI might keep bodies alive but souls wither. Imagine billions maintained like pets while their former-peer AIs reshape reality."
     },
     "3-16": {
       "id": "3-16",
-      "text": "The online self becomes a parallel life, a cleaner version running alongside the complicated original."
+      "title": "The Control Mechanism",
+      "text": "UBI seems generous until you realize it's the perfect social control tool. Disagree with the system? Your monthly payment has encountered an error."
     },
     "3-17": {
       "id": "3-17",
-      "text": "In the gap between the lived moment and the posted version lies a peculiar modern loneliness."
+      "title": "Unpaid Training",
+      "text": "Every CAPTCHA you solve trains AI to not need you. We're literally teaching our replacements for free."
     },
     "3-18": {
       "id": "3-18",
-      "text": "We startle at sounds our ancestors learned to fear, our bodies remembering dangers we've never personally faced."
+      "title": "The Data Dignity Movement",
+      "text": "Some propose paying people for their data. But what happens when AI no longer needs new data, just computational power?"
     },
     "3-19": {
       "id": "3-19",
-      "text": "The past lives in us whether we acknowledge it or not, a genetic inheritance of both wisdom and trauma."
+      "title": "Digital Sharecropping",
+      "text": "We farm engagement for platforms, generating data-crops we don't own. The digital economy perfected exploitation before AI made it obsolete."
     },
     "3-20": {
       "id": "3-20",
-      "text": "Each retelling polishes the story like a stone in a river, wearing away the sharp truths until only smooth myth remains."
+      "title": "The Feedback Loop",
+      "text": "AI trained on human data becomes superhuman, making human data worthless. We bootstrap our replacements then wonder why we're replaced."
     },
     "3-21": {
       "id": "3-21",
-      "text": "We become characters in our own family legends, playing roles written before we were born."
+      "title": "Therapeutic Unemployment",
+      "text": "When AI therapists never break confidentiality, never judge, and cost pennies, human therapists become a luxury good for those who can afford authenticity."
     },
     "3-22": {
       "id": "3-22",
-      "text": "The truth matters less than the meaning we've assigned to it, the lesson more important than the literal facts."
+      "title": "The Care Uncanny Valley",
+      "text": "AI care feels almost right — which makes it deeply wrong. The simulation of empathy might be worse than honest indifference."
     },
     "3-23": {
       "id": "3-23",
-      "text": "Family stories are how we teach each other who we are, a curriculum passed down through generations."
+      "title": "Prompt Engineer Priests",
+      "text": "For a brief moment, 'prompt engineers' were the new creative class. Then AI learned to prompt itself. Even our collaboration with AI becomes obsolete."
     },
     "3-24": {
       "id": "3-24",
-      "text": "Before words, before sight, there was touch — the first language we learned and the last we forget."
+      "title": "Infinite Content",
+      "text": "When AI generates infinite perfect content, human creation becomes either pointless hobby or stubborn resistance. Most will choose Netflix."
     },
     "3-25": {
       "id": "3-25",
-      "text": "The body remembers safety in the curve of certain embraces, danger in the quality of a grip."
+      "title": "The Authenticity Premium",
+      "text": "'Human-made' might become a luxury label, like 'organic.' But how do you prove it when AI can fake any human signature?"
     },
     "3-26": {
       "id": "3-26",
-      "text": "We carry the memory of every loving touch, a invisible armor against the coldness of the world."
+      "title": "Digital Hermits",
+      "text": "Trust in human interaction collapses when anyone could be an AI. The loneliness epidemic becomes the loneliness default."
     },
     "3-27": {
       "id": "3-27",
-      "text": "Music bypasses the conscious mind, reaching directly into the body's memory, making us move before we remember why."
+      "title": "The Skin Hunger Economy",
+      "text": "Physical touch might be the last human monopoly. Expect the rise of professional huggers, hand-holders, human contact workers."
     },
     "3-28": {
       "id": "3-28",
-      "text": "The body holds what the mind cannot bear to remember, storing trauma in muscle and bone."
+      "title": "Reality Authentication",
+      "text": "We'll need blockchain verification for human interactions. 'This conversation certified 100% human' — until AI fakes that too."
     },
     "3-29": {
       "id": "3-29",
-      "text": "We carry our histories in our posture, our fears in our breathing patterns, our pain in the way we hold ourselves."
+      "title": "Experience Inequality",
+      "text": "The employed class travels the world; the unemployed travel VR. Real experience becomes another form of wealth concentration."
     },
     "3-30": {
       "id": "3-30",
-      "text": "Healing means teaching the body new memories, convincing it that the danger has passed."
+      "title": "The Purpose Vacuum",
+      "text": "Remove work from 'work-life balance' and what remains? For many, life without work isn't liberation — it's existential horror."
     },
     "3-31": {
       "id": "3-31",
-      "text": "The body's memory is honest in ways the mind's cannot be, remembering without judgment or story."
+      "title": "Neo-Monasticism",
+      "text": "Expect revival of religious and spiritual movements as humans desperately seek meaning beyond economic function. The AI age might birth new religions."
     },
     "3-32": {
       "id": "3-32",
-      "text": "We knew love before we knew ourselves, recognized by a rhythm that called us home before we understood the concept of home."
+      "title": "Productivity Poison",
+      "text": "We're so programmed for productivity that purposelessness feels like death. The hardest adjustment might be psychological, not economic."
     },
     "3-33": {
       "id": "3-33",
-      "text": "Taste is time travel, each familiar flavor a portal to a self we used to be, a world that no longer exists."
+      "title": "The Boredom Epidemic",
+      "text": "Endless leisure sounds nice until month six. Expect skyrocketing rates of addiction, depression, and self-destructive behavior among the permanently leisured."
     },
     "3-34": {
       "id": "3-34",
-      "text": "The foods of childhood comfort us not with nutrition but with memory, feeding a hunger that isn't physical."
+      "title": "Enforced Creativity",
+      "text": "'Everyone's an artist now!' they'll say, ignoring that forced creativity is just another form of make-work, especially when AI out-creates us all."
     },
     "3-35": {
       "id": "3-35",
-      "text": "We seek our grandmother's recipes not for the food but for the feeling, trying to cook our way back to being loved."
+      "title": "The Follower Economy",
+      "text": "Social media metrics become the new resume. Your worth measured in likes, shares, engagement — the algorithmic popularity contest from hell."
     },
     "3-36": {
       "id": "3-36",
-      "text": "In selecting our memories, we become both artist and curator of our own existence."
+      "title": "Competitive Consumption",
+      "text": "Without career achievements, consumption becomes competition. Who has the newest gadget, the best experience, the most exclusive access."
     },
     "3-37": {
       "id": "3-37",
-      "text": "The stories we tell about ourselves become the truth, repeated until even we believe them completely."
+      "title": "The Helping Impulse",
+      "text": "Humans need to feel helpful. When machines need no help, we're reduced to helping each other cope with being unneeded — recursive purposelessness."
     },
     "3-38": {
       "id": "3-38",
-      "text": "We are mythmakers by necessity, creating meaning from the random scatter of experiences that comprise a life."
+      "title": "The 5% Solution",
+      "text": "Human-AI teams where humans contribute 5% aren't partnerships — they're fig leaves for our obsolescence. Token human involvement."
     },
     "3-39": {
       "id": "3-39",
-      "text": "The final edit of our lives will be made by others, but until then, we are the authors of our own remembering."
+      "title": "Responsibility Without Power",
+      "text": "The worst position: legally responsible for AI decisions you don't understand. All liability, no actual control — the human rubber stamp."
+    },
+    "3-40": {
+      "id": "3-40",
+      "title": "The Deskilling Spiral",
+      "text": "The more AI helps, the less skilled humans become, justifying more AI help. The partnership devolves into dependency into irrelevance."
+    },
+    "3-41": {
+      "id": "3-41",
+      "title": "Network Effect Tyranny",
+      "text": "AI amplifies network effects exponentially. The biggest AI gets the most data, improves fastest, attracts more users — unstoppable monopoly dynamics."
+    },
+    "3-42": {
+      "id": "3-42",
+      "title": "Regional Devastation",
+      "text": "Entire regions built on now-automated industries face collapse. The Rust Belt was a preview; the AI Belt will encompass whole nations."
+    },
+    "3-43": {
+      "id": "3-43",
+      "title": "The Moving Target",
+      "text": "'Future-proof' careers are mirages. By the time you retrain for the 'safe' job, AI already conquered that hilltop too."
+    },
+    "3-44": {
+      "id": "3-44",
+      "title": "Digital Brownshirts",
+      "text": "Mass unemployment plus social media equals perfect recruitment for extremism. Angry, purposeless millions are history's most dangerous ingredient."
+    },
+    "3-45": {
+      "id": "3-45",
+      "title": "The Scapegoat Algorithm",
+      "text": "When jobs disappear, who gets blamed? The immigrants? The elites? The machines? History suggests we'll choose the most vulnerable targets."
+    },
+    "3-46": {
+      "id": "3-46",
+      "title": "Neo-Luddism Rising",
+      "text": "Expect violent anti-AI movements. When smashing machines seems like the only agency left, some will light the torches."
+    },
+    "3-47": {
+      "id": "3-47",
+      "title": "The Purity Spiral",
+      "text": "Unemployment breeds extremism breeds purity tests. Who's truly human? Who's augmented? Who's a traitor to the species? Ugly times ahead."
+    },
+    "3-48": {
+      "id": "3-48",
+      "title": "Algorithmic Divide",
+      "text": "Society splits between those who embrace AI and those who reject it. The new culture war: enhancement versus authenticity."
+    },
+    "3-49": {
+      "id": "3-49",
+      "title": "The Empathy Gap",
+      "text": "Tech billionaires genuinely can't understand why people fear AI. From their yachts, the future looks bright. From the unemployment line, it looks apocalyptic."
+    },
+    "3-50": {
+      "id": "3-50",
+      "title": "Disruption Theology",
+      "text": "'Move fast and break things' works for software, not societies. Tech's religious faith in disruption ignores the human wreckage."
+    },
+    "3-51": {
+      "id": "3-51",
+      "title": "The Last Vote",
+      "text": "Why maintain democracy when most voters contribute nothing to GDP? The economic logic of disenfranchisement becomes terrifyingly clear."
     }
   }
 }
