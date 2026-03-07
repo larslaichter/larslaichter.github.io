@@ -199,7 +199,20 @@
             const seed = document.createElement('div');
             seed.className = 'thought-circle seed-thought';
             seed.addEventListener('click', () => {
-                playSeed();
+                if (unlockedSet.has(currentRoot.id)) {
+                    // Already unlocked — just replay seed
+                    playSeed();
+                } else if (listenedSet.has(currentRoot.id) || audioEl.paused) {
+                    // Second click or audio stopped — reveal children
+                    if (currentRoot.children?.length) {
+                        unlockedSet.add(currentRoot.id);
+                        listenedSet.add(currentRoot.id);
+                        revealChildren();
+                    }
+                } else {
+                    // First click — play
+                    playSeed();
+                }
             });
             ci.appendChild(seed);
 
@@ -409,6 +422,13 @@
             document.getElementById('progress-fill').style.width = '0%';
             removeArc();
             document.querySelector('.seed-thought')?.classList.remove('playing');
+            // Reveal children when audio finishes
+            const playingId = currentRoot.id;
+            if (!unlockedSet.has(playingId) && currentRoot.children?.length) {
+                listenedSet.add(playingId);
+                unlockedSet.add(playingId);
+                revealChildren();
+            }
         });
         audioEl.addEventListener('pause', () => {
             removeArc();
