@@ -99,7 +99,7 @@
         }
         #progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s linear; }
 
-        #navigation { display: flex; justify-content: space-between; align-items: center; }
+        #navigation { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
         .nav-btn {
             width: 40px; height: 40px; border-radius: 50%;
             background: #1e1e1e; border: none; color: #fff;
@@ -195,18 +195,24 @@
             const seed = document.createElement('div');
             seed.className = 'thought-circle seed-thought';
             seed.addEventListener('click', () => {
+                // If not at top level, go up
+                if (navigationStack.length > 0) {
+                    const p = navigationStack.pop();
+                    currentRoot = p.root; rotation = p.rotation; focusedIndex = p.focusedIndex;
+                    renderThoughts();
+                    if (unlockedSet.has(currentRoot.id)) updateFocus();
+                    return;
+                }
+                // Top level behaviour
                 if (unlockedSet.has(currentRoot.id)) {
-                    // Already unlocked — just replay seed
                     playSeed();
                 } else if (listenedSet.has(currentRoot.id) || audioEl.paused) {
-                    // Second click or audio stopped — reveal children
                     if (currentRoot.children?.length) {
                         unlockedSet.add(currentRoot.id);
                         listenedSet.add(currentRoot.id);
                         revealChildren();
                     }
                 } else {
-                    // First click — play
                     playSeed();
                 }
             });
