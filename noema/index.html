@@ -412,7 +412,11 @@
             hint.classList.add('visible');
             setTimeout(() => hint.classList.remove('visible'), 2500);
 
+            // Set rotation so thought[0] starts at bottom center
             const step = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
+            rotation = Math.PI; // thought[0] angle = rotation + 0 - PI/2 = PI/2 (bottom)
+            updatePositions();
+
             document.querySelectorAll('.sub-thought').forEach((circle, i) => {
                 setTimeout(() => circle.classList.add('visible'), 80 + i * 80);
             });
@@ -425,13 +429,29 @@
             document.getElementById('progress-fill').style.width = '0%';
             removeArc();
             document.querySelector('.seed-thought')?.classList.remove('playing');
-            // Reveal children when audio finishes
-            const playingId = currentRoot.id;
-            if (!unlockedSet.has(playingId) && currentRoot.children?.length) {
-                listenedSet.add(playingId);
-                unlockedSet.add(playingId);
+
+            // Seed ended: reveal children if not yet unlocked
+            if (!unlockedSet.has(currentRoot.id) && currentRoot.children?.length) {
+                listenedSet.add(currentRoot.id);
+                unlockedSet.add(currentRoot.id);
                 seedTapped = true;
                 revealChildren();
+                return;
+            }
+
+            // Sub-thought ended: auto-advance to next
+            if (currentThoughts.length > 1 && unlockedSet.has(currentRoot.id)) {
+                const step = (2 * Math.PI) / currentThoughts.length;
+                focusedIndex = (focusedIndex + 1) % currentThoughts.length;
+                rotation = Math.PI - focusedIndex * step;
+                updatePositions();
+                // Update focus without re-triggering playback (call manually)
+                document.querySelectorAll('.sub-thought').forEach(el => el.classList.remove('focused'));
+                const el = document.querySelector(`[data-index="${focusedIndex}"]`);
+                if (el) el.classList.add('focused');
+                const t = currentThoughts[focusedIndex];
+                updateContentCard(t);
+                playSubThought(t);
             }
         });
         audioEl.addEventListener('pause', () => {
@@ -491,7 +511,9 @@
             isDragging = false;
             if (!currentThoughts.length) return;
             const step = (2 * Math.PI) / currentThoughts.length;
-            rotation = Math.round(rotation / step) * step;
+            // Snap so focused thought lands at bottom center (rotation = PI - i*step)
+            focusedIndex = getFocusedIndex();
+            rotation = Math.PI - focusedIndex * step;
             updatePositions(); updateFocus();
         }
 
