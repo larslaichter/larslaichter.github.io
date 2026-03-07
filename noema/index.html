@@ -67,16 +67,21 @@
             pointer-events: none; z-index: 15;
         }
 
-        /* Spinning arc — tight */
+        /* Progress arc — SVG circle that fills as audio plays */
         .playing-arc {
-            position: absolute; border-radius: 50%;
-            border: 1.5px solid transparent;
-            border-top-color: #fff;
+            position: absolute;
             pointer-events: none; z-index: 9;
-            animation: spin 1.1s linear infinite;
             transform: translate(-50%, -50%);
         }
-        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        .playing-arc circle {
+            fill: none;
+            stroke: #ffffff;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            transform-origin: center;
+            transform: rotate(-90deg);
+            transition: stroke-dashoffset 0.15s linear;
+        }
 
         /* Content card */
         #content-card {
@@ -301,15 +306,29 @@
 
         function createArc(element) {
             removeArc();
-            const size = element.offsetWidth + 8;
-            const arc = document.createElement('div');
-            arc.className = 'playing-arc';
-            arc.style.width = size + 'px';
-            arc.style.height = size + 'px';
-            arc.style.left = element.style.left;
-            arc.style.top = element.style.top;
-            element.parentElement.appendChild(arc);
-            currentArc = arc;
+            const d = element.offsetWidth + 10; // diameter of arc SVG
+            const r = d / 2 - 2;               // circle radius inside SVG
+            const circ = 2 * Math.PI * r;
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.classList.add('playing-arc');
+            svg.setAttribute('width', d);
+            svg.setAttribute('height', d);
+            svg.setAttribute('viewBox', `0 0 ${d} ${d}`);
+            svg.style.left = element.style.left;
+            svg.style.top = element.style.top;
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', d / 2);
+            circle.setAttribute('cy', d / 2);
+            circle.setAttribute('r', r);
+            circle.style.strokeDasharray = circ;
+            circle.style.strokeDashoffset = circ; // starts empty
+            svg.appendChild(circle);
+
+            element.parentElement.appendChild(svg);
+            currentArc = svg;
+            currentArc._circ = circ;
         }
 
         function removeArc() {
@@ -321,6 +340,12 @@
             if (!audioEl.duration) return;
             const pct = audioEl.currentTime / audioEl.duration;
             document.getElementById('progress-fill').style.width = `${pct * 100}%`;
+            // Drive the arc
+            if (currentArc && currentArc._circ) {
+                const offset = currentArc._circ * (1 - pct);
+                const circle = currentArc.querySelector('circle');
+                if (circle) circle.style.strokeDashoffset = offset;
+            }
 
             if (pct > 0.8) {
                 // Which node is playing?
