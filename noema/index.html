@@ -8,11 +8,9 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
 
         body {
-            background: #050505;
-            color: #fff;
+            background: #050505; color: #fff;
             font-family: system-ui, -apple-system, "SF Pro Display", "Segoe UI", sans-serif;
-            overflow: hidden;
-            height: 100vh;
+            overflow: hidden; height: 100vh;
         }
 
         #breadcrumb {
@@ -20,10 +18,108 @@
             transform: translateX(-50%);
             display: flex; gap: 8px; align-items: center;
             opacity: 0; transition: opacity 0.3s; z-index: 20;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
         }
         #breadcrumb.visible { opacity: 1; }
-        .breadcrumb-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; opacity: 0.3; }
-        .breadcrumb-arrow { color: #fff; opacity: 0.2; font-size: 10px; }
+        .breadcrumb-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; opacity: 0.5; }
+        .breadcrumb-dot.active { opacity: 1; }
+        .breadcrumb-arrow { color: #fff; opacity: 0.4; font-size: 10px; }
+
+        #settings-button {
+            position: absolute; top: 20px; right: 20px;
+            width: 36px; height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            z-index: 25;
+        }
+        #settings-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        #settings-button:active {
+            transform: scale(0.9);
+        }
+
+        #settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: #111;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease;
+            z-index: 30;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        #settings-panel.open {
+            right: 0;
+        }
+
+        #settings-panel h3 {
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        #settings-panel pre {
+            background: #222;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 60vh;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        #copy-button {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.15s;
+        }
+        #copy-button:hover {
+            background: #eee;
+        }
+        #copy-button:active {
+            transform: scale(0.98);
+        }
+
+        #close-settings {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #close-settings:hover {
+            color: #fff;
+        }
 
         #canvas {
             position: absolute; top: 0; left: 0;
@@ -32,49 +128,48 @@
         }
         .canvas-inner { position: relative; width: 100%; height: 100%; max-width: 600px; }
 
-        .thought-circle {
+        /* All circles share base styles */
+        .node {
             position: absolute; background: #fff; border-radius: 50%;
-            cursor: pointer; z-index: 10;
-            transition: width 0.25s ease, height 0.25s ease, opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer; transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease;
+            opacity: 0.9; /* Default opacity 90% */
         }
+        
+        /* Playing state - 100% opacity */
+        .node.playing { opacity: 1 !important; }
 
-        .seed-thought {
-            width: 60px; height: 60px;
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        /* Seed glows when playing */
-        .seed-thought.playing {
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.15), 0 0 0 8px rgba(255,255,255,0.06);
-        }
-
-        .sub-thought {
-            width: 26px; height: 26px;
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.3);
-        }
-        .sub-thought.visible {
+        /* Seed */
+        .node-seed { width: 60px; height: 60px; z-index: 12; }
+        .node-seed.playing { 
             opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.15), 0 0 0 8px rgba(255,255,255,0.06); 
         }
-        .sub-thought.focused { width: 32px; height: 32px; }
 
-        .sub-thought.listened { opacity: 0.35 !important; }
-        .sub-thought.listened.focused { opacity: 1 !important; }
+        /* Level 1 */
+        .node-l1 { width: 26px; height: 26px; z-index: 11; transition: width 0.2s ease, height 0.2s ease, opacity 0.4s ease; }
+        .node-l1.focused { width: 32px; height: 32px; }
+        .node-l1.listened { opacity: 0.3; }
+        .node-l1.listened.focused { opacity: 0.9; }
+        .node-l1.focused.playing { opacity: 1; }
 
-        /* Progress arc — SVG circle that fills as audio plays */
+        /* Level 2 — small satellites around each L1 */
+        .node-l2 { width: 11px; height: 11px; z-index: 10; opacity: 0.55; }
+        .node-l2.has-children { opacity: 0.7; }
+        .node-l2.visible { pointer-events: auto; }
+
+        /* Level 3 — tiny dots */
+        .node-l3 { width: 6px; height: 6px; z-index: 9; opacity: 0.3; }
+        .node-l3.visible { pointer-events: auto; opacity: 0.5; }
+
+        /* Progress arc */
         .playing-arc {
-            position: absolute;
-            pointer-events: none; z-index: 9;
+            position: absolute; pointer-events: none; z-index: 13;
             transform: translate(-50%, -50%);
         }
         .playing-arc circle {
-            fill: none;
-            stroke: #ffffff;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            transform-origin: center;
-            transform: rotate(-90deg);
+            fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round;
+            transform-origin: center; transform: rotate(-90deg);
             transition: stroke-dashoffset 0.15s linear;
         }
 
@@ -92,11 +187,7 @@
 
         #thought-title { font-weight: 600; font-size: 15px; color: #fff; margin-bottom: 8px; }
         #thought-text { font-size: 13px; line-height: 1.65; color: #888; flex: 1; overflow-y: auto; margin-bottom: 14px; }
-
-        #progress-bar {
-            height: 1.5px; background: rgba(255,255,255,0.12);
-            border-radius: 1px; margin-bottom: 16px; overflow: hidden;
-        }
+        #progress-bar { height: 1.5px; background: rgba(255,255,255,0.12); border-radius: 1px; margin-bottom: 16px; overflow: hidden; }
         #progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s linear; }
 
         #navigation { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
@@ -109,18 +200,6 @@
         }
         .nav-btn:active { transform: scale(0.9); background: #2a2a2a; }
 
-        /* Hint text when children unlocked */
-        #unlock-hint {
-            position: absolute; bottom: 46vh; left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px; letter-spacing: 0.08em;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            opacity: 0; transition: opacity 0.6s;
-            white-space: nowrap; pointer-events: none;
-        }
-        #unlock-hint.visible { opacity: 1; }
-
         #loading {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
@@ -130,152 +209,362 @@
     </style>
 </head>
 <body>
-    <div id="loading">noema</div>
     <div id="breadcrumb"></div>
-    <div id="unlock-hint"></div>
-    <div id="canvas"><div class="canvas-inner"></div></div>
+    
+    <button id="settings-button">⚙</button>
+    
+    <div id="settings-panel">
+        <button id="close-settings">×</button>
+        <h3>Structure</h3>
+        <pre id="markdown-output"></pre>
+        <button id="copy-button">Copy to Clipboard</button>
+    </div>
+
+    <div id="loading">Loading</div>
+
+    <div id="canvas">
+        <div class="canvas-inner"></div>
+    </div>
 
     <div id="content-card">
-        <div id="thought-title"></div>
-        <div id="thought-text"></div>
+        <h2 id="thought-title"></h2>
+        <p id="thought-text"></p>
         <div id="progress-bar"><div id="progress-fill"></div></div>
         <div id="navigation">
-            <button class="nav-btn" id="back-button" title="Up level">↑</button>
-            <button class="nav-btn" id="branch-button" title="Down level">↓</button>
+            <button class="nav-btn" id="back-button" style="display:none">◄</button>
+            <button class="nav-btn" id="branch-button" style="display:none">▼</button>
         </div>
     </div>
 
-    <audio id="audio-player"></audio>
+    <audio id="audio-player" preload="none"></audio>
+    
+    <!-- Pop sounds -->
+    <audio id="pop-sound-single" preload="auto">
+        <source src="data:audio/wav;base64,UklGRuQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YcAAAAAAAAoAFgAiAC4AOgBGAFIAXgBqAHYAggCOAJoApgCyAL4AygDWAOIA7gD6AAYBEgEeASoBNgFCAU4BWgFmAXIBfgGKAZYBogGuAboBxgHSAd4B6gH2AQICDgIaAiYCMgI+AkoCVgJiAm4CegKGApICngKqArYCwgLOAtoC5gLyAv4CCgMWAyIDLgM6A0YDUgNeA2oDdgOCA44DmgOmA7IDvgPKA9YD4gPuA/oDBgQSBB4EKgQ2BEIETgRaBGYEcgR+BIoElgSiBK4EugTGBNIE3gTqBPYEAgUOBRoFJgUyBT4FSgVWBWIFbgV6BYYFkgWeBaoFtgXCBc4F2gXmBfIF/gUKBhYGIgYuBjoGRgZSBl4GagZ2BoIGjgaaBqYGsga+BsoG1gbiBu4G+gYGBxIHHgcqBzYHQgdOB1oHZgdyB34HigcCAPz/9v/w/+r/5P/e/9j/0v/M/8b/wP+6/7T/rv+o/6L/nP+W/5D/iv+E/37/eP9y/2z/Zv9g/1r/VP9O/0j/Qv88/zb/MP8q/yT/Hv8Y/xL/DP8G/wD/+v70/u7+6P7i/tz+1v7Q/sr+xP6+/rj+sv6s/qb+oP6a/pT+jv6I/oL+fP52/nD+av5k/l7+WP5S/kz+Rv5A/jr+NP4u/ij+Iv4c/hb+EP4K/gT+/v0=" type="audio/wav">
+    </audio>
+    
+    <audio id="pop-sound-double" preload="auto">
+        <source src="data:audio/wav;base64,UklGRhgBAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YfQAAAAAAAAKABYAIgAuADoARgBSAF4AagB2AIIAjgCaAKYAsgC+AMoA1gDiAO4A+gAGARIBHgEqATYBQgFOAVoBZgFyAX4BigGWAaIBrgG6AcYB0gHeAeoB9gECAg4CGgImAjICPgJKAlYCYgJuAnoChgKSAp4CqgK2AsICzgLaAuYC8gL+AgoD///9/fv7+fn39/X19PPy8vDw7u7s7Orq6Ojm5uTk4uLg4N7e3Nza2tjY1tbU1NLS0NDOzszMysrIyMbGxMTCwsDAvr68vLq6uLi2trS0srKwsK6urKyqqgAACgAWACIALgA6AEYAUgBeAGoAdgCCAI4AmgCmALIAvgDKANYA4gDuAPoABgESAR4BKgE2AUIBTgFaAWYBcgF+AYoBAgD8//b/8P/q/+T/3v/Y/9L/zP/G/8D/uv+0/67/qP+i/5z/lv+Q/4r/hP9+/3j/cv9s/2b/YP9a/1T/Tv9I/0L/" type="audio/wav">
+    </audio>
 
     <script>
-        let thoughtTree = null, currentRoot = null;
-        let currentThoughts = [], focusedIndex = 0;
+        const thoughtTree = {
+            root: { id: 0, title: "Risk of Mass AI Unemployment", text: "How likely is it that Artificial Intelligence will cause massive unemployment in the next decade?", children: [1, 14, 26, 39, 52, 64] },
+            thoughts: {
+                0: { id: 0, title: "Risk of Mass AI Unemployment", text: "How likely is it that Artificial Intelligence will cause massive unemployment in the next decade?", children: [1, 14, 26, 39, 52, 64] },
+                1: { id: 1, title: "Historical Context", text: "Technology has displaced workers throughout history, from the printing press to the assembly line. Each time, new jobs emerged we couldn't previously imagine.", children: [2, 6, 10] },
+                2: { id: 2, title: "Industrial Revolution Pattern", text: "The Industrial Revolution eliminated millions of agricultural jobs, yet created entirely new industries and professions. The transition was painful but ultimately led to higher living standards.", children: [3, 4, 5] },
+                3: { id: 3, title: "Timing Matters", text: "Industrial transitions took generations. Workers had time to adapt, and their children entered different fields. AI change might happen in years, not decades." },
+                4: { id: 4, title: "Social Safety Nets", text: "During industrialization, we lacked unemployment insurance, retraining programs, or social security. Modern societies have tools to manage transitions." },
+                5: { id: 5, title: "Skills Mismatch", text: "Factory work required similar physical skills to farming. The jump from truck driver to data analyst is far greater." },
+                6: { id: 6, title: "The Automation Paradox", text: "ATMs were supposed to eliminate bank tellers. Instead, they made branches cheaper to operate, banks opened more branches, and teller employment actually increased.", children: [7, 8, 9] },
+                7: { id: 7, title: "Complement vs Substitute", text: "Technology often complements human work rather than replacing it. Spreadsheets didn't eliminate accountants - they made them more productive." },
+                8: { id: 8, title: "New Task Creation", text: "As automation handles routine work, humans focus on creative, interpersonal, and strategic tasks that emerge from the new capabilities." },
+                9: { id: 9, title: "The Productivity Dividend", text: "Higher productivity can lower prices, increase demand, and create more jobs in the same field - if the demand is elastic enough." },
+                10: { id: 10, title: "This Time Might Be Different", text: "Previous automation replaced muscle. AI replaces minds. When machines can think, learn, and create, what uniquely human value remains?", children: [11, 12, 13] },
+                11: { id: 11, title: "Cognitive Capabilities", text: "AI already matches or exceeds humans in many cognitive tasks - from chess to medical diagnosis. The scope of 'human-only' work shrinks daily." },
+                12: { id: 12, title: "General vs Narrow AI", text: "Current AI excels at specific tasks. Artificial General Intelligence that matches human flexibility remains elusive, possibly decades away." },
+                13: { id: 13, title: "Economic Value of Consciousness", text: "Even if AI matches our capabilities, will people pay premium for human touch? We still prefer handmade goods and human performers." },
+                14: { id: 14, title: "Current Labor Market Signals", text: "Despite rapid AI advancement, unemployment remains near historic lows in many developed nations. Where are the jobless masses?", children: [15, 19, 23] },
+                15: { id: 15, title: "The Great Reshuffling", text: "Workers are changing jobs at record rates, moving from declining sectors to growing ones. The churn is high, but employment remains strong.", children: [16, 17, 18] },
+                16: { id: 16, title: "Wage Polarization", text: "High-skill and low-skill jobs grow, while middle-skill jobs disappear. The barbell economy creates inequality even with full employment." },
+                17: { id: 17, title: "Geographic Displacement", text: "Jobs concentrate in superstar cities while rural areas hollow out. The jobs exist, but not where people live." },
+                18: { id: 18, title: "Quality vs Quantity", text: "Gig economy and part-time work mask underemployment. People have jobs, but not careers with benefits and security." },
+                19: { id: 19, title: "Leading Indicators", text: "Unemployment is a lagging indicator. By the time mass joblessness appears, the damage is done. Watch investment patterns and hiring freezes.", children: [20, 21, 22] },
+                20: { id: 20, title: "Corporate AI Spending", text: "Companies pour billions into AI not to expand but to cut costs. Every efficiency gain potentially means fewer workers needed." },
+                21: { id: 21, title: "Startup Job Creation", text: "Modern tech startups create fewer jobs than industrial predecessors. Instagram had 13 employees when Facebook bought it for $1 billion." },
+                22: { id: 22, title: "The Productivity Puzzle", text: "If AI is so transformative, why isn't productivity soaring? Perhaps the revolution is building but hasn't yet reached critical mass." },
+                23: { id: 23, title: "Skills Gap Reality", text: "Millions of jobs go unfilled while millions seek work. The mismatch between skills needed and skills available grows wider.", children: [24, 25] },
+                24: { id: 24, title: "Education Lag", text: "Universities teach outdated curricula. By graduation, students' skills are already obsolete. The education system can't keep pace with change." },
+                25: { id: 25, title: "Retraining Challenges", text: "Mid-career workers struggle to acquire new technical skills. Online courses have low completion rates. Real retraining requires time and money most lack." },
+                26: { id: 26, title: "Policy Responses", text: "Governments worldwide grapple with AI's implications. From Universal Basic Income to robot taxes, radical proposals enter mainstream discourse.", children: [27, 31, 35] },
+                27: { id: 27, title: "Universal Basic Income", text: "Give everyone money to live, whether they work or not. Alaska's oil dividend provides a small-scale model, but nationwide implementation faces huge obstacles.", children: [28, 29, 30] },
+                28: { id: 28, title: "Inflation Concerns", text: "If everyone gets $1000/month, won't rents just rise by $1000? Without addressing supply, UBI might just fuel inflation." },
+                29: { id: 29, title: "Work Incentives", text: "Critics fear UBI destroys work ethic. Proponents argue it enables entrepreneurship and creative pursuits. Small pilots show mixed results." },
+                30: { id: 30, title: "Political Feasibility", text: "UBI requires massive tax increases or spending cuts. In polarized democracies, achieving consensus seems nearly impossible." },
+                31: { id: 31, title: "Job Guarantee Programs", text: "Government as employer of last resort, creating public works projects for anyone who wants a job. The New Deal provides historical precedent.", children: [32, 33, 34] },
+                32: { id: 32, title: "Make-Work Concerns", text: "Creating jobs just to create jobs risks inefficiency. Soviet full employment led to 'we pretend to work, they pretend to pay us.'" },
+                33: { id: 33, title: "Matching Skills to Needs", text: "Public needs are enormous - from infrastructure to eldercare. The challenge is matching unemployed workers' skills to social priorities." },
+                34: { id: 34, title: "Private Sector Crowding", text: "If government offers guaranteed jobs, private employers must compete. This could drive up wages but also reduce business flexibility." },
+                35: { id: 35, title: "Human-Centered Economy", text: "Shift focus from efficiency to human flourishing. Shorter work weeks, job sharing, and valuing care work could spread available work more broadly.", children: [36, 37, 38] },
+                36: { id: 36, title: "Four-Day Work Week", text: "Trials show maintained productivity with better work-life balance. As AI boosts efficiency, humans could work less while maintaining living standards." },
+                37: { id: 37, title: "Care Economy Expansion", text: "Aging populations need human care. Teaching, nursing, and social work resist automation. Properly valuing this work could employ millions." },
+                38: { id: 38, title: "Measurement Challenges", text: "GDP measures production, not wellbeing. New economic metrics might value leisure, health, and happiness over pure output." },
+                39: { id: 39, title: "Sectoral Disruption Patterns", text: "AI won't hit everywhere equally or simultaneously. Understanding which sectors face immediate risk helps predict unemployment patterns.", children: [40, 44, 48] },
+                40: { id: 40, title: "White Collar Surprise", text: "Many assumed blue-collar jobs would go first. Instead, AI threatens lawyers, accountants, and analysts - anyone who manipulates information.", children: [41, 42, 43] },
+                41: { id: 41, title: "Routine Cognitive Work", text: "Document review, basic analysis, report writing - AI excels at pattern recognition and synthesis. Junior professional roles face elimination." },
+                42: { id: 42, title: "Creative Professions", text: "AI generates art, music, and writing. While top creatives remain valuable, mid-tier commercial work becomes automated." },
+                43: { id: 43, title: "Professional Service Evolution", text: "Instead of replacing professionals, AI might augment them. One lawyer with AI could do the work of ten, changing the profession's structure." },
+                44: { id: 44, title: "Physical Work Persistence", text: "Robots struggle with unstructured environments. Plumbers, electricians, and construction workers might outlast office workers.", children: [45, 46, 47] },
+                45: { id: 45, title: "Dexterity Challenges", text: "Human hands perform millions of complex manipulations. Replicating this in varied real-world conditions remains extremely difficult and expensive." },
+                46: { id: 46, title: "On-Site Requirement", text: "Many physical jobs require presence at unpredictable locations. The cost of mobile, adaptable robots exceeds human wages for now." },
+                47: { id: 47, title: "Human Preference", text: "People trust humans in their homes. The social comfort with human service providers creates natural demand for human workers." },
+                48: { id: 48, title: "Regulatory Protection", text: "Some jobs enjoy legal protection. Licenses, unions, and regulations slow automation in medicine, law, and other fields.", children: [49, 50, 51] },
+                49: { id: 49, title: "Professional Licensing", text: "Doctors, lawyers, and accountants require licenses. Changing regulations to allow AI practice faces fierce resistance from professional associations." },
+                50: { id: 50, title: "Liability Questions", text: "Who gets sued when AI makes mistakes? Until liability frameworks clarify, many fields will require human oversight and accountability." },
+                51: { id: 51, title: "Union Resistance", text: "Strong unions negotiate automation limits. German auto workers secured guarantees about human employment levels in exchange for productivity gains." },
+                52: { id: 52, title: "Timeline Uncertainties", text: "Predictions range from imminent catastrophe to gradual century-long transitions. The pace of change matters as much as the destination.", children: [53, 57, 61] },
+                53: { id: 53, title: "Exponential vs Linear", text: "Humans think linearly but technology advances exponentially. The next decade might bring more change than the past century.", children: [54, 55, 56] },
+                54: { id: 54, title: "The AI Winter Question", text: "AI has experienced boom-bust cycles before. Current enthusiasm might hit fundamental limits, slowing the transformation." },
+                55: { id: 55, title: "Compound Effects", text: "AI improves AI development. As systems bootstrap their own improvement, change could accelerate beyond prediction." },
+                56: { id: 56, title: "Implementation Lag", text: "Even revolutionary technology takes time to deploy. Companies must retool processes, retrain workers, and overcome organizational inertia." },
+                57: { id: 57, title: "Demographic Buffers", text: "Aging populations create labor shortages in many countries. AI automation might arrive just in time to maintain living standards.", children: [58, 59, 60] },
+                58: { id: 58, title: "The Dependency Ratio", text: "Fewer workers support more retirees. Without automation, taxes must rise dramatically or services must be cut." },
+                59: { id: 59, title: "Immigration Politics", text: "Rich countries could import workers but face political resistance. AI offers a politically palatable alternative to immigration." },
+                60: { id: 60, title: "Caregiving Demands", text: "Aging increases demand for human-touch services. While AI handles routine work, humans provide companionship and complex care." },
+                61: { id: 61, title: "Black Swan Events", text: "Unexpected events could accelerate or derail AI deployment. Wars, pandemics, or breakthroughs create discontinuous change.", children: [62, 63] },
+                62: { id: 62, title: "Regulatory Backlash", text: "A major AI catastrophe - deaths from autonomous vehicles, biased decisions, or privacy violations - could trigger severe restrictions." },
+                63: { id: 63, title: "Breakthrough Acceleration", text: "A single lab achieving AGI could transform everything overnight. The winner-take-all dynamics of AI create unstable dynamics." },
+                64: { id: 64, title: "Human Adaptation Capacity", text: "Humans have survived ice ages, plagues, and world wars. Our adaptability might surprise pessimists - if we act wisely.", children: [65, 69, 73, 77] },
+                65: { id: 65, title: "New Job Categories", text: "Who predicted 'social media manager' or 'app developer' twenty years ago? Future jobs might be literally unimaginable today.", children: [66, 67, 68] },
+                66: { id: 66, title: "AI Collaboration Roles", text: "Prompt engineers, AI trainers, and model therapists already emerge. Working with AI, not against it, creates new opportunities." },
+                67: { id: 67, title: "Meaning Economy", text: "As material needs are met cheaply, people pay for purpose, community, and experiences. Human guides to meaning gain value." },
+                68: { id: 68, title: "Neo-Artisan Movement", text: "Mass automation makes handcrafted goods more valuable. 'Made by humans' becomes a luxury brand." },
+                69: { id: 69, title: "Education Revolution", text: "Crisis forces educational reform. Continuous learning, apprenticeships, and just-in-time training replace obsolete degree systems.", children: [70, 71, 72] },
+                70: { id: 70, title: "Microcredentials", text: "Instead of four-year degrees, workers earn specific skill badges. Modular education allows rapid reskilling as needs change." },
+                71: { id: 71, title: "AI-Powered Learning", text: "Personalized AI tutors make high-quality education universally accessible. The same force displacing workers enables their retraining." },
+                72: { id: 72, title: "Learning While Earning", text: "Companies invest in continuous worker development. The line between working and learning blurs as adaptation becomes constant." },
+                73: { id: 73, title: "Social Innovation", text: "Crisis spurs creativity. The Great Depression birthed Social Security. AI displacement might force equally dramatic social innovations.", children: [74, 75, 76] },
+                74: { id: 74, title: "Ownership Models", text: "Worker cooperatives, profit sharing, and equity distribution spread automation benefits. The who-owns-the-robots question becomes central." },
+                75: { id: 75, title: "Time Banking", text: "Alternative economies emerge where people trade hours of service. An hour of teaching equals an hour of plumbing, creating AI-proof exchange." },
+                76: { id: 76, title: "Digital Commons", text: "Open-source AI and public data trusts ensure benefits flow broadly. Technology becomes public infrastructure like roads or internet." },
+                77: { id: 77, title: "The Optimistic Scenario", text: "Perhaps we're birthing not unemployment but liberation. Humans freed from drudgery to pursue creativity, relationships, and self-actualization.", children: [78, 79, 80] },
+                78: { id: 78, title: "The End of Scarcity", text: "AI plus renewable energy equals abundance. When machines provide all necessities cheaply, human work becomes voluntary self-expression." },
+                79: { id: 79, title: "Renaissance 2.0", text: "Like Renaissance Florence, material abundance enables cultural flowering. Everyone becomes an artist, philosopher, or inventor." },
+                80: { id: 80, title: "Star Trek Economics", text: "Science fiction imagined post-scarcity societies focused on exploration and growth. Fiction might become blueprint for reality." }
+            }
+        };
+
+        // Audio and state management
+        const audioEl = document.getElementById('audio-player');
+        const popSingle = document.getElementById('pop-sound-single');
+        const popDouble = document.getElementById('pop-sound-double');
+        
+        let currentRoot = thoughtTree.root;
+        let currentThoughts = [];
         let navigationStack = [];
-        let audioEl = document.getElementById('audio-player');
-        let isDragging = false, lastAngle = 0, rotation = 0;
+        let seedTapped = false;
+        let subFocused = false;
+        let rotation = Math.PI; // Start at bottom
+        let focusedIndex = 0;
+        let isDragging = false;
+        let lastAngle = 0;
         let currentArc = null;
-        const listenedSet = new Set();
-        const unlockedSet = new Set();
-        let seedTapped = false;  // tracks if seed has been played once this level
+        let listenedSet = new Set();
+        let layout = [];
+        
+        // Prevent audio replaying at same level
+        let playedAtLevel = new Map(); // Map level depth to Set of played IDs
 
-        const ORBIT_RADIUS = 108;
-        const SEED_TOP = 40;
+        // Geometry
+        const R1 = 108; // L1 orbit
+        const R2 = 32;  // L2 orbit
+        const R3 = 12;  // L3 orbit
+        const SEED_TOP = 55;
+        const seedPos = () => ({ x: window.innerWidth / 2, y: window.innerHeight * SEED_TOP / 100 });
 
-        // ── Load ─────────────────────────────────────────────────────────────
-        fetch('./thought-tree.json')
-            .then(r => r.json())
-            .then(data => {
-                thoughtTree = data;
-                currentRoot = thoughtTree.seed;
-                document.getElementById('loading').style.display = 'none';
-                renderThoughts();
-                // Play seed immediately
-                playSeed();
-            })
-            .catch(() => { document.getElementById('loading').textContent = 'error'; });
+        // Settings panel
+        const settingsButton = document.getElementById('settings-button');
+        const settingsPanel = document.getElementById('settings-panel');
+        const closeSettings = document.getElementById('close-settings');
+        const copyButton = document.getElementById('copy-button');
+        const markdownOutput = document.getElementById('markdown-output');
 
-        // ── Seed playback ─────────────────────────────────────────────────────
-        function playSeed() {
-            audioEl.pause();
-            removeArc();
-            audioEl.src = `./audio/thought-${currentRoot.id}.mp3`;
-            updateContentCard(currentRoot);
-            audioEl.play().then(() => {
-                const seedEl = document.querySelector('.seed-thought');
-                if (seedEl) seedEl.classList.add('playing');
-                listenedSet.add(currentRoot.id);
-            }).catch(() => {});
+        settingsButton.addEventListener('click', () => {
+            generateMarkdown();
+            settingsPanel.classList.add('open');
+        });
+
+        closeSettings.addEventListener('click', () => {
+            settingsPanel.classList.remove('open');
+        });
+
+        copyButton.addEventListener('click', () => {
+            const text = markdownOutput.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyButton.textContent = 'Copy to Clipboard';
+                }, 2000);
+            });
+        });
+
+        function generateMarkdown() {
+            let markdown = '';
+            
+            function traverseThought(thought, depth = 0) {
+                const prefix = '#'.repeat(depth + 1);
+                markdown += `${prefix} ${thought.title || 'Untitled'}\n\n${thought.text}\n\n`;
+                
+                if (thought.children) {
+                    thought.children.forEach(childId => {
+                        const child = thoughtTree.thoughts[childId];
+                        if (child) traverseThought(child, depth + 1);
+                    });
+                }
+            }
+            
+            traverseThought(currentRoot, 0);
+            markdownOutput.textContent = markdown;
         }
 
-        // ── Render ────────────────────────────────────────────────────────────
-        function renderThoughts() {
+        // ── Initialize ────────────────────────────────────────────────────────
+        window.addEventListener('load', () => {
+            document.getElementById('loading').style.display = 'none';
+            renderAll();
+        });
+
+        // ── Render scene ──────────────────────────────────────────────────────
+        function renderAll() {
             const ci = document.querySelector('.canvas-inner');
             ci.innerHTML = '';
-            removeArc();
-
+            
+            // Seed node
             const seed = document.createElement('div');
-            seed.className = 'thought-circle seed-thought';
-            seed.addEventListener('click', () => {
-                // If nested, go up a level
-                if (navigationStack.length > 0) {
-                    const p = navigationStack.pop();
-                    currentRoot = p.root; rotation = p.rotation; focusedIndex = p.focusedIndex;
-                    seedTapped = true; // was already revealed
-                    renderThoughts();
-                    return;
-                }
-                // Top level: 1st tap = play, 2nd tap = reveal sub-thoughts
-                if (!seedTapped) {
-                    seedTapped = true;
-                    playSeed();
-                } else if (!unlockedSet.has(currentRoot.id)) {
-                    if (currentRoot.children?.length) {
-                        unlockedSet.add(currentRoot.id);
-                        listenedSet.add(currentRoot.id);
-                        revealChildren();
-                    }
-                } else {
-                    playSeed(); // already revealed — replay
-                }
-            });
+            seed.className = 'node node-seed';
+            const { x: cx, y: cy } = seedPos();
+            seed.style.left = cx + 'px'; seed.style.top = cy + 'px';
+            seed.addEventListener('click', onSeedClick);
             ci.appendChild(seed);
 
-            currentThoughts = (currentRoot.children || []).map(id => thoughtTree.thoughts[id]);
-            const step = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
-            const isUnlocked = unlockedSet.has(currentRoot.id);
+            // Current thoughts (children of root)
+            currentThoughts = currentRoot.children?.map(id => thoughtTree.thoughts[id]) || [];
+            const step1 = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
+            layout = [];
 
-            currentThoughts.forEach((t, i) => {
-                const angle = rotation + i * step - Math.PI / 2;
-                const x = Math.cos(angle) * ORBIT_RADIUS;
-                const y = Math.sin(angle) * ORBIT_RADIUS;
+            // Render all nodes at once (visible from start as requested)
+            currentThoughts.forEach((t1, i) => {
+                const angle1 = rotation + i * step1 - Math.PI / 2;
+                const x1 = cx + Math.cos(angle1) * R1;
+                const y1 = cy + Math.sin(angle1) * R1;
 
-                const circle = document.createElement('div');
-                circle.className = 'thought-circle sub-thought';
-                circle.dataset.index = i;
-                circle.style.left = `calc(50% + ${x}px)`;
-                circle.style.top = `calc(${SEED_TOP}% + ${y}px)`;
-                circle.style.transform = 'translate(-50%, -50%)';
+                const el1 = document.createElement('div');
+                el1.className = 'node node-l1';
+                if (listenedSet.has(t1.id)) el1.classList.add('listened');
+                el1.style.left = x1 + 'px'; el1.style.top = y1 + 'px';
+                el1.addEventListener('click', () => onL1Click(i));
+                ci.appendChild(el1);
 
-                if (listenedSet.has(t.id)) circle.classList.add('listened');
+                const entry = { thought: t1, x: x1, y: y1, el: el1, children: [] };
+                layout.push(entry);
 
-                ci.appendChild(circle);
+                // L2: children of L1
+                const l2thoughts = (t1.children || []).map(id => thoughtTree.thoughts[id]);
+                const step2 = l2thoughts.length ? (2 * Math.PI) / l2thoughts.length : 0;
+                l2thoughts.forEach((t2, j) => {
+                    const angle2 = j * step2 - Math.PI / 2;
+                    const x2 = x1 + Math.cos(angle2) * R2;
+                    const y2 = y1 + Math.sin(angle2) * R2;
 
-                // Reveal with stagger if unlocked
-                if (isUnlocked) {
-                    setTimeout(() => circle.classList.add('visible'), 60 + i * 60);
-                }
+                    const el2 = document.createElement('div');
+                    el2.className = 'node node-l2';
+                    el2.classList.add('visible'); // Make visible from start
+                    if (t2.children?.length) el2.classList.add('has-children');
+                    el2.style.left = x2 + 'px'; el2.style.top = y2 + 'px';
+                    ci.appendChild(el2);
+
+                    const entry2 = { thought: t2, x: x2, y: y2, el: el2, parentIndex: i, childIndex: j };
+                    entry.children.push(entry2);
+
+                    // L3: children of L2
+                    const l3thoughts = (t2.children || []).map(id => thoughtTree.thoughts[id]);
+                    const step3 = l3thoughts.length ? (2 * Math.PI) / l3thoughts.length : 0;
+                    l3thoughts.forEach((t3, k) => {
+                        const angle3 = k * step3 - Math.PI / 2;
+                        const el3 = document.createElement('div');
+                        el3.className = 'node node-l3 visible'; // Make visible from start
+                        el3.style.left = (x2 + Math.cos(angle3) * R3) + 'px';
+                        el3.style.top  = (y2 + Math.sin(angle3) * R3) + 'px';
+                        ci.appendChild(el3);
+                    });
+                });
             });
 
             updateBreadcrumb();
 
-            // Update card to seed if no sub-thoughts visible yet
-            if (!isUnlocked) {
-                document.getElementById('content-card').classList.add('visible');
+            if (subFocused) {
+                applyFocus();
+            } else {
                 updateContentCard(currentRoot);
                 document.getElementById('back-button').style.display = navigationStack.length ? 'flex' : 'none';
                 document.getElementById('branch-button').style.display = 'none';
-            } else {
-                updateFocus();
+                document.getElementById('content-card').classList.add('visible');
             }
         }
 
-        function updatePositions() {
-            const step = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
-            document.querySelectorAll('.sub-thought').forEach((el, i) => {
-                const angle = rotation + i * step - Math.PI / 2;
-                el.style.left = `calc(50% + ${Math.cos(angle) * ORBIT_RADIUS}px)`;
-                el.style.top = `calc(${SEED_TOP}% + ${Math.sin(angle) * ORBIT_RADIUS}px)`;
+        function onL1Click(index) {
+            if (!subFocused) {
+                popSingle.currentTime = 0;
+                popSingle.play();
+                subFocused = true;
+                seedTapped = true;
+                snapToBottom(index);
+                repositionAll();
+                applyFocus();
+            } else if (index === focusedIndex && layout[index].thought.children?.length) {
+                // Go deeper
+                popDouble.currentTime = 0;
+                popDouble.play();
+                goDeeper();
+            } else {
+                // Switch focus
+                popSingle.currentTime = 0;
+                popSingle.play();
+                focusedIndex = index;
+                snapToBottom(index);
+                repositionAll();
+                applyFocus();
+            }
+        }
+
+        // ── Reposition all nodes after rotation change ────────────────────────
+        function repositionAll() {
+            const { x: cx, y: cy } = seedPos();
+            const step1 = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
+
+            layout.forEach((entry, i) => {
+                const angle1 = rotation + i * step1 - Math.PI / 2;
+                const x1 = cx + Math.cos(angle1) * R1;
+                const y1 = cy + Math.sin(angle1) * R1;
+                entry.x = x1; entry.y = y1;
+                entry.el.style.left = x1 + 'px'; entry.el.style.top = y1 + 'px';
+
+                const step2 = entry.children.length ? (2 * Math.PI) / entry.children.length : 0;
+                entry.children.forEach((c, j) => {
+                    const angle2 = j * step2 - Math.PI / 2;
+                    const x2 = x1 + Math.cos(angle2) * R2;
+                    const y2 = y1 + Math.sin(angle2) * R2;
+                    c.x = x2; c.y = y2;
+                    c.el.style.left = x2 + 'px'; c.el.style.top = y2 + 'px';
+                    
+                    // L3 follows L2
+                    let l3 = c.el.nextSibling;
+                    const l3count = (thoughtTree.thoughts[c.thought.id]?.children || []).length;
+                    const step3 = l3count ? (2 * Math.PI) / l3count : 0;
+                    for (let k = 0; k < l3count && l3 && l3.classList.contains('node-l3'); k++) {
+                        const angle3 = k * step3 - Math.PI / 2;
+                        l3.style.left = (x2 + Math.cos(angle3) * R3) + 'px';
+                        l3.style.top  = (y2 + Math.sin(angle3) * R3) + 'px';
+                        l3 = l3.nextSibling;
+                    }
+                });
             });
+
+            // Move arc with focused circle
+            if (currentArc && layout[focusedIndex]) {
+                const { x, y } = layout[focusedIndex];
+                currentArc.style.left = x + 'px'; currentArc.style.top = y + 'px';
+            }
         }
 
         // ── Focus ─────────────────────────────────────────────────────────────
         function getFocusedIndex() {
             if (!currentThoughts.length) return 0;
-            const step = (2 * Math.PI) / currentThoughts.length;
-            const target = Math.PI / 2;
+            const step1 = (2 * Math.PI) / currentThoughts.length;
+            const target = Math.PI / 2; // bottom
             let best = 0, bestD = Infinity;
             currentThoughts.forEach((_, i) => {
-                let a = ((rotation + i * step) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+                let a = ((rotation + i * step1) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
                 let d = Math.abs(a - target);
                 if (d > Math.PI) d = 2 * Math.PI - d;
                 if (d < bestD) { bestD = d; best = i; }
@@ -283,217 +572,270 @@
             return best;
         }
 
-        function updateFocus() {
-            if (!unlockedSet.has(currentRoot.id)) return;
-            document.querySelectorAll('.sub-thought').forEach(el => el.classList.remove('focused'));
-            if (!currentThoughts.length) return;
+        function applyFocus() {
+            layout.forEach(e => e.el.classList.remove('focused', 'playing'));
+            if (!layout.length) return;
             focusedIndex = getFocusedIndex();
-            const el = document.querySelector(`[data-index="${focusedIndex}"]`);
-            if (el) el.classList.add('focused');
-            const t = currentThoughts[focusedIndex];
+            layout[focusedIndex].el.classList.add('focused');
+            const t = layout[focusedIndex].thought;
             updateContentCard(t);
-            playSubThought(t);
+            playSubThought(t, layout[focusedIndex]);
         }
 
-        // ── Content card ──────────────────────────────────────────────────────
-        function updateContentCard(node) {
-            document.getElementById('thought-title').textContent = node.title || '';
-            document.getElementById('thought-text').textContent = node.text;
-            document.getElementById('content-card').classList.add('visible');
-            document.getElementById('back-button').style.display = navigationStack.length ? 'flex' : 'none';
-            const canGoDown = node.children && node.children.length > 0;
-            document.getElementById('branch-button').style.display = canGoDown ? 'flex' : 'none';
+        function snapToBottom(idx) {
+            const step = (2 * Math.PI) / currentThoughts.length;
+            rotation = Math.PI - idx * step;
         }
 
-        // ── Audio ─────────────────────────────────────────────────────────────
-        function playSubThought(thought) {
-            audioEl.pause();
-            removeArc();
-            document.querySelector('.seed-thought')?.classList.remove('playing');
-            audioEl.src = `./audio/thought-${thought.id}.mp3`;
-            audioEl.play().then(() => {
-                const el = document.querySelector('.sub-thought.focused');
-                if (el) {
-                    createArc(el);
-                    // Mark as listened immediately on play start
+        // ── Seed click ────────────────────────────────────────────────────────
+        function onSeedClick() {
+            if (navigationStack.length > 0) {
+                // Go up
+                popDouble.currentTime = 0;
+                popDouble.play();
+                const p = navigationStack.pop();
+                currentRoot = p.root; rotation = p.rotation;
+                focusedIndex = p.focusedIndex; subFocused = p.subFocused;
+                renderAll();
+                if (subFocused) applyFocus();
+                return;
+            }
+            if (!seedTapped) {
+                seedTapped = true;
+                playSeed();
+            } else if (!subFocused && currentThoughts.length) {
+                popSingle.currentTime = 0;
+                popSingle.play();
+                subFocused = true;
+                snapToBottom(0); repositionAll();
+                applyFocus();
+            } else {
+                playSeed();
+            }
+        }
+
+        function goDeeper() {
+            const t = currentThoughts[focusedIndex];
+            if (!t?.children?.length) return;
+            navigationStack.push({ root: currentRoot, rotation, focusedIndex, subFocused });
+            currentRoot = t; rotation = Math.PI; seedTapped = false; subFocused = false;
+            renderAll(); playSeed();
+        }
+
+        // ── Audio with heading inclusion ─────────────────────────────────────
+        function playSeed() {
+            audioEl.pause(); removeArc();
+            document.querySelector('.node-seed')?.classList.remove('playing');
+            
+            const depth = navigationStack.length;
+            const levelKey = `${depth}-seed`;
+            
+            // Check if already played at this level
+            if (!playedAtLevel.has(depth)) {
+                playedAtLevel.set(depth, new Set());
+            }
+            
+            if (!playedAtLevel.get(depth).has(currentRoot.id)) {
+                audioEl.src = `./audio/thought-${currentRoot.id}.mp3`;
+                updateContentCard(currentRoot);
+                document.getElementById('content-card').classList.add('visible');
+                document.getElementById('back-button').style.display = navigationStack.length ? 'flex' : 'none';
+                document.getElementById('branch-button').style.display = 'none';
+                audioEl.play().then(() => {
+                    document.querySelector('.node-seed')?.classList.add('playing');
+                    listenedSet.add(currentRoot.id);
+                    playedAtLevel.get(depth).add(currentRoot.id);
+                }).catch(() => {});
+            } else {
+                // Already played at this level, just show card
+                updateContentCard(currentRoot);
+                document.getElementById('content-card').classList.add('visible');
+                document.getElementById('back-button').style.display = navigationStack.length ? 'flex' : 'none';
+                document.getElementById('branch-button').style.display = 'none';
+                
+                // If seed was already played and has children, auto-advance to sub-thoughts
+                if (currentThoughts.length) {
+                    setTimeout(() => {
+                        subFocused = true;
+                        snapToBottom(0);
+                        repositionAll();
+                        applyFocus();
+                    }, 500);
+                }
+            }
+        }
+
+        function playSubThought(thought, entry) {
+            audioEl.pause(); removeArc();
+            document.querySelector('.node-seed')?.classList.remove('playing');
+            layout.forEach(e => e.el.classList.remove('playing'));
+            
+            const depth = navigationStack.length;
+            const levelKey = `${depth}-sub`;
+            
+            if (!playedAtLevel.has(levelKey)) {
+                playedAtLevel.set(levelKey, new Set());
+            }
+            
+            if (!playedAtLevel.get(levelKey).has(thought.id)) {
+                audioEl.src = `./audio/thought-${thought.id}.mp3`;
+                audioEl.play().then(() => {
                     if (!listenedSet.has(thought.id)) {
                         listenedSet.add(thought.id);
-                        el.classList.add('listened');
+                        entry.el.classList.add('listened');
+                    }
+                    entry.el.classList.add('playing');
+                    createArc(entry);
+                    playedAtLevel.get(levelKey).add(thought.id);
+                }).catch(() => {});
+            } else {
+                // Already played, check if should go deeper
+                if (thought.children?.length) {
+                    popDouble.currentTime = 0;
+                    popDouble.play();
+                    goDeeper();
+                } else {
+                    // Move to next thought
+                    const next = (focusedIndex + 1) % currentThoughts.length;
+                    if (next !== focusedIndex) {
+                        popSingle.currentTime = 0;
+                        popSingle.play();
+                        focusedIndex = next;
+                        snapToBottom(next);
+                        repositionAll();
+                        applyFocus();
                     }
                 }
-            }).catch(() => {});
+            }
         }
 
-        function createArc(element) {
+        function createArc(entry) {
             removeArc();
-            const d = element.offsetWidth + 10; // diameter of arc SVG
-            const r = d / 2 - 2;               // circle radius inside SVG
+            const size = (entry.el.offsetWidth || 26) + 10;
+            const r = size / 2 - 2;
             const circ = 2 * Math.PI * r;
 
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.classList.add('playing-arc');
-            svg.setAttribute('width', d);
-            svg.setAttribute('height', d);
-            svg.setAttribute('viewBox', `0 0 ${d} ${d}`);
-            svg.style.left = element.style.left;
-            svg.style.top = element.style.top;
+            svg.setAttribute('width', size); svg.setAttribute('height', size);
+            svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+            svg.style.left = entry.x + 'px'; svg.style.top = entry.y + 'px';
 
             const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            circle.setAttribute('cx', d / 2);
-            circle.setAttribute('cy', d / 2);
+            circle.setAttribute('cx', size / 2); circle.setAttribute('cy', size / 2);
             circle.setAttribute('r', r);
             circle.style.strokeDasharray = circ;
-            circle.style.strokeDashoffset = circ; // starts empty
+            circle.style.strokeDashoffset = circ;
             svg.appendChild(circle);
 
-            element.parentElement.appendChild(svg);
-            currentArc = svg;
-            currentArc._circ = circ;
+            document.querySelector('.canvas-inner').appendChild(svg);
+            currentArc = svg; currentArc._circ = circ;
         }
 
         function removeArc() {
             if (currentArc) { currentArc.remove(); currentArc = null; }
         }
 
-        // ── Progress / listened tracking ──────────────────────────────────────
+        // ── Progress tracking ─────────────────────────────────────────────────
         audioEl.addEventListener('timeupdate', () => {
             if (!audioEl.duration) return;
             const pct = audioEl.currentTime / audioEl.duration;
             document.getElementById('progress-fill').style.width = `${pct * 100}%`;
-            // Drive the arc
-            if (currentArc && currentArc._circ) {
-                const offset = currentArc._circ * (1 - pct);
-                const circle = currentArc.querySelector('circle');
-                if (circle) circle.style.strokeDashoffset = offset;
-            }
-
-            if (pct > 0.8) {
-                // Which node is playing?
-                const playingId = getPlayingNodeId();
-                if (playingId && !listenedSet.has(playingId)) {
-                    listenedSet.add(playingId);
-                    markListened(playingId);
-                }
+            if (currentArc?._circ) {
+                const c = currentArc.querySelector('circle');
+                if (c) c.style.strokeDashoffset = currentArc._circ * (1 - pct);
             }
         });
-
-        function getPlayingNodeId() {
-            // Seed playing?
-            if (document.querySelector('.seed-thought.playing')) return currentRoot.id;
-            // Sub-thought
-            if (currentThoughts.length && focusedIndex < currentThoughts.length)
-                return currentThoughts[focusedIndex]?.id;
-            return null;
-        }
-
-        function markListened(nodeId) {
-            // Add dot to circle
-            const el = document.querySelector(`.sub-thought.focused`) ||
-                       document.querySelector(`[data-thought-id="${nodeId}"]`);
-            if (el) el.classList.add('listened');
-
-            // If this is the current root (seed), unlock its children
-            if (nodeId === currentRoot.id && currentRoot.children?.length && !unlockedSet.has(nodeId)) {
-                unlockedSet.add(nodeId);
-                revealChildren();
-            }
-
-            // Update branch button if a sub-thought
-            const t = currentThoughts[focusedIndex];
-            if (t && t.id === nodeId && t.children?.length) {
-                unlockedSet.add(nodeId);
-                document.getElementById('branch-button').style.display = 'flex';
-            }
-        }
-
-        function revealChildren() {
-            const hint = document.getElementById('unlock-hint');
-            hint.textContent = 'new thoughts';
-            hint.classList.add('visible');
-            setTimeout(() => hint.classList.remove('visible'), 2500);
-
-            // Set rotation so thought[0] starts at bottom center
-            const step = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
-            rotation = Math.PI; // thought[0] angle = rotation + 0 - PI/2 = PI/2 (bottom)
-            updatePositions();
-
-            document.querySelectorAll('.sub-thought').forEach((circle, i) => {
-                setTimeout(() => circle.classList.add('visible'), 80 + i * 80);
-            });
-
-            // Start focus/playback on first sub-thought
-            setTimeout(() => updateFocus(), currentThoughts.length * 80 + 200);
-        }
 
         audioEl.addEventListener('ended', () => {
             document.getElementById('progress-fill').style.width = '0%';
             removeArc();
-            document.querySelector('.seed-thought')?.classList.remove('playing');
+            document.querySelector('.node-seed')?.classList.remove('playing');
+            layout.forEach(e => e.el.classList.remove('playing'));
 
-            // Seed ended: reveal children if not yet unlocked
-            if (!unlockedSet.has(currentRoot.id) && currentRoot.children?.length) {
-                listenedSet.add(currentRoot.id);
-                unlockedSet.add(currentRoot.id);
-                seedTapped = true;
-                revealChildren();
+            // Seed ended — switch to sub-thought mode
+            if (!subFocused && currentThoughts.length) {
+                popSingle.currentTime = 0;
+                popSingle.play();
+                seedTapped = true; subFocused = true;
+                snapToBottom(0); repositionAll();
+                applyFocus();
                 return;
             }
 
-            // Sub-thought ended: auto-advance to next
-            if (currentThoughts.length > 1 && unlockedSet.has(currentRoot.id)) {
-                const step = (2 * Math.PI) / currentThoughts.length;
-                focusedIndex = (focusedIndex + 1) % currentThoughts.length;
-                rotation = Math.PI - focusedIndex * step;
-                updatePositions();
-                // Update focus without re-triggering playback (call manually)
-                document.querySelectorAll('.sub-thought').forEach(el => el.classList.remove('focused'));
-                const el = document.querySelector(`[data-index="${focusedIndex}"]`);
-                if (el) el.classList.add('focused');
-                const t = currentThoughts[focusedIndex];
-                updateContentCard(t);
-                playSubThought(t);
+            // Sub-thought ended — check if we've heard all at this level
+            if (subFocused && currentThoughts.length > 0) {
+                const depth = navigationStack.length;
+                const levelKey = `${depth}-sub`;
+                const allHeard = currentThoughts.every(t => playedAtLevel.get(levelKey)?.has(t.id));
+                
+                if (allHeard && currentThoughts[focusedIndex].children?.length) {
+                    // Auto-advance to first child node
+                    popDouble.currentTime = 0;
+                    popDouble.play();
+                    goDeeper();
+                } else {
+                    // Continue to next thought
+                    const next = (focusedIndex + 1) % currentThoughts.length;
+                    popSingle.currentTime = 0;
+                    popSingle.play();
+                    focusedIndex = next;
+                    snapToBottom(next); repositionAll();
+                    layout.forEach(e => e.el.classList.remove('focused'));
+                    const entry = layout[next];
+                    if (entry) { 
+                        entry.el.classList.add('focused'); 
+                        updateContentCard(entry.thought); 
+                        playSubThought(entry.thought, entry); 
+                    }
+                }
             }
         });
+
         audioEl.addEventListener('pause', () => {
             removeArc();
-            document.querySelector('.seed-thought')?.classList.remove('playing');
+            document.querySelector('.node-seed')?.classList.remove('playing');
+            layout.forEach(e => e.el.classList.remove('playing'));
         });
 
-        // ── Navigation ────────────────────────────────────────────────────────
-        document.getElementById('branch-button').addEventListener('click', () => {
-            const t = currentThoughts[focusedIndex];
-            if (!t?.children?.length) return;
-            navigationStack.push({ root: currentRoot, rotation, focusedIndex });
-            currentRoot = t; rotation = 0;
-            seedTapped = false;
-            renderThoughts();
-            playSeed();
-        });
+        // ── Content card (with heading in title) ──────────────────────────────
+        function updateContentCard(node) {
+            document.getElementById('thought-title').textContent = node.title || '';
+            document.getElementById('thought-text').textContent = node.text;
+            document.getElementById('content-card').classList.add('visible');
+            document.getElementById('back-button').style.display = navigationStack.length ? 'flex' : 'none';
+            document.getElementById('branch-button').style.display = (node.children?.length) ? 'flex' : 'none';
+        }
+
+        // ── Navigation buttons ────────────────────────────────────────────────
+        document.getElementById('branch-button').addEventListener('click', goDeeper);
 
         document.getElementById('back-button').addEventListener('click', () => {
             if (!navigationStack.length) return;
+            popDouble.currentTime = 0;
+            popDouble.play();
             const p = navigationStack.pop();
-            currentRoot = p.root; rotation = p.rotation; focusedIndex = p.focusedIndex;
-            renderThoughts();
-            // Restore: if parent was unlocked, update focus
-            if (unlockedSet.has(currentRoot.id)) updateFocus();
+            currentRoot = p.root; rotation = p.rotation;
+            focusedIndex = p.focusedIndex; subFocused = p.subFocused;
+            renderAll();
+            if (subFocused) applyFocus();
         });
 
-        // ── Drag ──────────────────────────────────────────────────────────────
+        // ── Drag rotation ─────────────────────────────────────────────────────
         function getAngle(x, y) {
             const r = document.querySelector('.canvas-inner').getBoundingClientRect();
             return Math.atan2(y - (r.top + r.height * SEED_TOP / 100), x - (r.left + r.width / 2));
         }
 
         function handleStart(e) {
-            if (!unlockedSet.has(currentRoot.id)) return; // can't rotate until unlocked
+            if (!subFocused) return;
             if (!document.getElementById('canvas').contains(e.target)) return;
-            if (e.target.classList.contains('seed-thought')) return;
+            if (e.target.classList.contains('node-seed')) return;
             isDragging = true;
             const p = e.touches ? e.touches[0] : e;
             lastAngle = getAngle(p.clientX, p.clientY);
         }
-
+        
         function handleMove(e) {
             if (!isDragging) return;
             e.preventDefault();
@@ -503,18 +845,25 @@
             if (d > Math.PI) d -= 2 * Math.PI;
             if (d < -Math.PI) d += 2 * Math.PI;
             rotation += d; lastAngle = cur;
-            updatePositions(); updateFocus();
+            
+            // Play pop sound when crossing to new thought
+            const oldFocused = focusedIndex;
+            repositionAll(); 
+            const newFocused = getFocusedIndex();
+            if (oldFocused !== newFocused) {
+                popSingle.currentTime = 0;
+                popSingle.play();
+            }
+            applyFocus();
         }
-
+        
         function handleEnd() {
             if (!isDragging) return;
             isDragging = false;
             if (!currentThoughts.length) return;
-            const step = (2 * Math.PI) / currentThoughts.length;
-            // Snap so focused thought lands at bottom center (rotation = PI - i*step)
             focusedIndex = getFocusedIndex();
-            rotation = Math.PI - focusedIndex * step;
-            updatePositions(); updateFocus();
+            snapToBottom(focusedIndex);
+            repositionAll(); applyFocus();
         }
 
         document.addEventListener('mousedown', handleStart);
@@ -523,66 +872,70 @@
         document.addEventListener('touchstart', handleStart, { passive: false });
         document.addEventListener('touchmove', handleMove, { passive: false });
         document.addEventListener('touchend', handleEnd);
-        window.addEventListener('resize', renderThoughts);
+        window.addEventListener('resize', renderAll);
 
         // ── Pinch to go deeper ────────────────────────────────────────────────
-        let pinchStartDist = null;
-        let pinchTriggered = false;
+        let pinchStartDist = null, pinchTriggered = false;
 
         function pinchDist(e) {
-            const t = e.touches;
-            const dx = t[0].clientX - t[1].clientX;
-            const dy = t[0].clientY - t[1].clientY;
-            return Math.sqrt(dx * dx + dy * dy);
+            return Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
         }
-
         document.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 2) {
-                pinchStartDist = pinchDist(e);
-                pinchTriggered = false;
-                isDragging = false; // cancel single-finger drag
-            }
+            if (e.touches.length === 2) { pinchStartDist = pinchDist(e); pinchTriggered = false; isDragging = false; }
         }, { passive: false });
-
         document.addEventListener('touchmove', (e) => {
             if (e.touches.length !== 2 || pinchTriggered) return;
             e.preventDefault();
-            const dist = pinchDist(e);
-            const delta = pinchStartDist - dist; // positive = pinching in
-            if (delta > 40) {
+            if (pinchStartDist - pinchDist(e) > 40) {
                 pinchTriggered = true;
-                // Navigate down into focused sub-thought
                 const t = currentThoughts[focusedIndex];
-                if (t?.children?.length && unlockedSet.has(t.id)) {
-                    navigationStack.push({ root: currentRoot, rotation, focusedIndex });
-                    currentRoot = t; rotation = 0;
-                    renderThoughts();
-                    playSeed();
+                if (t?.children?.length) {
+                    popDouble.currentTime = 0;
+                    popDouble.play();
+                    goDeeper();
                 }
             }
         }, { passive: false });
-
         document.addEventListener('touchend', (e) => {
-            if (e.touches.length < 2) {
-                pinchStartDist = null;
-                pinchTriggered = false;
-            }
+            if (e.touches.length < 2) { pinchStartDist = null; pinchTriggered = false; }
         });
 
-        // ── Breadcrumb ────────────────────────────────────────────────────────
+        // ── Enhanced Breadcrumb ────────────────────────────────────────────────
         function updateBreadcrumb() {
             const bc = document.getElementById('breadcrumb');
             bc.innerHTML = '';
             if (!navigationStack.length) { bc.classList.remove('visible'); return; }
             bc.classList.add('visible');
+            
             bc.appendChild(Object.assign(document.createElement('div'), { className: 'breadcrumb-dot' }));
-            navigationStack.forEach(() => {
-                const a = document.createElement('span');
-                a.className = 'breadcrumb-arrow'; a.textContent = '›';
-                bc.appendChild(a);
+            
+            navigationStack.forEach((_, idx) => {
+                bc.appendChild(Object.assign(document.createElement('span'), { className: 'breadcrumb-arrow', textContent: '›' }));
                 bc.appendChild(Object.assign(document.createElement('div'), { className: 'breadcrumb-dot' }));
             });
+            
+            // Mark the last dot as active
+            const dots = bc.querySelectorAll('.breadcrumb-dot');
+            if (dots.length) dots[dots.length - 1].classList.add('active');
         }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' && navigationStack.length) {
+                document.getElementById('back-button').click();
+            } else if (e.key === 'ArrowDown' && layout[focusedIndex]?.thought.children?.length) {
+                document.getElementById('branch-button').click();
+            } else if (subFocused && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                const dir = e.key === 'ArrowLeft' ? -1 : 1;
+                const next = (focusedIndex + dir + currentThoughts.length) % currentThoughts.length;
+                popSingle.currentTime = 0;
+                popSingle.play();
+                focusedIndex = next;
+                snapToBottom(next);
+                repositionAll();
+                applyFocus();
+            }
+        });
     </script>
 </body>
 </html>
