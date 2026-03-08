@@ -22,7 +22,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            perspective: 1000px;
             overflow: hidden;
         }
         
@@ -30,8 +29,7 @@
             position: relative;
             width: 100%;
             height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Circles/nodes */
@@ -42,10 +40,11 @@
             cursor: pointer;
             transform: translate(-50%, -50%);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(255,255,255,0.2);
+            opacity: 0.9;
         }
         
         .node.playing {
+            opacity: 1;
             box-shadow: 0 0 0 3px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.4);
         }
         
@@ -53,37 +52,33 @@
             opacity: 0;
             transform: translate(-50%, -50%) scale(0);
         }
-        
-        /* 3D effect for initial view */
-        .node.orbit-3d {
-            animation: orbit3d 20s linear infinite;
-        }
-        
-        @keyframes orbit3d {
-            from { transform: translate(-50%, -50%) rotateY(0deg) translateZ(100px); }
-            to { transform: translate(-50%, -50%) rotateY(360deg) translateZ(100px); }
-        }
 
         /* Main/seed node */
         .node-seed {
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             z-index: 100;
         }
         
         /* Level sizes */
-        .node-l1 { width: 36px; height: 36px; z-index: 90; }
-        .node-l2 { width: 24px; height: 24px; z-index: 80; }
-        .node-l3 { width: 16px; height: 16px; z-index: 70; }
-        .node-l4 { width: 10px; height: 10px; z-index: 60; opacity: 0.7; }
-        .node-l5 { width: 6px; height: 6px; z-index: 50; opacity: 0.5; }
+        .node-l1 { width: 32px; height: 32px; z-index: 90; }
+        .node-l2 { width: 20px; height: 20px; z-index: 80; }
+        .node-l3 { width: 14px; height: 14px; z-index: 70; }
+        .node-l4 { width: 8px; height: 8px; z-index: 60; opacity: 0.7; }
+        .node-l5 { width: 5px; height: 5px; z-index: 50; opacity: 0.5; }
+        
+        .node-l1.focused {
+            width: 38px;
+            height: 38px;
+            opacity: 1;
+        }
         
         /* Orbit preview dots */
         .orbit-preview {
             position: absolute;
             background: #fff;
             border-radius: 50%;
-            opacity: 0.4;
+            opacity: 0.3;
             pointer-events: none;
             transition: all 0.3s ease;
         }
@@ -102,6 +97,50 @@
             transform-origin: center;
             transform: rotate(-90deg);
             opacity: 0.8;
+        }
+
+        /* Depth indicator */
+        #depth-indicator {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 200;
+        }
+        
+        #depth-indicator.visible {
+            opacity: 1;
+        }
+
+        .depth-dot {
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.3;
+            transition: all 0.2s;
+        }
+        
+        .depth-dot.active {
+            opacity: 1;
+            width: 7px;
+            height: 7px;
+        }
+        
+        .depth-arrow {
+            color: #fff;
+            opacity: 0.5;
+            font-size: 10px;
+            margin: 0 2px;
         }
 
         /* Bottom content area */
@@ -134,7 +173,7 @@
         #controls {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             padding: 12px 0;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
@@ -175,6 +214,11 @@
             background: rgba(255,255,255,0.15);
         }
 
+        /* Navigation buttons */
+        .nav-btn {
+            background: rgba(255,255,255,0.08);
+        }
+
         /* Progress bar */
         #progress-container {
             flex: 1;
@@ -213,39 +257,6 @@
             padding: 0;
         }
 
-        /* Level indicator */
-        #level-indicator {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            padding: 8px 16px;
-            background: rgba(0,0,0,0.8);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        #level-indicator.visible {
-            opacity: 1;
-        }
-
-        .level-dot {
-            width: 5px;
-            height: 5px;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 0.3;
-        }
-        
-        .level-dot.active {
-            opacity: 1;
-        }
-
         /* Loading */
         #loading {
             position: absolute;
@@ -258,14 +269,19 @@
             color: rgba(255,255,255,0.3);
         }
         
-        /* Transitions */
-        .transitioning .node {
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Mobile adjustments */
+        @media (max-height: 700px) {
+            .node-seed { width: 48px; height: 48px; }
+            .node-l1 { width: 28px; height: 28px; }
+            .node-l1.focused { width: 34px; height: 34px; }
+            #content { padding: 16px; }
+            #thought-title { font-size: 16px; }
+            #thought-text { font-size: 14px; }
         }
     </style>
 </head>
 <body>
-    <div id="level-indicator"></div>
+    <div id="depth-indicator"></div>
     
     <div id="loading">Loading</div>
 
@@ -278,8 +294,9 @@
         <div id="thought-text"></div>
         
         <div id="controls">
-            <button class="control-btn" id="back-btn" title="Go up">◄</button>
+            <button class="control-btn nav-btn" id="up-btn" title="Go up level">▲</button>
             <button class="control-btn" id="play-pause-btn">▶</button>
+            <button class="control-btn nav-btn" id="down-btn" title="Go down level">▼</button>
             
             <div id="progress-container">
                 <div id="progress-bar">
@@ -296,7 +313,7 @@
     <audio id="audio-player" preload="none"></audio>
 
     <script>
-        // Thought tree structure (same as before)
+        // Thought tree structure
         const thoughtTree = {
             root: { id: 0, title: "Risk of Mass AI Unemployment", text: "How likely is it that Artificial Intelligence will cause massive unemployment in the next decade?", children: [1, 14, 26, 39, 52, 64] },
             thoughts: {
@@ -389,33 +406,18 @@
         let currentRoot = thoughtTree.root;
         let navigationStack = [];
         let rotation = 0;
-        let rotationVelocity = 0;
         let isPlaying = false;
         let isDragging = false;
-        let lastDragX = 0;
         let playbackSpeed = 1;
         let currentLayout = [];
         let focusedIndex = 0;
         let autoAdvanceTimer = null;
-        let is3DView = true;
         let currentProgressRing = null;
+        let hasStarted = false;
 
         // Constants
-        const ORBIT_RADIUS = {
-            1: 120,
-            2: 100,
-            3: 80,
-            4: 60,
-            5: 40
-        };
-        
-        const PREVIEW_RADIUS = {
-            1: 20,
-            2: 16,
-            3: 12,
-            4: 8,
-            5: 6
-        };
+        const ORBIT_RADIUS = 100;
+        const PREVIEW_RADIUS = 18;
 
         // Get center position
         function getCenter() {
@@ -429,55 +431,14 @@
         // Initialize
         window.addEventListener('load', () => {
             document.getElementById('loading').style.display = 'none';
-            render3DView();
+            renderView();
             setupControls();
-            requestAnimationFrame(animate);
         });
 
-        // Render 3D planetary view
-        function render3DView() {
+        // Render the circular view
+        function renderView() {
             const container = document.querySelector('.canvas-inner');
             container.innerHTML = '';
-            container.classList.remove('transitioning');
-            is3DView = true;
-            
-            const center = getCenter();
-            
-            // Main seed node
-            const seed = document.createElement('div');
-            seed.className = 'node node-seed';
-            seed.style.left = center.x + 'px';
-            seed.style.top = center.y + 'px';
-            seed.addEventListener('click', onSeedClick);
-            container.appendChild(seed);
-            
-            // Orbiting children with 3D effect
-            const children = (currentRoot.children || []).map(id => thoughtTree.thoughts[id]);
-            const angleStep = (Math.PI * 2) / children.length;
-            
-            children.forEach((child, i) => {
-                const angle = i * angleStep;
-                const node = document.createElement('div');
-                node.className = 'node node-l1 orbit-3d';
-                node.style.left = center.x + Math.cos(angle) * ORBIT_RADIUS[1] + 'px';
-                node.style.top = center.y + Math.sin(angle) * ORBIT_RADIUS[1] + 'px';
-                node.style.animationDelay = `${i * 0.1}s`;
-                container.appendChild(node);
-                
-                // Add preview dots for sub-children
-                addPreviewDots(node, child, 2);
-            });
-            
-            updateLevelIndicator();
-            document.getElementById('back-btn').disabled = navigationStack.length === 0;
-        }
-
-        // Render flat circular view
-        function renderFlatView() {
-            const container = document.querySelector('.canvas-inner');
-            container.innerHTML = '';
-            container.classList.add('transitioning');
-            is3DView = false;
             
             const center = getCenter();
             currentLayout = [];
@@ -490,55 +451,58 @@
             seed.addEventListener('click', onSeedClick);
             container.appendChild(seed);
             
-            // Children in circle
-            const children = (currentRoot.children || []).map(id => thoughtTree.thoughts[id]);
-            const radius = ORBIT_RADIUS[1];
-            
-            children.forEach((child, i) => {
-                const angle = rotation + (i / children.length) * Math.PI * 2 - Math.PI / 2;
-                const x = center.x + Math.cos(angle) * radius;
-                const y = center.y + Math.sin(angle) * radius;
+            // Show children only if we've started
+            if (hasStarted) {
+                // Children in circle
+                const children = (currentRoot.children || []).map(id => thoughtTree.thoughts[id]);
                 
-                const node = document.createElement('div');
-                node.className = 'node node-l1';
-                node.style.left = x + 'px';
-                node.style.top = y + 'px';
-                node.addEventListener('click', () => onChildClick(child, i));
-                container.appendChild(node);
-                
-                currentLayout.push({
-                    node: child,
-                    element: node,
-                    x, y, index: i
+                children.forEach((child, i) => {
+                    const angle = rotation + (i / children.length) * Math.PI * 2 - Math.PI / 2;
+                    const x = center.x + Math.cos(angle) * ORBIT_RADIUS;
+                    const y = center.y + Math.sin(angle) * ORBIT_RADIUS;
+                    
+                    const node = document.createElement('div');
+                    node.className = 'node node-l1';
+                    node.style.left = x + 'px';
+                    node.style.top = y + 'px';
+                    node.addEventListener('click', () => onChildClick(child, i));
+                    container.appendChild(node);
+                    
+                    currentLayout.push({
+                        node: child,
+                        element: node,
+                        x, y, index: i
+                    });
+                    
+                    // Add preview dots for sub-children
+                    addPreviewDots(node, child, angle);
                 });
                 
-                // Add preview dots
-                addPreviewDots(node, child, 2, angle);
-            });
+                updateFocusedNode();
+            }
             
-            updateFocusedNode();
-            setTimeout(() => container.classList.remove('transitioning'), 50);
+            updateDepthIndicator();
+            updateButtonStates();
         }
 
         // Add preview dots around a node
-        function addPreviewDots(parentEl, parentThought, level, parentAngle = 0) {
-            if (!parentThought.children || level > 3) return;
+        function addPreviewDots(parentEl, parentThought, parentAngle) {
+            if (!parentThought.children) return;
             
             const children = parentThought.children.map(id => thoughtTree.thoughts[id]);
-            const radius = PREVIEW_RADIUS[level];
             const angleStep = (Math.PI * 2) / children.length;
             
             children.forEach((child, i) => {
                 const angle = parentAngle + i * angleStep;
                 const dot = document.createElement('div');
-                dot.className = `orbit-preview node-l${level + 1}`;
+                dot.className = 'orbit-preview';
                 
-                const x = parseFloat(parentEl.style.left) + Math.cos(angle) * radius;
-                const y = parseFloat(parentEl.style.top) + Math.sin(angle) * radius;
+                const x = parseFloat(parentEl.style.left) + Math.cos(angle) * PREVIEW_RADIUS;
+                const y = parseFloat(parentEl.style.top) + Math.sin(angle) * PREVIEW_RADIUS;
                 
                 dot.style.left = x + 'px';
                 dot.style.top = y + 'px';
-                dot.style.width = dot.style.height = (8 - level * 2) + 'px';
+                dot.style.width = dot.style.height = '4px';
                 
                 document.querySelector('.canvas-inner').appendChild(dot);
             });
@@ -546,10 +510,19 @@
 
         // Handle seed click
         function onSeedClick() {
-            if (is3DView) {
-                // First click: remove 3D, play intro
-                renderFlatView();
+            if (!hasStarted) {
+                // First click: start and play intro
+                hasStarted = true;
+                renderView();
                 playNode(currentRoot);
+                
+                // Show first level after audio starts
+                setTimeout(() => {
+                    if (currentRoot.children?.length) {
+                        const firstChild = thoughtTree.thoughts[currentRoot.children[0]];
+                        playNode(firstChild);
+                    }
+                }, 500);
             } else if (navigationStack.length > 0) {
                 // Go back up
                 goUp();
@@ -576,8 +549,7 @@
         function snapToNode(index) {
             const targetAngle = -index / currentLayout.length * Math.PI * 2 - Math.PI / 2;
             rotation = targetAngle;
-            rotationVelocity = 0;
-            renderFlatView();
+            renderView();
         }
 
         // Update which node is focused (at bottom)
@@ -590,7 +562,7 @@
             const center = getCenter();
             
             currentLayout.forEach((item, i) => {
-                const dist = Math.abs(item.y - (center.y + ORBIT_RADIUS[1]));
+                const dist = Math.abs(item.y - (center.y + ORBIT_RADIUS));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestIndex = i;
@@ -602,17 +574,17 @@
             // Update visual states
             currentLayout.forEach((item, i) => {
                 if (i === focusedIndex) {
-                    item.element.style.transform = 'translate(-50%, -50%) scale(1.2)';
-                    item.element.style.zIndex = '100';
+                    item.element.classList.add('focused');
                 } else {
-                    item.element.style.transform = 'translate(-50%, -50%) scale(1)';
-                    item.element.style.zIndex = '90';
+                    item.element.classList.remove('focused');
                 }
             });
         }
 
         // Go deeper into a node
         function goDeeper(node) {
+            if (!node.children?.length) return;
+            
             navigationStack.push({
                 root: currentRoot,
                 rotation: rotation,
@@ -623,13 +595,11 @@
             rotation = 0;
             focusedIndex = 0;
             
-            renderFlatView();
+            renderView();
             
             // Auto-play first child
-            if (currentRoot.children?.length) {
-                const firstChild = thoughtTree.thoughts[currentRoot.children[0]];
-                setTimeout(() => playNode(firstChild), 300);
-            }
+            const firstChild = thoughtTree.thoughts[currentRoot.children[0]];
+            setTimeout(() => playNode(firstChild), 300);
         }
 
         // Go back up
@@ -641,11 +611,7 @@
             rotation = prev.rotation;
             focusedIndex = prev.focusedIndex;
             
-            if (navigationStack.length === 0 && is3DView === false) {
-                render3DView();
-            } else {
-                renderFlatView();
-            }
+            renderView();
         }
 
         // Play a node
@@ -659,21 +625,28 @@
             
             // Remove old progress rings
             document.querySelectorAll('.progress-ring').forEach(r => r.remove());
+            document.querySelectorAll('.node.playing').forEach(n => n.classList.remove('playing'));
             
             // Load and play audio
             audioEl.src = `./audio/thought-${node.id}.mp3`;
             audioEl.playbackRate = playbackSpeed;
             audioEl.play().then(() => {
                 isPlaying = true;
-                updatePlayPauseButton();
+                updateButtonStates();
                 
                 // Add playing class
-                const nodeEl = currentLayout[focusedIndex]?.element || document.querySelector('.node-seed');
-                nodeEl?.classList.add('playing');
+                let nodeEl;
+                if (node === currentRoot) {
+                    nodeEl = document.querySelector('.node-seed');
+                } else {
+                    nodeEl = currentLayout.find(item => item.node === node)?.element;
+                }
                 
-                // Create progress ring
-                createProgressRing(nodeEl);
-            });
+                if (nodeEl) {
+                    nodeEl.classList.add('playing');
+                    createProgressRing(nodeEl);
+                }
+            }).catch(() => {});
         }
 
         // Create progress ring
@@ -721,7 +694,7 @@
         // Handle audio end
         audioEl.addEventListener('ended', () => {
             isPlaying = false;
-            updatePlayPauseButton();
+            updateButtonStates();
             
             // Remove playing states
             document.querySelectorAll('.node.playing').forEach(n => n.classList.remove('playing'));
@@ -729,22 +702,22 @@
             currentProgressRing = null;
             
             // Auto-advance logic
-            if (!is3DView && currentLayout.length > 0) {
+            if (currentLayout.length > 0) {
+                const currentNode = currentLayout[focusedIndex]?.node || currentRoot;
                 const nextIndex = (focusedIndex + 1) % currentLayout.length;
-                const nextNode = currentLayout[nextIndex].node;
                 
-                // Check if we've completed the circle and current node has children
-                if (nextIndex === 0 && currentLayout[focusedIndex].node.children?.length) {
+                // Check if current node has children and we haven't played next sibling
+                if (currentNode.children?.length && nextIndex === 0) {
                     // Auto-dive deeper
                     autoAdvanceTimer = setTimeout(() => {
-                        goDeeper(currentLayout[focusedIndex].node);
+                        goDeeper(currentNode);
                     }, 1000);
-                } else {
-                    // Advance to next
+                } else if (nextIndex !== 0) {
+                    // Advance to next sibling
                     autoAdvanceTimer = setTimeout(() => {
                         focusedIndex = nextIndex;
                         snapToNode(nextIndex);
-                        playNode(nextNode);
+                        playNode(currentLayout[nextIndex].node);
                     }, 500);
                 }
             }
@@ -752,12 +725,20 @@
 
         // Controls setup
         function setupControls() {
-            const backBtn = document.getElementById('back-btn');
+            const upBtn = document.getElementById('up-btn');
+            const downBtn = document.getElementById('down-btn');
             const playPauseBtn = document.getElementById('play-pause-btn');
             const speedBtn = document.getElementById('speed-btn');
             const progressBar = document.getElementById('progress-bar');
             
-            backBtn.addEventListener('click', goUp);
+            upBtn.addEventListener('click', goUp);
+            
+            downBtn.addEventListener('click', () => {
+                const node = currentLayout[focusedIndex]?.node;
+                if (node?.children?.length) {
+                    goDeeper(node);
+                }
+            });
             
             playPauseBtn.addEventListener('click', () => {
                 if (isPlaying) {
@@ -766,10 +747,12 @@
                 } else if (audioEl.src) {
                     audioEl.play();
                     isPlaying = true;
-                } else if (!is3DView && currentLayout.length) {
+                } else if (hasStarted && currentLayout.length) {
                     playNode(currentLayout[focusedIndex].node);
+                } else if (!hasStarted) {
+                    onSeedClick();
                 }
-                updatePlayPauseButton();
+                updateButtonStates();
             });
             
             speedBtn.addEventListener('click', () => {
@@ -788,23 +771,31 @@
             });
         }
 
-        function updatePlayPauseButton() {
+        function updateButtonStates() {
+            document.getElementById('up-btn').disabled = navigationStack.length === 0;
+            
+            const node = currentLayout[focusedIndex]?.node;
+            document.getElementById('down-btn').disabled = !node?.children?.length;
+            
             document.getElementById('play-pause-btn').textContent = isPlaying ? '⏸' : '▶';
         }
 
         // Touch/mouse rotation
         let touchStartX = 0;
         let touchStartRotation = 0;
+        let rotationVelocity = 0;
 
         document.getElementById('canvas').addEventListener('mousedown', onDragStart);
         document.getElementById('canvas').addEventListener('touchstart', onDragStart);
         
         function onDragStart(e) {
-            if (is3DView || e.target.classList.contains('node')) return;
+            if (e.target.classList.contains('node')) return;
+            if (!hasStarted || !currentLayout.length) return;
             
             isDragging = true;
             touchStartX = e.touches ? e.touches[0].clientX : e.clientX;
             touchStartRotation = rotation;
+            rotationVelocity = 0;
             
             document.addEventListener('mousemove', onDragMove);
             document.addEventListener('mouseup', onDragEnd);
@@ -822,18 +813,16 @@
             
             // Convert pixel movement to rotation
             rotation = touchStartRotation + (deltaX / canvasWidth) * Math.PI * 2;
-            rotationVelocity = deltaX - lastDragX;
-            lastDragX = deltaX;
             
-            renderFlatView();
+            renderView();
         }
         
         function onDragEnd() {
             isDragging = false;
             
-            // Apply momentum
-            if (Math.abs(rotationVelocity) > 2) {
-                rotationVelocity *= 0.95;
+            // Snap to nearest node
+            if (currentLayout.length) {
+                snapToNode(focusedIndex);
             }
             
             document.removeEventListener('mousemove', onDragMove);
@@ -842,39 +831,44 @@
             document.removeEventListener('touchend', onDragEnd);
         }
 
-        // Animation loop
-        function animate() {
-            if (!isDragging && Math.abs(rotationVelocity) > 0.01 && !is3DView) {
-                rotation += rotationVelocity * 0.01;
-                rotationVelocity *= 0.92; // Friction
-                renderFlatView();
-            }
-            
-            requestAnimationFrame(animate);
-        }
-
-        // Level indicator
-        function updateLevelIndicator() {
-            const indicator = document.getElementById('level-indicator');
+        // Depth indicator
+        function updateDepthIndicator() {
+            const indicator = document.getElementById('depth-indicator');
             indicator.innerHTML = '';
             
-            if (navigationStack.length === 0) {
+            if (navigationStack.length === 0 && !hasStarted) {
                 indicator.classList.remove('visible');
                 return;
             }
             
             indicator.classList.add('visible');
             
-            // Add dots for each level
-            for (let i = 0; i <= navigationStack.length; i++) {
+            // Root dot
+            const rootDot = document.createElement('div');
+            rootDot.className = 'depth-dot';
+            if (navigationStack.length === 0) {
+                rootDot.classList.add('active');
+            }
+            indicator.appendChild(rootDot);
+            
+            // Add dots for each level in navigation
+            navigationStack.forEach((item, i) => {
+                const arrow = document.createElement('span');
+                arrow.className = 'depth-arrow';
+                arrow.textContent = '›';
+                indicator.appendChild(arrow);
+                
                 const dot = document.createElement('div');
-                dot.className = 'level-dot';
-                if (i === navigationStack.length) {
+                dot.className = 'depth-dot';
+                if (i === navigationStack.length - 1) {
                     dot.classList.add('active');
                 }
                 indicator.appendChild(dot);
-            }
+            });
         }
+
+        // Handle window resize
+        window.addEventListener('resize', renderView);
     </script>
 </body>
 </html>
