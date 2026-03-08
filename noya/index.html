@@ -8,7 +8,7 @@
   <meta name="description" content="A network of artists, scholars and technologists building ideas that survive and scale.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -17,13 +17,15 @@
     }
 
     :root {
-      --bg: #0a0908;
-      --fg: #f5f0eb;
-      --muted: #6b6460;
-      --accent: #c8956c;
-      --accent-glow: rgba(200, 149, 108, 0.15);
+      --bg: #080c09;
+      --fg: #edf0ec;
+      --muted: #5a6b5c;
+      --accent: #4a7c59;
+      --accent-light: #6aab7e;
+      --accent-glow: rgba(74, 124, 89, 0.15);
       --serif: 'Instrument Serif', Georgia, serif;
       --sans: 'Inter', -apple-system, sans-serif;
+      --mono: 'IBM Plex Mono', 'Courier New', monospace;
     }
 
     html {
@@ -32,7 +34,7 @@
     }
 
     body {
-      font-family: var(--sans);
+      font-family: var(--mono);
       background: var(--bg);
       color: var(--fg);
       line-height: 1.5;
@@ -371,10 +373,10 @@
     }
 
     .grid-title .number {
-      font-family: var(--sans);
+      font-family: var(--mono);
       font-size: 0.15em;
       vertical-align: super;
-      color: var(--accent);
+      color: var(--accent-light);
       margin-left: 0.5em;
     }
 
@@ -702,7 +704,7 @@
 
     .cta-button:hover {
       transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(200, 149, 108, 0.3);
+      box-shadow: 0 20px 40px rgba(74, 124, 89, 0.35);
     }
 
     .cta-button .arrow {
@@ -811,8 +813,8 @@
       bottom: calc(100% + 1.2rem);
       left: 50%;
       transform: translateX(-50%) translateY(6px);
-      background: #1a1714;
-      border: 1px solid rgba(200, 149, 108, 0.2);
+      background: #0e1510;
+      border: 1px solid rgba(74, 124, 89, 0.25);
       padding: 1.4rem 1.6rem;
       width: 300px;
       pointer-events: none;
@@ -833,16 +835,16 @@
       left: 50%;
       transform: translateX(-50%);
       border: 6px solid transparent;
-      border-top-color: rgba(200, 149, 108, 0.2);
+      border-top-color: rgba(74, 124, 89, 0.25);
     }
 
     .noya-def {
-      font-family: var(--sans);
-      font-size: 0.72rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
       font-style: normal;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--accent-light);
       margin-bottom: 0.75rem;
     }
 
@@ -854,11 +856,11 @@
     }
 
     .noya-meanings li {
-      font-family: var(--sans);
-      font-size: 0.78rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
       font-style: normal;
-      color: rgba(245, 240, 235, 0.7);
-      line-height: 1.5;
+      color: rgba(237, 240, 236, 0.65);
+      line-height: 1.55;
       letter-spacing: 0;
       padding-left: 1rem;
       position: relative;
