@@ -45,138 +45,14 @@
       color: var(--bg);
     }
 
-    /* ═══════════════════════════════════════════
-       PASSWORD GATE — THE QUESTION
-    ═══════════════════════════════════════════ */
-    #gate {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      transition: opacity 1.2s cubic-bezier(0.4, 0, 0, 1),
-                  transform 1.2s cubic-bezier(0.4, 0, 0, 1),
-                  visibility 0s linear 1.2s;
-    }
-
-    #gate.unlocked {
-      opacity: 0;
-      transform: scale(1.1);
-      pointer-events: none;
-      visibility: hidden;
-    }
-
-    .gate-wrapper {
-      width: 100%;
-      max-width: 900px;
-      text-align: center;
-    }
-
-    .gate-question {
-      font-family: var(--serif);
-      font-size: clamp(2.5rem, 8vw, 6rem);
-      font-weight: 400;
-      font-style: italic;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: 4rem;
-      opacity: 0;
-      animation: fadeInSlow 2s 0.5s forwards;
-    }
-
     @keyframes fadeInSlow {
       to { opacity: 1; }
     }
-
-    .gate-question .highlight {
-      color: var(--accent);
-      font-style: normal;
-    }
-
-    .gate-input-wrapper {
-      position: relative;
-      display: inline-block;
-      opacity: 0;
-      animation: fadeInSlow 1.5s 1.5s forwards;
-    }
-
-    #gate input {
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid var(--muted);
-      color: var(--fg);
-      font-family: var(--sans);
-      font-size: 1.5rem;
-      font-weight: 300;
-      letter-spacing: 0.5em;
-      text-transform: lowercase;
-      padding: 1rem 0;
-      width: min(400px, 80vw);
-      text-align: center;
-      outline: none;
-      transition: border-color 0.4s;
-    }
-
-    #gate input:focus {
-      border-color: var(--accent);
-    }
-
-    #gate input::placeholder {
-      color: var(--muted);
-      letter-spacing: 0.3em;
-      text-transform: none;
-    }
-
-    .gate-hint {
-      margin-top: 3rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      opacity: 0;
-      animation: fadeInSlow 1s 2.5s forwards;
-    }
-
-    .gate-error {
-      position: absolute;
-      bottom: -2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.75rem;
-      color: #ff4444;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .gate-error.visible { opacity: 1; }
-
-    .gate-corner {
-      position: fixed;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      opacity: 0;
-      animation: fadeInSlow 1s 3s forwards;
-    }
-
-    .gate-corner.tl { top: 2rem; left: 2rem; }
-    .gate-corner.tr { top: 2rem; right: 2rem; text-align: right; }
-    .gate-corner.bl { bottom: 2rem; left: 2rem; }
-    .gate-corner.br { bottom: 2rem; right: 2rem; text-align: right; }
 
     /* ═══════════════════════════════════════════
        MAIN CONTENT
     ═══════════════════════════════════════════ */
     #content {
-      opacity: 0;
-      transition: opacity 1s 0.3s;
-    }
-
-    #content.visible {
       opacity: 1;
     }
 
@@ -1003,38 +879,6 @@
   <div class="cursor" id="cursor"></div>
 
   <!-- ═══════════════════════════════════════════
-       PASSWORD GATE
-  ═══════════════════════════════════════════ -->
-  <div id="gate">
-    <div class="gate-corner tl">Noya</div>
-    <div class="gate-corner tr">Network<br>Active</div>
-    <div class="gate-corner bl">Prague<br>Oslo</div>
-    <div class="gate-corner br">Est.<br>2026</div>
-
-    <div class="gate-wrapper">
-      <h1 class="gate-question">
-        What is <span class="highlight">the good life</span>?
-      </h1>
-      
-      <form id="gate-form">
-        <div class="gate-input-wrapper">
-          <input 
-            type="text" 
-            id="password" 
-            placeholder="password" 
-            autocomplete="off" 
-            autofocus
-            spellcheck="false"
-          >
-          <span class="gate-error" id="gate-error">not quite</span>
-        </div>
-      </form>
-      
-      <p class="gate-hint">The answer is the question</p>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════
        MAIN CONTENT
   ═══════════════════════════════════════════ -->
   <div id="content">
@@ -1207,33 +1051,7 @@
   </div>
 
   <script>
-    // Password Gate
-    const gate = document.getElementById('gate');
-    const content = document.getElementById('content');
-    const form = document.getElementById('gate-form');
-    const input = document.getElementById('password');
-    const error = document.getElementById('gate-error');
 
-    // Check if already unlocked
-    if (sessionStorage.getItem('fp-unlocked') === 'true') {
-      gate.classList.add('unlocked');
-      content.classList.add('visible');
-    }
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const val = input.value.toLowerCase().trim().replace(/\s+/g, '');
-      
-      if (val === 'thegoodlife') {
-        sessionStorage.setItem('fp-unlocked', 'true');
-        gate.classList.add('unlocked');
-        setTimeout(() => content.classList.add('visible'), 400);
-      } else {
-        error.classList.add('visible');
-        input.value = '';
-        setTimeout(() => error.classList.remove('visible'), 2000);
-      }
-    });
 
     // Custom Cursor
     const cursor = document.getElementById('cursor');
