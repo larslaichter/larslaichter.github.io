@@ -8,279 +8,295 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
 
         body {
-            background: #050505; color: #fff;
-            font-family: system-ui, -apple-system, "SF Pro Display", "Segoe UI", sans-serif;
+            background: #000; color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overflow: hidden; height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        #breadcrumb {
-            position: absolute; top: 16px; left: 50%;
-            transform: translateX(-50%);
-            display: flex; gap: 8px; align-items: center;
-            opacity: 0; transition: opacity 0.3s; z-index: 20;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 6px 14px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-        }
-        #breadcrumb.visible { opacity: 1; }
-        .breadcrumb-dot { width: 5px; height: 5px; background: #fff; border-radius: 50%; opacity: 0.5; }
-        .breadcrumb-dot.active { opacity: 1; }
-        .breadcrumb-arrow { color: #fff; opacity: 0.4; font-size: 9px; }
-
-        #settings-button {
-            position: absolute; top: 16px; right: 16px;
-            width: 32px; height: 32px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s;
-            z-index: 25;
-        }
-        #settings-button:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        #settings-panel {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            background: #111;
-            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
-            transition: right 0.3s ease;
-            z-index: 30;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        #settings-panel.open { right: 0; }
-
-        #settings-panel h3 {
-            margin-bottom: 16px;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        #settings-panel pre {
-            background: #222;
-            padding: 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            max-height: 60vh;
-            overflow-y: auto;
-            margin-bottom: 16px;
-        }
-
-        #copy-button {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.15s;
-        }
-
-        #close-settings {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 32px;
-            height: 32px;
-            background: transparent;
-            border: none;
-            color: #666;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        /* Top graph area - 50% of screen */
+        /* Top visualization area */
         #canvas {
             position: relative;
-            flex: 1;
+            height: 50vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 50vh;
-            max-height: 50vh;
+            perspective: 1000px;
+            overflow: hidden;
         }
-        .canvas-inner { position: relative; width: 100%; height: 100%; max-width: 600px; }
+        
+        .canvas-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        /* Nodes */
+        /* Circles/nodes */
         .node {
-            position: absolute; background: #fff; border-radius: 50%;
-            cursor: pointer; transform: translate(-50%, -50%);
-            transition: opacity 0.4s ease;
-            opacity: 0.9;
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(255,255,255,0.2);
         }
-        .node.playing { opacity: 1 !important; }
-        .node.hidden { display: none; }
-
-        /* Seed */
-        .node-seed { width: 52px; height: 52px; z-index: 12; }
-        .node-seed.playing { 
-            opacity: 1;
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.15), 0 0 0 8px rgba(255,255,255,0.06); 
+        
+        .node.playing {
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.4);
+        }
+        
+        .node.hidden {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+        
+        /* 3D effect for initial view */
+        .node.orbit-3d {
+            animation: orbit3d 20s linear infinite;
+        }
+        
+        @keyframes orbit3d {
+            from { transform: translate(-50%, -50%) rotateY(0deg) translateZ(100px); }
+            to { transform: translate(-50%, -50%) rotateY(360deg) translateZ(100px); }
         }
 
-        /* Level 1 */
-        .node-l1 { width: 24px; height: 24px; z-index: 11; transition: all 0.2s ease; }
-        .node-l1.focused { width: 30px; height: 30px; }
-        .node-l1.listened { opacity: 0.3; }
-        .node-l1.listened.focused { opacity: 0.9; }
-        .node-l1.focused.playing { opacity: 1; }
+        /* Main/seed node */
+        .node-seed {
+            width: 60px;
+            height: 60px;
+            z-index: 100;
+        }
+        
+        /* Level sizes */
+        .node-l1 { width: 36px; height: 36px; z-index: 90; }
+        .node-l2 { width: 24px; height: 24px; z-index: 80; }
+        .node-l3 { width: 16px; height: 16px; z-index: 70; }
+        .node-l4 { width: 10px; height: 10px; z-index: 60; opacity: 0.7; }
+        .node-l5 { width: 6px; height: 6px; z-index: 50; opacity: 0.5; }
+        
+        /* Orbit preview dots */
+        .orbit-preview {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.4;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
 
-        /* Level 2 - smaller */
-        .node-l2 { width: 10px; height: 10px; z-index: 10; opacity: 0.55; }
-        .node-l2.has-children { opacity: 0.7; }
-
-        /* Level 3 - tiny */
-        .node-l3 { width: 5px; height: 5px; z-index: 9; opacity: 0.3; }
-
-        /* Progress arc */
-        .playing-arc {
-            position: absolute; pointer-events: none; z-index: 13;
+        /* Progress ring */
+        .progress-ring {
+            position: absolute;
+            pointer-events: none;
             transform: translate(-50%, -50%);
         }
-        .playing-arc circle {
-            fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round;
-            transform-origin: center; transform: rotate(-90deg);
-            transition: stroke-dashoffset 0.15s linear;
+        .progress-ring circle {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2;
+            stroke-linecap: round;
+            transform-origin: center;
+            transform: rotate(-90deg);
+            opacity: 0.8;
         }
 
-        /* Bottom content - 50% of screen */
-        #content-card {
-            position: relative;
+        /* Bottom content area */
+        #content {
             height: 50vh;
             background: #111;
             border-radius: 20px 20px 0 0;
-            padding: 20px 20px 20px;
             display: flex;
             flex-direction: column;
+            padding: 20px;
         }
 
-        #thought-title { font-weight: 600; font-size: 15px; color: #fff; margin-bottom: 8px; }
-        #thought-text { font-size: 13px; line-height: 1.65; color: #888; flex: 1; overflow-y: auto; margin-bottom: 14px; }
-        #progress-bar { height: 2px; background: rgba(255,255,255,0.1); border-radius: 1px; margin-bottom: 16px; overflow: hidden; }
-        #progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s linear; }
+        #thought-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fff;
+        }
 
-        /* Level navigation buttons */
-        #level-navigation {
+        #thought-text {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 16px;
+        }
+
+        /* Controls */
+        #controls {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            padding: 0 10px;
+            gap: 16px;
+            padding: 12px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .level-btn {
-            width: 50px; height: 50px;
+
+        .control-btn {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.15s;
         }
-        .level-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        .level-btn:not(:disabled):hover {
+        
+        .control-btn:hover:not(:disabled) {
             background: rgba(255,255,255,0.15);
             border-color: rgba(255,255,255,0.3);
         }
-        .level-btn:active:not(:disabled) {
-            transform: scale(0.9);
+        
+        .control-btn:active:not(:disabled) {
+            transform: scale(0.92);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
         }
 
-        #play-pause-button {
-            width: 60px; height: 60px;
-            font-size: 24px;
+        #play-pause-btn {
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
             background: rgba(255,255,255,0.15);
         }
 
-        #loading {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 11px; letter-spacing: 0.25em;
-            color: rgba(255,255,255,0.25); text-transform: uppercase;
+        /* Progress bar */
+        #progress-container {
+            flex: 1;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+        }
+
+        #progress-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Speed control */
+        #speed-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #speed-btn {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 0;
+        }
+
+        /* Level indicator */
+        #level-indicator {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
-        /* Mobile optimization */
-        @media (max-height: 700px) {
-            #breadcrumb { top: 10px; padding: 4px 12px; }
-            #settings-button { top: 10px; right: 10px; width: 28px; height: 28px; font-size: 14px; }
-            .node-seed { width: 48px; height: 48px; }
-            .node-l1 { width: 22px; height: 22px; }
-            .node-l1.focused { width: 28px; height: 28px; }
-            #content-card { padding: 16px 16px 16px; }
-            .level-btn { width: 44px; height: 44px; font-size: 18px; }
-            #play-pause-button { width: 52px; height: 52px; font-size: 20px; }
+        #level-indicator.visible {
+            opacity: 1;
+        }
+
+        .level-dot {
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+        
+        .level-dot.active {
+            opacity: 1;
+        }
+
+        /* Loading */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+        }
+        
+        /* Transitions */
+        .transitioning .node {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
 <body>
-    <div id="breadcrumb"></div>
+    <div id="level-indicator"></div>
     
-    <button id="settings-button">⚙</button>
-    
-    <div id="settings-panel">
-        <button id="close-settings">×</button>
-        <h3>Structure</h3>
-        <pre id="markdown-output"></pre>
-        <button id="copy-button">Copy to Clipboard</button>
-    </div>
-
     <div id="loading">Loading</div>
 
     <div id="canvas">
         <div class="canvas-inner"></div>
     </div>
 
-    <div id="content-card">
+    <div id="content">
         <h2 id="thought-title"></h2>
-        <p id="thought-text"></p>
-        <div id="progress-bar"><div id="progress-fill"></div></div>
-        <div id="level-navigation">
-            <button class="level-btn" id="up-button" disabled>▲</button>
-            <button class="level-btn" id="play-pause-button">▶</button>
-            <button class="level-btn" id="down-button" disabled>▼</button>
+        <div id="thought-text"></div>
+        
+        <div id="controls">
+            <button class="control-btn" id="back-btn" title="Go up">◄</button>
+            <button class="control-btn" id="play-pause-btn">▶</button>
+            
+            <div id="progress-container">
+                <div id="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+            
+            <div id="speed-control">
+                <button class="control-btn" id="speed-btn">1×</button>
+            </div>
         </div>
     </div>
 
     <audio id="audio-player" preload="none"></audio>
-    
-    <!-- Pop sounds -->
-    <audio id="pop-sound-single" preload="auto">
-        <source src="data:audio/wav;base64,UklGRuQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YcAAAAAAAAoAFgAiAC4AOgBGAFIAXgBqAHYAggCOAJoApgCyAL4AygDWAOIA7gD6AAYBEgEeASoBNgFCAU4BWgFmAXIBfgGKAZYBogGuAboBxgHSAd4B6gH2AQICDgIaAiYCMgI+AkoCVgJiAm4CegKGApICngKqArYCwgLOAtoC5gLyAv4CCgMWAyIDLgM6A0YDUgNeA2oDdgOCA44DmgOmA7IDvgPKA9YD4gPuA/oDBgQSBB4EKgQ2BEIETgRaBGYEcgR+BIoElgSiBK4EugTGBNIE3gTqBPYEAgUOBRoFJgUyBT4FSgVWBWIFbgV6BYYFkgWeBaoFtgXCBc4F2gXmBfIF/gUKBhYGIgYuBjoGRgZSBl4GagZ2BoIGjgaaBqYGsga+BsoG1gbiBu4G+gYGBxIHHgcqBzYHQgdOB1oHZgdyB34HigcCAPz/9v/w/+r/5P/e/9j/0v/M/8b/wP+6/7T/rv+o/6L/nP+W/5D/iv+E/37/eP9y/2z/Zv9g/1r/VP9O/0j/Qv88/zb/MP8q/yT/Hv8Y/xL/DP8G/wD/+v70/u7+6P7i/tz+1v7Q/sr+xP6+/rj+sv6s/qb+oP6a/pT+jv6I/oL+fP52/nD+av5k/l7+WP5S/kz+Rv5A/jr+NP4u/ij+Iv4c/hb+EP4K/gT+/v0=" type="audio/wav">
-    </audio>
-    
-    <audio id="pop-sound-double" preload="auto">
-        <source src="data:audio/wav;base64,UklGRhgBAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YfQAAAAAAAAKABYAIgAuADoARgBSAF4AagB2AIIAjgCaAKYAsgC+AMoA1gDiAO4A+gAGARIBHgEqATYBQgFOAVoBZgFyAX4BigGWAaIBrgG6AcYB0gHeAeoB9gECAg4CGgImAjICPgJKAlYCYgJuAnoChgKSAp4CqgK2AsICzgLaAuYC8gL+AgoD///9/fv7+fn39/X19PPy8vDw7u7s7Orq6Ojm5uTk4uLg4N7e3Nza2tjY1tbU1NLS0NDOzszMysrIyMbGxMTCwsDAvr68vLq6uLi2trS0srKwsK6urKyqqgAACgAWACIALgA6AEYAUgBeAGoAdgCCAI4AmgCmALIAvgDKANYA4gDuAPoABgESAR4BKgE2AUIBTgFaAWYBcgF+AYoBAgD8//b/8P/q/+T/3v/Y/9L/zP/G/8D/uv+0/67/qP+i/5z/lv+Q/4r/hP9+/3j/cv9s/2b/YP9a/1T/Tv9I/0L/" type="audio/wav">
-    </audio>
 
     <script>
+        // Thought tree structure (same as before)
         const thoughtTree = {
             root: { id: 0, title: "Risk of Mass AI Unemployment", text: "How likely is it that Artificial Intelligence will cause massive unemployment in the next decade?", children: [1, 14, 26, 39, 52, 64] },
             thoughts: {
@@ -368,520 +384,496 @@
             }
         };
 
-        // Audio and state
+        // State
         const audioEl = document.getElementById('audio-player');
-        const popSingle = document.getElementById('pop-sound-single');
-        const popDouble = document.getElementById('pop-sound-double');
-        
         let currentRoot = thoughtTree.root;
-        let currentThoughts = [];
         let navigationStack = [];
-        let rotation = Math.PI; // Start at bottom
-        let focusedIndex = 0;
-        let isDragging = false;
-        let lastAngle = 0;
-        let currentArc = null;
-        let listenedSet = new Set();
-        let layout = [];
-        let playedAtLevel = new Map();
+        let rotation = 0;
+        let rotationVelocity = 0;
         let isPlaying = false;
-        let currentlyPlayingNode = null;
+        let isDragging = false;
+        let lastDragX = 0;
+        let playbackSpeed = 1;
+        let currentLayout = [];
+        let focusedIndex = 0;
+        let autoAdvanceTimer = null;
+        let is3DView = true;
+        let currentProgressRing = null;
 
-        // Mobile-optimized geometry
-        const R1 = 90;  // L1 orbit
-        const R2 = 28;  // L2 orbit
-        const R3 = 10;  // L3 orbit
-        const seedPos = () => {
+        // Constants
+        const ORBIT_RADIUS = {
+            1: 120,
+            2: 100,
+            3: 80,
+            4: 60,
+            5: 40
+        };
+        
+        const PREVIEW_RADIUS = {
+            1: 20,
+            2: 16,
+            3: 12,
+            4: 8,
+            5: 6
+        };
+
+        // Get center position
+        function getCenter() {
             const canvas = document.getElementById('canvas');
             return {
                 x: canvas.offsetWidth / 2,
                 y: canvas.offsetHeight / 2
             };
-        };
-
-        // UI Elements
-        const upButton = document.getElementById('up-button');
-        const downButton = document.getElementById('down-button');
-        const playPauseButton = document.getElementById('play-pause-button');
-        const settingsButton = document.getElementById('settings-button');
-        const settingsPanel = document.getElementById('settings-panel');
-        const closeSettings = document.getElementById('close-settings');
-        const copyButton = document.getElementById('copy-button');
-        const markdownOutput = document.getElementById('markdown-output');
-
-        // Settings panel
-        settingsButton.addEventListener('click', () => {
-            generateMarkdown();
-            settingsPanel.classList.add('open');
-        });
-
-        closeSettings.addEventListener('click', () => {
-            settingsPanel.classList.remove('open');
-        });
-
-        copyButton.addEventListener('click', () => {
-            const text = markdownOutput.textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                copyButton.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyButton.textContent = 'Copy to Clipboard';
-                }, 2000);
-            });
-        });
-
-        function generateMarkdown() {
-            let markdown = '';
-            
-            function traverseThought(thought, depth = 0) {
-                const prefix = '#'.repeat(depth + 1);
-                markdown += `${prefix} ${thought.title || 'Untitled'}\n\n${thought.text}\n\n`;
-                
-                if (thought.children) {
-                    thought.children.forEach(childId => {
-                        const child = thoughtTree.thoughts[childId];
-                        if (child) traverseThought(child, depth + 1);
-                    });
-                }
-            }
-            
-            traverseThought(currentRoot, 0);
-            markdownOutput.textContent = markdown;
-        }
-
-        // Navigation buttons
-        upButton.addEventListener('click', () => {
-            if (navigationStack.length > 0) {
-                popDouble.currentTime = 0;
-                popDouble.play();
-                goUp();
-            }
-        });
-
-        downButton.addEventListener('click', () => {
-            const focused = getFocusedThought();
-            if (focused?.children?.length) {
-                popDouble.currentTime = 0;
-                popDouble.play();
-                goDeeper();
-            }
-        });
-
-        playPauseButton.addEventListener('click', () => {
-            if (isPlaying) {
-                pausePlayback();
-            } else {
-                startPlayback();
-            }
-        });
-
-        function updateButtonStates() {
-            upButton.disabled = navigationStack.length === 0;
-            
-            const focused = getFocusedThought();
-            downButton.disabled = !focused?.children?.length;
-            
-            playPauseButton.textContent = isPlaying ? '⏸' : '▶';
         }
 
         // Initialize
         window.addEventListener('load', () => {
             document.getElementById('loading').style.display = 'none';
-            renderAll();
-            updateButtonStates();
+            render3DView();
+            setupControls();
+            requestAnimationFrame(animate);
         });
 
-        // Render scene
-        function renderAll() {
-            const ci = document.querySelector('.canvas-inner');
-            ci.innerHTML = '';
+        // Render 3D planetary view
+        function render3DView() {
+            const container = document.querySelector('.canvas-inner');
+            container.innerHTML = '';
+            container.classList.remove('transitioning');
+            is3DView = true;
             
-            // Seed node
+            const center = getCenter();
+            
+            // Main seed node
             const seed = document.createElement('div');
             seed.className = 'node node-seed';
-            const { x: cx, y: cy } = seedPos();
-            seed.style.left = cx + 'px'; seed.style.top = cy + 'px';
+            seed.style.left = center.x + 'px';
+            seed.style.top = center.y + 'px';
             seed.addEventListener('click', onSeedClick);
-            ci.appendChild(seed);
-
-            // Current thoughts
-            currentThoughts = currentRoot.children?.map(id => thoughtTree.thoughts[id]) || [];
-            const step1 = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
-            layout = [];
-
-            // At top level, show all nodes. Otherwise, only show current level
-            const showAllNodes = navigationStack.length === 0;
-
-            currentThoughts.forEach((t1, i) => {
-                const angle1 = rotation + i * step1 - Math.PI / 2;
-                const x1 = cx + Math.cos(angle1) * R1;
-                const y1 = cy + Math.sin(angle1) * R1;
-
-                const el1 = document.createElement('div');
-                el1.className = 'node node-l1';
-                if (listenedSet.has(t1.id)) el1.classList.add('listened');
-                el1.style.left = x1 + 'px'; el1.style.top = y1 + 'px';
-                el1.addEventListener('click', () => onL1Click(i));
-                ci.appendChild(el1);
-
-                const entry = { thought: t1, x: x1, y: y1, el: el1, children: [] };
-                layout.push(entry);
-
-                if (showAllNodes) {
-                    // L2: children of L1
-                    const l2thoughts = (t1.children || []).map(id => thoughtTree.thoughts[id]);
-                    const step2 = l2thoughts.length ? (2 * Math.PI) / l2thoughts.length : 0;
-                    l2thoughts.forEach((t2, j) => {
-                        const angle2 = j * step2 - Math.PI / 2;
-                        const x2 = x1 + Math.cos(angle2) * R2;
-                        const y2 = y1 + Math.sin(angle2) * R2;
-
-                        const el2 = document.createElement('div');
-                        el2.className = 'node node-l2';
-                        if (t2.children?.length) el2.classList.add('has-children');
-                        el2.style.left = x2 + 'px'; el2.style.top = y2 + 'px';
-                        ci.appendChild(el2);
-
-                        const entry2 = { thought: t2, x: x2, y: y2, el: el2, parentIndex: i, childIndex: j };
-                        entry.children.push(entry2);
-
-                        // L3: children of L2
-                        const l3thoughts = (t2.children || []).map(id => thoughtTree.thoughts[id]);
-                        const step3 = l3thoughts.length ? (2 * Math.PI) / l3thoughts.length : 0;
-                        l3thoughts.forEach((t3, k) => {
-                            const angle3 = k * step3 - Math.PI / 2;
-                            const el3 = document.createElement('div');
-                            el3.className = 'node node-l3';
-                            el3.style.left = (x2 + Math.cos(angle3) * R3) + 'px';
-                            el3.style.top  = (y2 + Math.sin(angle3) * R3) + 'px';
-                            ci.appendChild(el3);
-                        });
-                    });
-                }
+            container.appendChild(seed);
+            
+            // Orbiting children with 3D effect
+            const children = (currentRoot.children || []).map(id => thoughtTree.thoughts[id]);
+            const angleStep = (Math.PI * 2) / children.length;
+            
+            children.forEach((child, i) => {
+                const angle = i * angleStep;
+                const node = document.createElement('div');
+                node.className = 'node node-l1 orbit-3d';
+                node.style.left = center.x + Math.cos(angle) * ORBIT_RADIUS[1] + 'px';
+                node.style.top = center.y + Math.sin(angle) * ORBIT_RADIUS[1] + 'px';
+                node.style.animationDelay = `${i * 0.1}s`;
+                container.appendChild(node);
+                
+                // Add preview dots for sub-children
+                addPreviewDots(node, child, 2);
             });
-
-            updateBreadcrumb();
-            applyFocus();
-            updateButtonStates();
+            
+            updateLevelIndicator();
+            document.getElementById('back-btn').disabled = navigationStack.length === 0;
         }
 
-        function onL1Click(index) {
-            if (index === focusedIndex) {
-                if (layout[index].thought.children?.length) {
-                    downButton.click();
-                } else {
-                    startPlayback();
-                }
-            } else {
-                popSingle.currentTime = 0;
-                popSingle.play();
-                focusedIndex = index;
-                snapToBottom(index);
-                repositionAll();
-                applyFocus();
-            }
+        // Render flat circular view
+        function renderFlatView() {
+            const container = document.querySelector('.canvas-inner');
+            container.innerHTML = '';
+            container.classList.add('transitioning');
+            is3DView = false;
+            
+            const center = getCenter();
+            currentLayout = [];
+            
+            // Main seed node
+            const seed = document.createElement('div');
+            seed.className = 'node node-seed';
+            seed.style.left = center.x + 'px';
+            seed.style.top = center.y + 'px';
+            seed.addEventListener('click', onSeedClick);
+            container.appendChild(seed);
+            
+            // Children in circle
+            const children = (currentRoot.children || []).map(id => thoughtTree.thoughts[id]);
+            const radius = ORBIT_RADIUS[1];
+            
+            children.forEach((child, i) => {
+                const angle = rotation + (i / children.length) * Math.PI * 2 - Math.PI / 2;
+                const x = center.x + Math.cos(angle) * radius;
+                const y = center.y + Math.sin(angle) * radius;
+                
+                const node = document.createElement('div');
+                node.className = 'node node-l1';
+                node.style.left = x + 'px';
+                node.style.top = y + 'px';
+                node.addEventListener('click', () => onChildClick(child, i));
+                container.appendChild(node);
+                
+                currentLayout.push({
+                    node: child,
+                    element: node,
+                    x, y, index: i
+                });
+                
+                // Add preview dots
+                addPreviewDots(node, child, 2, angle);
+            });
+            
+            updateFocusedNode();
+            setTimeout(() => container.classList.remove('transitioning'), 50);
         }
 
+        // Add preview dots around a node
+        function addPreviewDots(parentEl, parentThought, level, parentAngle = 0) {
+            if (!parentThought.children || level > 3) return;
+            
+            const children = parentThought.children.map(id => thoughtTree.thoughts[id]);
+            const radius = PREVIEW_RADIUS[level];
+            const angleStep = (Math.PI * 2) / children.length;
+            
+            children.forEach((child, i) => {
+                const angle = parentAngle + i * angleStep;
+                const dot = document.createElement('div');
+                dot.className = `orbit-preview node-l${level + 1}`;
+                
+                const x = parseFloat(parentEl.style.left) + Math.cos(angle) * radius;
+                const y = parseFloat(parentEl.style.top) + Math.sin(angle) * radius;
+                
+                dot.style.left = x + 'px';
+                dot.style.top = y + 'px';
+                dot.style.width = dot.style.height = (8 - level * 2) + 'px';
+                
+                document.querySelector('.canvas-inner').appendChild(dot);
+            });
+        }
+
+        // Handle seed click
         function onSeedClick() {
-            if (navigationStack.length > 0) {
-                upButton.click();
+            if (is3DView) {
+                // First click: remove 3D, play intro
+                renderFlatView();
+                playNode(currentRoot);
+            } else if (navigationStack.length > 0) {
+                // Go back up
+                goUp();
             } else {
-                startPlayback();
+                // Play seed again
+                playNode(currentRoot);
             }
         }
 
-        // Reposition nodes
-        function repositionAll() {
-            const { x: cx, y: cy } = seedPos();
-            const step1 = currentThoughts.length ? (2 * Math.PI) / currentThoughts.length : 0;
+        // Handle child node click
+        function onChildClick(node, index) {
+            if (index === focusedIndex && node.children?.length) {
+                // Click on focused node with children: dive deeper
+                goDeeper(node);
+            } else {
+                // Focus this node
+                focusedIndex = index;
+                snapToNode(index);
+                playNode(node);
+            }
+        }
 
-            layout.forEach((entry, i) => {
-                const angle1 = rotation + i * step1 - Math.PI / 2;
-                const x1 = cx + Math.cos(angle1) * R1;
-                const y1 = cy + Math.sin(angle1) * R1;
-                entry.x = x1; entry.y = y1;
-                entry.el.style.left = x1 + 'px'; entry.el.style.top = y1 + 'px';
+        // Snap rotation to put node at bottom
+        function snapToNode(index) {
+            const targetAngle = -index / currentLayout.length * Math.PI * 2 - Math.PI / 2;
+            rotation = targetAngle;
+            rotationVelocity = 0;
+            renderFlatView();
+        }
 
-                if (entry.children.length) {
-                    const step2 = entry.children.length ? (2 * Math.PI) / entry.children.length : 0;
-                    entry.children.forEach((c, j) => {
-                        const angle2 = j * step2 - Math.PI / 2;
-                        const x2 = x1 + Math.cos(angle2) * R2;
-                        const y2 = y1 + Math.sin(angle2) * R2;
-                        c.x = x2; c.y = y2;
-                        c.el.style.left = x2 + 'px'; c.el.style.top = y2 + 'px';
-                    });
+        // Update which node is focused (at bottom)
+        function updateFocusedNode() {
+            if (!currentLayout.length) return;
+            
+            // Find node closest to bottom
+            let closestIndex = 0;
+            let closestDist = Infinity;
+            const center = getCenter();
+            
+            currentLayout.forEach((item, i) => {
+                const dist = Math.abs(item.y - (center.y + ORBIT_RADIUS[1]));
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestIndex = i;
                 }
             });
-
-            if (currentArc && layout[focusedIndex]) {
-                const { x, y } = layout[focusedIndex];
-                currentArc.style.left = x + 'px'; currentArc.style.top = y + 'px';
-            }
-        }
-
-        // Focus management
-        function getFocusedIndex() {
-            if (!currentThoughts.length) return 0;
-            const step1 = (2 * Math.PI) / currentThoughts.length;
-            const target = Math.PI / 2; // bottom
-            let best = 0, bestD = Infinity;
-            currentThoughts.forEach((_, i) => {
-                let a = ((rotation + i * step1) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-                let d = Math.abs(a - target);
-                if (d > Math.PI) d = 2 * Math.PI - d;
-                if (d < bestD) { bestD = d; best = i; }
+            
+            focusedIndex = closestIndex;
+            
+            // Update visual states
+            currentLayout.forEach((item, i) => {
+                if (i === focusedIndex) {
+                    item.element.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                    item.element.style.zIndex = '100';
+                } else {
+                    item.element.style.transform = 'translate(-50%, -50%) scale(1)';
+                    item.element.style.zIndex = '90';
+                }
             });
-            return best;
         }
 
-        function getFocusedThought() {
-            return currentThoughts[focusedIndex] || currentRoot;
-        }
-
-        function applyFocus() {
-            layout.forEach(e => e.el.classList.remove('focused'));
-            if (!layout.length) {
-                updateContentCard(currentRoot);
-                return;
+        // Go deeper into a node
+        function goDeeper(node) {
+            navigationStack.push({
+                root: currentRoot,
+                rotation: rotation,
+                focusedIndex: focusedIndex
+            });
+            
+            currentRoot = node;
+            rotation = 0;
+            focusedIndex = 0;
+            
+            renderFlatView();
+            
+            // Auto-play first child
+            if (currentRoot.children?.length) {
+                const firstChild = thoughtTree.thoughts[currentRoot.children[0]];
+                setTimeout(() => playNode(firstChild), 300);
             }
-            focusedIndex = getFocusedIndex();
-            layout[focusedIndex].el.classList.add('focused');
-            const t = layout[focusedIndex].thought;
-            updateContentCard(t);
         }
 
-        function snapToBottom(idx) {
-            const step = (2 * Math.PI) / currentThoughts.length;
-            rotation = Math.PI - idx * step;
-        }
-
-        // Navigation
+        // Go back up
         function goUp() {
             if (!navigationStack.length) return;
-            const p = navigationStack.pop();
-            currentRoot = p.root;
-            rotation = p.rotation;
-            focusedIndex = p.focusedIndex;
-            renderAll();
-        }
-
-        function goDeeper() {
-            const t = currentThoughts[focusedIndex];
-            if (!t?.children?.length) return;
-            navigationStack.push({ root: currentRoot, rotation, focusedIndex });
-            currentRoot = t;
-            rotation = Math.PI;
-            focusedIndex = 0;
-            renderAll();
-            startPlayback(); // Auto-play when diving deeper
-        }
-
-        // Audio playback
-        function startPlayback() {
-            const node = getFocusedThought();
-            if (!node) return;
             
-            audioEl.pause();
-            removeArc();
+            const prev = navigationStack.pop();
+            currentRoot = prev.root;
+            rotation = prev.rotation;
+            focusedIndex = prev.focusedIndex;
             
-            const depth = navigationStack.length;
-            const levelKey = `${depth}-${currentThoughts.length ? 'sub' : 'seed'}`;
-            
-            if (!playedAtLevel.has(levelKey)) {
-                playedAtLevel.set(levelKey, new Set());
+            if (navigationStack.length === 0 && is3DView === false) {
+                render3DView();
+            } else {
+                renderFlatView();
             }
+        }
+
+        // Play a node
+        function playNode(node) {
+            audioEl.pause();
+            clearTimeout(autoAdvanceTimer);
             
+            // Update UI
+            document.getElementById('thought-title').textContent = node.title || '';
+            document.getElementById('thought-text').textContent = node.text || '';
+            
+            // Remove old progress rings
+            document.querySelectorAll('.progress-ring').forEach(r => r.remove());
+            
+            // Load and play audio
             audioEl.src = `./audio/thought-${node.id}.mp3`;
-            updateContentCard(node);
-            
+            audioEl.playbackRate = playbackSpeed;
             audioEl.play().then(() => {
                 isPlaying = true;
-                currentlyPlayingNode = node;
-                updateButtonStates();
+                updatePlayPauseButton();
                 
-                if (navigationStack.length === 0) {
-                    document.querySelector('.node-seed')?.classList.add('playing');
-                } else {
-                    layout.forEach(e => e.el.classList.remove('playing'));
-                    layout[focusedIndex]?.el.classList.add('playing');
-                    createArc(layout[focusedIndex]);
-                }
+                // Add playing class
+                const nodeEl = currentLayout[focusedIndex]?.element || document.querySelector('.node-seed');
+                nodeEl?.classList.add('playing');
                 
-                listenedSet.add(node.id);
-                playedAtLevel.get(levelKey).add(node.id);
-                
-                if (layout[focusedIndex]) {
-                    layout[focusedIndex].el.classList.add('listened');
-                }
-            }).catch(() => {});
+                // Create progress ring
+                createProgressRing(nodeEl);
+            });
         }
 
-        function pausePlayback() {
-            audioEl.pause();
-            isPlaying = false;
-            removeArc();
-            document.querySelector('.node-seed')?.classList.remove('playing');
-            layout.forEach(e => e.el.classList.remove('playing'));
-            updateButtonStates();
-        }
-
-        function createArc(entry) {
-            if (!entry) return;
-            removeArc();
-            const size = (entry.el.offsetWidth || 24) + 10;
-            const r = size / 2 - 2;
-            const circ = 2 * Math.PI * r;
-
+        // Create progress ring
+        function createProgressRing(nodeEl) {
+            if (!nodeEl) return;
+            
+            const size = parseFloat(getComputedStyle(nodeEl).width) + 10;
+            const radius = size / 2 - 3;
+            const circumference = 2 * Math.PI * radius;
+            
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.classList.add('playing-arc');
+            svg.className = 'progress-ring';
             svg.setAttribute('width', size);
             svg.setAttribute('height', size);
-            svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-            svg.style.left = entry.x + 'px';
-            svg.style.top = entry.y + 'px';
-
+            svg.style.left = nodeEl.style.left;
+            svg.style.top = nodeEl.style.top;
+            
             const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             circle.setAttribute('cx', size / 2);
             circle.setAttribute('cy', size / 2);
-            circle.setAttribute('r', r);
-            circle.style.strokeDasharray = circ;
-            circle.style.strokeDashoffset = circ;
+            circle.setAttribute('r', radius);
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference;
+            
             svg.appendChild(circle);
-
             document.querySelector('.canvas-inner').appendChild(svg);
-            currentArc = svg;
-            currentArc._circ = circ;
+            
+            currentProgressRing = { svg, circle, circumference };
         }
 
-        function removeArc() {
-            if (currentArc) {
-                currentArc.remove();
-                currentArc = null;
-            }
-        }
-
-        // Audio events
+        // Update progress
         audioEl.addEventListener('timeupdate', () => {
-            if (!audioEl.duration) return;
-            const pct = audioEl.currentTime / audioEl.duration;
-            document.getElementById('progress-fill').style.width = `${pct * 100}%`;
-            if (currentArc?._circ) {
-                const c = currentArc.querySelector('circle');
-                if (c) c.style.strokeDashoffset = currentArc._circ * (1 - pct);
+            const progress = audioEl.currentTime / audioEl.duration;
+            
+            // Update progress bar
+            document.getElementById('progress-fill').style.width = `${progress * 100}%`;
+            
+            // Update progress ring
+            if (currentProgressRing) {
+                const offset = currentProgressRing.circumference * (1 - progress);
+                currentProgressRing.circle.style.strokeDashoffset = offset;
             }
         });
 
+        // Handle audio end
         audioEl.addEventListener('ended', () => {
-            document.getElementById('progress-fill').style.width = '0%';
             isPlaying = false;
-            removeArc();
-            document.querySelector('.node-seed')?.classList.remove('playing');
-            layout.forEach(e => e.el.classList.remove('playing'));
-            updateButtonStates();
+            updatePlayPauseButton();
+            
+            // Remove playing states
+            document.querySelectorAll('.node.playing').forEach(n => n.classList.remove('playing'));
+            document.querySelectorAll('.progress-ring').forEach(r => r.remove());
+            currentProgressRing = null;
             
             // Auto-advance logic
-            if (currentThoughts.length > 0) {
-                const next = (focusedIndex + 1) % currentThoughts.length;
-                if (next !== focusedIndex) {
-                    popSingle.currentTime = 0;
-                    popSingle.play();
-                    focusedIndex = next;
-                    snapToBottom(next);
-                    repositionAll();
-                    applyFocus();
-                    // Auto-play next
-                    setTimeout(() => startPlayback(), 500);
+            if (!is3DView && currentLayout.length > 0) {
+                const nextIndex = (focusedIndex + 1) % currentLayout.length;
+                const nextNode = currentLayout[nextIndex].node;
+                
+                // Check if we've completed the circle and current node has children
+                if (nextIndex === 0 && currentLayout[focusedIndex].node.children?.length) {
+                    // Auto-dive deeper
+                    autoAdvanceTimer = setTimeout(() => {
+                        goDeeper(currentLayout[focusedIndex].node);
+                    }, 1000);
+                } else {
+                    // Advance to next
+                    autoAdvanceTimer = setTimeout(() => {
+                        focusedIndex = nextIndex;
+                        snapToNode(nextIndex);
+                        playNode(nextNode);
+                    }, 500);
                 }
             }
         });
 
-        audioEl.addEventListener('pause', () => {
-            isPlaying = false;
-            updateButtonStates();
-        });
-
-        // Content card
-        function updateContentCard(node) {
-            document.getElementById('thought-title').textContent = node.title || '';
-            document.getElementById('thought-text').textContent = node.text;
-            updateButtonStates();
-        }
-
-        // Touch drag
-        function getAngle(x, y) {
-            const r = document.querySelector('.canvas-inner').getBoundingClientRect();
-            const { x: cx, y: cy } = seedPos();
-            return Math.atan2(y - (r.top + cy), x - (r.left + cx));
-        }
-
-        function handleStart(e) {
-            if (!document.getElementById('canvas').contains(e.target)) return;
-            if (e.target.classList.contains('node-seed')) return;
-            isDragging = true;
-            const p = e.touches ? e.touches[0] : e;
-            lastAngle = getAngle(p.clientX, p.clientY);
-        }
-        
-        function handleMove(e) {
-            if (!isDragging || !currentThoughts.length) return;
-            e.preventDefault();
-            const p = e.touches ? e.touches[0] : e;
-            const cur = getAngle(p.clientX, p.clientY);
-            let d = cur - lastAngle;
-            if (d > Math.PI) d -= 2 * Math.PI;
-            if (d < -Math.PI) d += 2 * Math.PI;
-            rotation += d;
-            lastAngle = cur;
+        // Controls setup
+        function setupControls() {
+            const backBtn = document.getElementById('back-btn');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const speedBtn = document.getElementById('speed-btn');
+            const progressBar = document.getElementById('progress-bar');
             
-            const oldFocused = focusedIndex;
-            repositionAll();
-            const newFocused = getFocusedIndex();
-            if (oldFocused !== newFocused) {
-                popSingle.currentTime = 0;
-                popSingle.play();
-            }
-            applyFocus();
-        }
-        
-        function handleEnd() {
-            if (!isDragging) return;
-            isDragging = false;
-            if (!currentThoughts.length) return;
-            focusedIndex = getFocusedIndex();
-            snapToBottom(focusedIndex);
-            repositionAll();
-            applyFocus();
-        }
-
-        document.addEventListener('mousedown', handleStart);
-        document.addEventListener('mousemove', handleMove);
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchstart', handleStart, { passive: false });
-        document.addEventListener('touchmove', handleMove, { passive: false });
-        document.addEventListener('touchend', handleEnd);
-        window.addEventListener('resize', () => {
-            renderAll();
-        });
-
-        // Breadcrumb
-        function updateBreadcrumb() {
-            const bc = document.getElementById('breadcrumb');
-            bc.innerHTML = '';
-            if (!navigationStack.length) {
-                bc.classList.remove('visible');
-                return;
-            }
-            bc.classList.add('visible');
+            backBtn.addEventListener('click', goUp);
             
-            bc.appendChild(Object.assign(document.createElement('div'), { className: 'breadcrumb-dot' }));
-            
-            navigationStack.forEach((_, idx) => {
-                bc.appendChild(Object.assign(document.createElement('span'), { className: 'breadcrumb-arrow', textContent: '›' }));
-                bc.appendChild(Object.assign(document.createElement('div'), { className: 'breadcrumb-dot' }));
+            playPauseBtn.addEventListener('click', () => {
+                if (isPlaying) {
+                    audioEl.pause();
+                    isPlaying = false;
+                } else if (audioEl.src) {
+                    audioEl.play();
+                    isPlaying = true;
+                } else if (!is3DView && currentLayout.length) {
+                    playNode(currentLayout[focusedIndex].node);
+                }
+                updatePlayPauseButton();
             });
             
-            const dots = bc.querySelectorAll('.breadcrumb-dot');
-            if (dots.length) dots[dots.length - 1].classList.add('active');
+            speedBtn.addEventListener('click', () => {
+                const speeds = [0.75, 1, 1.25, 1.5, 2];
+                const currentIndex = speeds.indexOf(playbackSpeed);
+                playbackSpeed = speeds[(currentIndex + 1) % speeds.length];
+                speedBtn.textContent = playbackSpeed + '×';
+                audioEl.playbackRate = playbackSpeed;
+            });
+            
+            progressBar.addEventListener('click', (e) => {
+                if (!audioEl.duration) return;
+                const rect = progressBar.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                audioEl.currentTime = percent * audioEl.duration;
+            });
+        }
+
+        function updatePlayPauseButton() {
+            document.getElementById('play-pause-btn').textContent = isPlaying ? '⏸' : '▶';
+        }
+
+        // Touch/mouse rotation
+        let touchStartX = 0;
+        let touchStartRotation = 0;
+
+        document.getElementById('canvas').addEventListener('mousedown', onDragStart);
+        document.getElementById('canvas').addEventListener('touchstart', onDragStart);
+        
+        function onDragStart(e) {
+            if (is3DView || e.target.classList.contains('node')) return;
+            
+            isDragging = true;
+            touchStartX = e.touches ? e.touches[0].clientX : e.clientX;
+            touchStartRotation = rotation;
+            
+            document.addEventListener('mousemove', onDragMove);
+            document.addEventListener('mouseup', onDragEnd);
+            document.addEventListener('touchmove', onDragMove);
+            document.addEventListener('touchend', onDragEnd);
+        }
+        
+        function onDragMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+            const deltaX = currentX - touchStartX;
+            const canvasWidth = document.getElementById('canvas').offsetWidth;
+            
+            // Convert pixel movement to rotation
+            rotation = touchStartRotation + (deltaX / canvasWidth) * Math.PI * 2;
+            rotationVelocity = deltaX - lastDragX;
+            lastDragX = deltaX;
+            
+            renderFlatView();
+        }
+        
+        function onDragEnd() {
+            isDragging = false;
+            
+            // Apply momentum
+            if (Math.abs(rotationVelocity) > 2) {
+                rotationVelocity *= 0.95;
+            }
+            
+            document.removeEventListener('mousemove', onDragMove);
+            document.removeEventListener('mouseup', onDragEnd);
+            document.removeEventListener('touchmove', onDragMove);
+            document.removeEventListener('touchend', onDragEnd);
+        }
+
+        // Animation loop
+        function animate() {
+            if (!isDragging && Math.abs(rotationVelocity) > 0.01 && !is3DView) {
+                rotation += rotationVelocity * 0.01;
+                rotationVelocity *= 0.92; // Friction
+                renderFlatView();
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Level indicator
+        function updateLevelIndicator() {
+            const indicator = document.getElementById('level-indicator');
+            indicator.innerHTML = '';
+            
+            if (navigationStack.length === 0) {
+                indicator.classList.remove('visible');
+                return;
+            }
+            
+            indicator.classList.add('visible');
+            
+            // Add dots for each level
+            for (let i = 0; i <= navigationStack.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'level-dot';
+                if (i === navigationStack.length) {
+                    dot.classList.add('active');
+                }
+                indicator.appendChild(dot);
+            }
         }
     </script>
 </body>
