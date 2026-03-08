@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Future Proof</title>
-  <meta name="description" content="A network of artists, scholars and technologists that tinker with ideas that will survive and scale.">
+  <title>Noya</title>
+  <meta name="description" content="A network of artists, scholars and technologists building ideas that survive and scale.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -17,10 +17,11 @@
     }
 
     :root {
-      --bg: #0a0a0a;
-      --fg: #fafafa;
-      --muted: #666;
-      --accent: #00ff88;
+      --bg: #0a0908;
+      --fg: #f5f0eb;
+      --muted: #6b6460;
+      --accent: #c8956c;
+      --accent-glow: rgba(200, 149, 108, 0.15);
       --serif: 'Instrument Serif', Georgia, serif;
       --sans: 'Inter', -apple-system, sans-serif;
     }
@@ -201,7 +202,7 @@
       position: absolute;
       inset: 0;
       background: 
-        radial-gradient(ellipse 80% 50% at 50% 120%, rgba(0, 255, 136, 0.08) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 50% at 50% 120%, var(--accent-glow) 0%, transparent 60%);
       pointer-events: none;
     }
 
@@ -771,7 +772,7 @@
       position: absolute;
       inset: 0;
       background: radial-gradient(ellipse 60% 60% at 50% 50%, 
-        rgba(232, 255, 71, 0.1) 0%, transparent 70%);
+        var(--accent-glow) 0%, transparent 70%);
       animation: breathe 8s ease-in-out infinite;
     }
 
@@ -825,7 +826,7 @@
 
     .cta-button:hover {
       transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(232, 255, 71, 0.25);
+      box-shadow: 0 20px 40px rgba(200, 149, 108, 0.3);
     }
 
     .cta-button .arrow {
@@ -919,6 +920,81 @@
       transform: scale(2);
       opacity: 0.5;
     }
+
+    /* ═══════════════════════════════════════════
+       NOYA NAME + TOOLTIP
+    ═══════════════════════════════════════════ */
+    .noya-name {
+      position: relative;
+      display: inline-block;
+      cursor: default;
+    }
+
+    .noya-tooltip {
+      position: absolute;
+      bottom: calc(100% + 1.2rem);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: #1a1714;
+      border: 1px solid rgba(200, 149, 108, 0.2);
+      padding: 1.4rem 1.6rem;
+      width: 300px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      z-index: 100;
+    }
+
+    .noya-name:hover .noya-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .noya-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: rgba(200, 149, 108, 0.2);
+    }
+
+    .noya-def {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-style: normal;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .noya-meanings {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .noya-meanings li {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-style: normal;
+      color: rgba(245, 240, 235, 0.7);
+      line-height: 1.5;
+      letter-spacing: 0;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .noya-meanings li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body>
@@ -930,7 +1006,7 @@
        PASSWORD GATE
   ═══════════════════════════════════════════ -->
   <div id="gate">
-    <div class="gate-corner tl">Future<br>Proof</div>
+    <div class="gate-corner tl">Noya</div>
     <div class="gate-corner tr">Network<br>Active</div>
     <div class="gate-corner bl">Prague<br>Oslo</div>
     <div class="gate-corner br">Est.<br>2026</div>
@@ -971,19 +1047,31 @@
       </video>
       
       <header class="hero-header">
-        <div class="hero-logo">Future Proof</div>
+        <div class="hero-logo">
+          <span class="noya-name">Noya
+            <div class="noya-tooltip">
+              <div class="noya-def">noya / nōya</div>
+              <ul class="noya-meanings">
+                <li><strong>Hebrew</strong> נויה — beauty, adornment; to embellish</li>
+                <li><strong>Japanese</strong> 野矢 — field arrow; purposeful movement through open terrain</li>
+                <li><strong>Swahili</strong> — to shape, to form with intention</li>
+                <li><strong>Project Noya</strong> — a generative space for ideas that survive and scale</li>
+              </ul>
+            </div>
+          </span>
+        </div>
         <div class="hero-status">Building</div>
       </header>
 
       <div class="hero-title-container">
         <h1 class="hero-title">
           <span class="line"><span class="word">Ideas</span></span>
-          <span class="line"><span class="word">that <span class="italic">survive</span></span></span>
+          <span class="line"><span class="word">that <span class="italic">last</span></span></span>
         </h1>
       </div>
 
       <div class="hero-footer">
-        <p class="hero-tagline">A network of artists, scholars and technologists tinkering with ideas that will survive and scale.</p>
+        <p class="hero-tagline">A network of artists, scholars and technologists building ideas that survive and scale.</p>
         <div class="hero-scroll">
           <span>Scroll</span>
           <div class="hero-scroll-line"></div>
@@ -994,12 +1082,12 @@
     <!-- Statement -->
     <section class="statement">
       <div class="statement-content">
-        <div class="statement-label">The Problem</div>
+        <div class="statement-label">The Space</div>
         <p class="statement-text">
-          <span class="dim">Most technologies we create are</span> doing harm.
-          <span class="break"><span class="dim">Most of us are</span> no longer safe<span class="dim">—</span></span>
-          <span class="break"><em>isolated</em> <span class="dim">and</span> <em>unprepared</em></span>
-          <span class="break"><span class="dim">for the next pandemic, drone strike, or power outage.</span></span>
+          <span class="dim">A place for people who want to</span> make things that matter.
+          <span class="break"><span class="dim">Where artists, scholars and technologists</span></span>
+          <span class="break"><em>think together,</em> <span class="dim">build together,</span></span>
+          <span class="break"><span class="dim">and leave something</span> <em>worth keeping.</em></span>
         </p>
       </div>
     </section>
@@ -1007,24 +1095,24 @@
     <!-- Words Marquee -->
     <section class="words">
       <div class="words-row">
-        <span class="word-item">Survive<span class="dot"></span></span>
-        <span class="word-item">Create<span class="dot"></span></span>
-        <span class="word-item">Connect<span class="dot"></span></span>
-        <span class="word-item">Adapt<span class="dot"></span></span>
-        <span class="word-item">Survive<span class="dot"></span></span>
-        <span class="word-item">Create<span class="dot"></span></span>
-        <span class="word-item">Connect<span class="dot"></span></span>
-        <span class="word-item">Adapt<span class="dot"></span></span>
+        <span class="word-item">Make<span class="dot"></span></span>
+        <span class="word-item">Gather<span class="dot"></span></span>
+        <span class="word-item">Imagine<span class="dot"></span></span>
+        <span class="word-item">Scale<span class="dot"></span></span>
+        <span class="word-item">Make<span class="dot"></span></span>
+        <span class="word-item">Gather<span class="dot"></span></span>
+        <span class="word-item">Imagine<span class="dot"></span></span>
+        <span class="word-item">Scale<span class="dot"></span></span>
       </div>
       <div class="words-row">
         <span class="word-item">Think<span class="dot"></span></span>
         <span class="word-item">Build<span class="dot"></span></span>
         <span class="word-item">Question<span class="dot"></span></span>
-        <span class="word-item">Endure<span class="dot"></span></span>
+        <span class="word-item">Grow<span class="dot"></span></span>
         <span class="word-item">Think<span class="dot"></span></span>
         <span class="word-item">Build<span class="dot"></span></span>
         <span class="word-item">Question<span class="dot"></span></span>
-        <span class="word-item">Endure<span class="dot"></span></span>
+        <span class="word-item">Grow<span class="dot"></span></span>
       </div>
     </section>
 
@@ -1034,36 +1122,36 @@
         <h2 class="grid-title">
           Four<br>Pillars<span class="number">04</span>
         </h2>
-        <p class="grid-subtitle">Not paralysing pessimism. Not aggressive progressivism. A third way forward.</p>
+        <p class="grid-subtitle">A generative space where different kinds of intelligence meet and build together.</p>
       </div>
 
       <div class="grid-items">
         <div class="grid-item">
           <span class="grid-item-number">01</span>
           <div class="grid-item-content">
-            <h3>Survive</h3>
-            <p>Practices and tools for navigating this century. Preparation without paranoia.</p>
+            <h3>Ground</h3>
+            <p>Skills and practices for living well in uncertain times. Competence as the foundation for everything else.</p>
           </div>
         </div>
         <div class="grid-item">
           <span class="grid-item-number">02</span>
           <div class="grid-item-content">
-            <h3>Community</h3>
-            <p>Physical and psychological safety nets. People who show up when it matters.</p>
+            <h3>Circle</h3>
+            <p>A small, trusted network. People who think deeply, work across disciplines, and show up in person.</p>
           </div>
         </div>
         <div class="grid-item">
           <span class="grid-item-number">03</span>
           <div class="grid-item-content">
             <h3>Places</h3>
-            <p>Retreat and hub. Remote resilience and urban collaboration.</p>
+            <p>A retreat in Norway and a hub in Prague. Spaces designed for long thinking and serious making.</p>
           </div>
         </div>
         <div class="grid-item">
           <span class="grid-item-number">04</span>
           <div class="grid-item-content">
-            <h3>Make</h3>
-            <p>Write, draw, code, build, sweat. Creation as resistance.</p>
+            <h3>Studio</h3>
+            <p>Write, draw, code, build. The work itself — outputs that can be shared, taught, and carried forward.</p>
           </div>
         </div>
       </div>
@@ -1085,24 +1173,7 @@
       </div>
     </section>
 
-    <!-- Topics -->
-    <section class="topics">
-      <div class="topics-header">
-        <div class="topics-label">Areas of Inquiry</div>
-        <h2 class="topics-title">What we explore</h2>
-      </div>
-      
-      <div class="topics-grid">
-        <a href="#contact" class="topic-item"><span>Model Evaluations</span><span class="arrow">→</span></a>
-        <a href="#contact" class="topic-item"><span>Adaptation Practices</span><span class="arrow">→</span></a>
-        <a href="#contact" class="topic-item"><span>Living Off the Land</span><span class="arrow">→</span></a>
-        <a href="#contact" class="topic-item"><span>Art in Times of War</span><span class="arrow">→</span></a>
-        <a href="#contact" class="topic-item"><span>Resilient Infrastructure</span><span class="arrow">→</span></a>
-        <a href="#contact" class="topic-item"><span>Survival Skills</span><span class="arrow">→</span></a>
-        <a href="#contact" class="topic-item"><span>Off-Grid Systems</span><span class="arrow">→</span></a>
-        <a href="#contact" class="topic-item"><span>Community Building</span><span class="arrow">→</span></a>
-      </div>
-    </section>
+
 
     <!-- CTA -->
     <section class="polycam-section">
@@ -1113,9 +1184,9 @@
 
     <section class="cta" id="contact">
       <div class="cta-content">
-        <h2 class="cta-title">Build something<br>that <em>lasts</em></h2>
-        <p class="cta-text">We need imagination and community to develop better tools and a better way of life. Join the network.</p>
-        <a href="mailto:lars@laichter.house?subject=Future%20Proof" class="cta-button">
+        <h2 class="cta-title">Make something<br>worth <em>keeping</em></h2>
+        <p class="cta-text">Noya is a place for people who want to think seriously and make things that last. Join the network.</p>
+        <a href="mailto:lars@laichter.house?subject=Project%20Noya" class="cta-button">
           Get in touch
           <span class="arrow">→</span>
         </a>
@@ -1125,11 +1196,11 @@
     <!-- Footer -->
     <footer>
       <div class="footer-content">
-        <div class="footer-logo">Future Proof</div>
+        <div class="footer-logo">Noya</div>
         <div class="footer-middle">
           <a href="mailto:lars@laichter.house">lars@laichter.house</a>
         </div>
-        <div class="footer-copy">© 2026 — Risk · Art · Technology</div>
+        <div class="footer-copy">© 2026 — Art · Scholarship · Technology</div>
       </div>
     </footer>
 
