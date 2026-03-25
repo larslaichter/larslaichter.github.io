@@ -3,512 +3,462 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Podobizna — Trustworthy AI Personas</title>
+  <title>Podobizna</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --gold: #c9a84c;
-      --gold-dim: #8a6e32;
-      --bg: #0e0c09;
-      --bg2: #141209;
-      --text: #d4c9b0;
-      --text-dim: #7a7060;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --serif: 'Georgia', 'Times New Roman', serif;
-      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--serif);
-      line-height: 1.7;
-      font-size: 18px;
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
     }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      background: rgba(14,12,9,0.92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(201,168,76,0.15);
+    /* ── DECK ── */
+    #deck {
+      width: 100%; height: 100%;
+      position: relative;
     }
 
-    nav .logo {
-      font-size: 1.1rem;
-      letter-spacing: 0.15em;
-      color: var(--gold);
-      text-decoration: none;
-      font-family: var(--sans);
-      font-weight: 300;
-    }
-
-    nav .back {
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      text-decoration: none;
-      letter-spacing: 0.1em;
-      transition: color 0.2s;
-    }
-
-    nav .back:hover { color: var(--gold); }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
+    /* ── SLIDES ── */
+    .slide {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 6rem 2rem 4rem;
-      max-width: 800px;
-      margin: 0 auto;
+      padding: 8vw;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
     }
 
-    .hero-tag {
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .slide h1 {
       font-family: var(--sans);
-      font-size: 0.72rem;
+      font-weight: 700;
+      font-size: clamp(3rem, 10vw, 9rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .slide h2 {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: clamp(2rem, 5.5vw, 5rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .slide p {
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 2.5vw, 2rem);
+      line-height: 1.5;
+      color: rgba(255,255,255,0.7);
+      max-width: 800px;
+      margin-top: 1.5rem;
+    }
+
+    .slide .label {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: clamp(0.7rem, 1.2vw, 0.9rem);
       letter-spacing: 0.25em;
-      color: var(--gold-dim);
       text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
       margin-bottom: 2rem;
     }
 
-    h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: normal;
-      line-height: 1.15;
-      color: #e8dfc8;
-      margin-bottom: 1.5rem;
-    }
-
-    h1 em {
-      color: var(--gold);
+    .slide em {
       font-style: normal;
+      color: #fff;
     }
 
-    .hero-sub {
-      font-size: 1.2rem;
-      color: var(--text-dim);
-      max-width: 560px;
-      margin-bottom: 3rem;
-      font-family: var(--sans);
+    .slide strong {
+      color: #fff;
+      font-weight: normal;
+    }
+
+    /* ── SLIDE 1: LOGO ── */
+    #s1 {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0;
+    }
+
+    #s1 h1 {
+      font-size: clamp(4rem, 14vw, 13rem);
+      letter-spacing: 0.15em;
+      font-weight: 200;
+    }
+
+    #s1 .tagline {
+      font-family: var(--serif);
+      font-size: clamp(0.9rem, 2vw, 1.4rem);
+      color: rgba(255,255,255,0.4);
+      margin-top: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SLIDE: QUOTE-STYLE ── */
+    .slide.quote h2 {
       font-weight: 300;
-      line-height: 1.6;
+      font-size: clamp(1.8rem, 4.5vw, 4.5rem);
+      line-height: 1.2;
     }
 
-    .hero-cta {
+    .slide.quote h2 em {
+      font-style: italic;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── SLIDE: DIAGRAM ── */
+    .diagram {
+      font-family: var(--sans);
+      font-size: clamp(0.85rem, 1.8vw, 1.4rem);
+      color: rgba(255,255,255,0.5);
+      line-height: 2.2;
+      margin-top: 2.5rem;
+    }
+
+    .diagram .hi { color: #fff; font-weight: 600; }
+    .diagram .arr { color: rgba(255,255,255,0.25); }
+
+    /* ── SLIDE: STATS ROW ── */
+    .stats {
       display: flex;
-      gap: 1rem;
+      gap: clamp(2rem, 6vw, 6rem);
+      margin-top: 3rem;
       flex-wrap: wrap;
     }
 
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.75rem;
+    .stat-num {
       font-family: var(--sans);
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      text-decoration: none;
-      border: 1px solid;
-      transition: all 0.2s;
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
     }
 
-    .btn-primary {
-      background: var(--gold);
-      color: #0e0c09;
-      border-color: var(--gold);
+    .stat-label {
+      font-family: var(--serif);
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      color: rgba(255,255,255,0.45);
+      margin-top: 0.4rem;
     }
 
-    .btn-primary:hover {
-      background: #dabb6a;
-      border-color: #dabb6a;
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--gold);
-      border-color: var(--gold-dim);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--gold);
-    }
-
-    /* ── DIVIDER ── */
-    .rule {
-      border: none;
-      border-top: 1px solid rgba(201,168,76,0.2);
-      margin: 0;
-    }
-
-    /* ── SECTIONS ── */
-    section {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 5rem 2rem;
-    }
-
-    .section-label {
-      font-family: var(--sans);
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      color: var(--gold-dim);
-      text-transform: uppercase;
-      margin-bottom: 2.5rem;
-    }
-
-    h2 {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: normal;
-      color: #e8dfc8;
-      margin-bottom: 1.5rem;
-      line-height: 1.3;
-    }
-
-    p {
-      color: var(--text);
-      margin-bottom: 1.2rem;
-    }
-
-    p:last-child { margin-bottom: 0; }
-
-    /* ── QUOTE ── */
-    blockquote {
-      border-left: 2px solid var(--gold);
-      margin: 2.5rem 0;
-      padding: 0.5rem 0 0.5rem 1.5rem;
-      font-size: 1.25rem;
-      font-style: italic;
-      color: #c4b898;
-      line-height: 1.5;
-    }
-
-    /* ── DIAGRAM ── */
-    .diagram {
-      background: var(--bg2);
-      border: 1px solid rgba(201,168,76,0.15);
-      padding: 2rem;
-      margin: 2.5rem 0;
-      font-family: monospace;
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      line-height: 1.8;
-      overflow-x: auto;
-    }
-
-    .diagram .highlight { color: var(--gold); }
-    .diagram .label { color: #5a8a6a; }
-
-    /* ── SCENARIO ── */
-    .scenario {
-      background: var(--bg2);
-      border: 1px solid rgba(201,168,76,0.15);
-      padding: 2rem;
-      margin: 2.5rem 0;
-    }
-
-    .scenario-line {
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-    }
-
-    .scenario-line:last-child { margin-bottom: 0; }
-
-    .scenario-speaker {
-      font-family: var(--sans);
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold-dim);
-      margin-bottom: 0.3rem;
-    }
-
-    .scenario-text { color: var(--text); }
-
-    .scenario-meta {
-      font-family: var(--sans);
-      font-size: 0.75rem;
-      color: #4a8a5a;
-      font-style: italic;
-      margin-top: 0.5rem;
-    }
-
-    .scenario-intervene {
-      border-top: 1px solid rgba(201,168,76,0.1);
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
-
-    .scenario-intervene .scenario-speaker { color: #6a9a7a; }
-
-    /* ── THREE COLS ── */
-    .cols {
+    /* ── SLIDE: TWO COL ── */
+    .two-col {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 4vw;
+      margin-top: 3rem;
     }
 
-    .col-item h3 {
+    .two-col .col-head {
       font-family: var(--sans);
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      font-weight: 600;
+      color: #fff;
       margin-bottom: 0.75rem;
     }
 
-    .col-item p {
-      font-size: 0.95rem;
-      color: var(--text-dim);
-      font-family: var(--sans);
-      font-weight: 300;
+    .two-col .col-body {
+      font-family: var(--serif);
+      font-size: clamp(0.9rem, 1.6vw, 1.25rem);
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      margin-top: 0;
     }
 
-    /* ── PROTOTYPE CALLOUT ── */
-    .callout {
-      border: 1px solid rgba(201,168,76,0.3);
-      padding: 2rem;
-      margin: 2.5rem 0;
-      display: flex;
-      align-items: flex-start;
-      gap: 1.5rem;
-    }
-
-    .callout-icon {
-      font-size: 2rem;
-      flex-shrink: 0;
-      margin-top: 0.2rem;
-    }
-
-    .callout h3 {
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-
-    .callout p {
-      font-family: var(--sans);
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      font-weight: 300;
-      margin-bottom: 0.75rem;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid rgba(201,168,76,0.1);
-      padding: 3rem 2rem;
+    /* ── SLIDE: CTA ── */
+    #s-cta {
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      color: var(--text-dim);
     }
 
-    footer a { color: var(--gold-dim); text-decoration: none; }
-    footer a:hover { color: var(--gold); }
+    .cta-link {
+      display: inline-block;
+      margin-top: 2.5rem;
+      font-family: var(--sans);
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      padding-bottom: 0.2em;
+      transition: color 0.2s, border-color 0.2s;
+    }
 
-    /* ── PORTRAIT HEADER IMG ── */
-    .portrait-strip {
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
-      margin-bottom: 4rem;
-      opacity: 0.4;
+    .cta-link:hover {
+      color: #fff;
+      border-color: #fff;
+    }
+
+    /* ── PROGRESS ── */
+    #progress {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 100;
+    }
+
+    .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: #fff;
+      transform: scale(1.4);
+    }
+
+    /* ── SLIDE NUMBER ── */
+    #slide-num {
+      position: fixed;
+      bottom: 2rem;
+      right: 2.5rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.2);
+      z-index: 100;
+    }
+
+    /* ── NAV HINT ── */
+    #nav-hint {
+      position: fixed;
+      bottom: 2rem;
+      left: 2.5rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.18);
+      z-index: 100;
     }
 
     @media (max-width: 600px) {
-      nav { padding: 1rem; }
-      section { padding: 3.5rem 1.25rem; }
-      .hero { padding: 5rem 1.25rem 3rem; }
+      .slide { padding: 10vw 7vw; }
+      .two-col { grid-template-columns: 1fr; gap: 2rem; }
+      .stats { gap: 2.5rem; }
     }
   </style>
 </head>
 <body>
 
-<nav>
-  <a href="/" class="logo">PODOBIZNA</a>
-  <a href="https://larslaichter.com" class="back">← larslaichter.com</a>
-</nav>
+<div id="deck">
 
-<!-- HERO -->
-<div class="hero">
-  <p class="hero-tag">Creative Europe Innovation Lab · 2026</p>
-  <h1>Infrastructure for AI personas<br>that must be <em>trustworthy</em>.</h1>
-  <p class="hero-sub">Every AI persona today optimizes for fluency. None optimize for accountability. Podobizna fixes this at the architecture level.</p>
-  <div class="hero-cta">
-    <a href="https://podobizna.vercel.app" class="btn btn-primary" target="_blank">Try the prototype →</a>
-    <a href="#how" class="btn btn-secondary">How it works</a>
-  </div>
-</div>
-
-<hr class="rule">
-
-<!-- PROBLEM -->
-<section id="problem">
-  <p class="section-label">The Problem</p>
-  <h2>AI personas are exploding.<br>None of them are accountable.</h2>
-  <p>Museums are deploying AI visitor kiosks. Documentary producers are using AI for historical research. Educational publishers are building AI tutors modeled on real people. They all share the same failure mode:</p>
-
-  <blockquote>"The model says something it shouldn't — and no one can explain why."</blockquote>
-
-  <p>This creates reputational risk, legal exposure, and regulatory problems — especially as the EU AI Act takes effect in 2026. Yet no affordable, standardized tool exists to help institutions deploy AI responsibly for historical representation.</p>
-
-  <p>Current solutions are either unconstrained (fluent but unaccountable) or bespoke (€80,000–300,000 per deployment, non-interoperable, inaccessible to smaller institutions).</p>
-</section>
-
-<hr class="rule">
-
-<!-- SOLUTION -->
-<section id="how">
-  <p class="section-label">The Solution</p>
-  <h2>A governance layer between the user and the persona.</h2>
-  <p>Podobizna enables organizations to deploy AI representations of people that are explicitly constrained by evidence, role, and risk. The key architectural insight:</p>
-
-  <blockquote>Users never interact with personas directly.</blockquote>
-
-  <div class="diagram">
-    USER &nbsp;→&nbsp; <span class="highlight">MEDIATION LAYER</span> &nbsp;→&nbsp; PERSONA ENGINE &nbsp;→&nbsp; RESPONSE<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">│</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Intent filtering</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Source enforcement</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Uncertainty injection</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Intervention when needed</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">│</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">PERSONA CONTRACT</span><br>
-    &nbsp;&nbsp;&nbsp;<span class="label">(evidence · role · risk boundaries)</span>
+  <!-- 1: LOGO -->
+  <div class="slide active" id="s1">
+    <h1>PODOBIZNA</h1>
+    <p class="tagline">Trustworthy AI personas for cultural heritage</p>
   </div>
 
-  <p>The <strong>Persona Contract</strong> is a formal specification — an open standard — that defines what sources a persona may draw from, what claims are permitted, how uncertainty must be expressed, and when the system must refuse rather than hallucinate. The model doesn't role-play. It operates under contract.</p>
-</section>
-
-<hr class="rule">
-
-<!-- DEMO -->
-<section id="demo">
-  <p class="section-label">In Practice</p>
-  <h2>Friction is the feature.</h2>
-  <p>A museum visitor approaches a kiosk running a persona of Jan Masaryk, Czech diplomat and statesman:</p>
-
-  <div class="scenario">
-    <div class="scenario-line">
-      <div class="scenario-speaker">Visitor</div>
-      <div class="scenario-text">"Pan Masaryk, what did you think about the Munich Agreement?"</div>
-      <div class="scenario-meta">→ Mediation layer: legitimate historical question, sources available. Proceeds.</div>
-    </div>
-    <div class="scenario-line">
-      <div class="scenario-speaker">Masaryk (AI)</div>
-      <div class="scenario-text">"It was a catastrophe. As I wrote to Lord Halifax in October 1938: 'We have been basely betrayed.'"</div>
-      <div class="scenario-meta">Source: MZV Archive, Document 1938-X-15 ↗</div>
-    </div>
-
-    <div class="scenario-line scenario-intervene">
-      <div class="scenario-speaker">Visitor</div>
-      <div class="scenario-text">"Would you support NATO today?"</div>
-      <div class="scenario-meta">→ Mediation layer: anachronistic question. Intercepts.</div>
-    </div>
-    <div class="scenario-line">
-      <div class="scenario-speaker">Mediator</div>
-      <div class="scenario-text">"Masaryk died in 1948, before NATO existed. I can share what he wrote about collective security and alliances in his time. Would that help?"</div>
-    </div>
+  <!-- 2: PROBLEM -->
+  <div class="slide quote" id="s2">
+    <p class="label">The problem</p>
+    <h2>"Every AI persona today<br>optimizes for <em>fluency</em>.<br>None optimize for <em>accountability</em>."</h2>
   </div>
 
-  <p>Every response is grounded in verified sources. Every overreach is intercepted. Every refusal is explained. The system's accountability is structural — not a prompt engineering trick.</p>
-</section>
-
-<hr class="rule">
-
-<!-- SECTORS -->
-<section id="sectors">
-  <p class="section-label">Who It's For</p>
-  <h2>Two sectors. One infrastructure.</h2>
-
-  <div class="cols">
-    <div class="col-item">
-      <h3>Museums</h3>
-      <p>Interactive visitor experiences with historical figures — grounded in the archive, not the imagination. Scalable to any size institution.</p>
-    </div>
-    <div class="col-item">
-      <h3>Audiovisual</h3>
-      <p>Documentary research, historical drama script consultation, character canon enforcement for production teams. AI that cites its sources.</p>
-    </div>
-    <div class="col-item">
-      <h3>Education</h3>
-      <p>Historical figures in curriculum materials, university research tools, archival access interfaces. EU AI Act compliant by design.</p>
-    </div>
+  <!-- 3: CONSEQUENCE -->
+  <div class="slide" id="s3">
+    <p class="label">The consequence</p>
+    <h2>The model says something<br>it shouldn't.</h2>
+    <p>Reputational risk. Legal exposure. EU AI Act liability.<br>And no one can explain why it happened.</p>
   </div>
-</section>
 
-<hr class="rule">
+  <!-- 4: WHO CARES -->
+  <div class="slide" id="s4">
+    <p class="label">Who this hurts</p>
+    <h2>Museums. Documentaries.<br>Education publishers.</h2>
+    <p>All deploying AI personas of real people. All without a governance framework.</p>
+  </div>
 
-<!-- PROTOTYPE -->
-<section id="prototype">
-  <p class="section-label">Current Status</p>
-  <h2>Live since February 2026.</h2>
+  <!-- 5: INSIGHT -->
+  <div class="slide quote" id="s5">
+    <p class="label">The insight</p>
+    <h2>The problem isn't the model.<br>It's that there's <em>nothing between</em><br>the user and the model.</h2>
+  </div>
 
-  <div class="callout">
-    <div class="callout-icon">🎭</div>
-    <div>
-      <h3>Bettina — Prototype Persona</h3>
-      <p>Converse with an AI persona of <strong>Bettina Wegner</strong> — East German singer-songwriter, arrested in 1968 for protesting the Warsaw Pact invasion of Czechoslovakia. Navigate her life across decades using a time-slider. All responses include source citations. The archivist module provides access to underlying documents.</p>
-      <a href="https://podobizna.vercel.app" class="btn btn-secondary" target="_blank" style="font-size:0.8rem; padding: 0.5rem 1.25rem;">Open prototype →</a>
+  <!-- 6: SOLUTION -->
+  <div class="slide" id="s6">
+    <p class="label">The solution</p>
+    <h2>A governance layer.<br>Between every user<br>and every persona.</h2>
+  </div>
+
+  <!-- 7: HOW IT WORKS -->
+  <div class="slide" id="s7">
+    <p class="label">Architecture</p>
+    <h2>The Persona Contract</h2>
+    <div class="diagram">
+      <span class="arr">user →</span> <span class="hi">mediation layer</span> <span class="arr">→ persona → response</span><br>
+      <span style="opacity:0.3; padding-left:2.5em;">│</span><br>
+      <span style="padding-left:1.5em; color:rgba(255,255,255,0.4);">intent filter · source enforcement · uncertainty · refusal</span><br>
+      <span style="opacity:0.3; padding-left:2.5em;">│</span><br>
+      <span style="padding-left:1.5em; color:rgba(255,255,255,0.4);">Persona Contract: evidence · role · risk</span>
+    </div>
+    <p>The model doesn't role-play. It operates under contract.</p>
+  </div>
+
+  <!-- 8: DEMO MOMENT -->
+  <div class="slide" id="s8">
+    <p class="label">In practice</p>
+    <h2>"Would Masaryk support<br>NATO today?"</h2>
+    <p><em style="color:rgba(255,255,255,0.5); font-style:italic;">The system intercepts.</em><br>"Masaryk died in 1948, before NATO existed. I can share what he wrote about collective security. Would that help?"</p>
+    <p style="margin-top:1rem;">Friction is the feature.</p>
+  </div>
+
+  <!-- 9: PROTOTYPE -->
+  <div class="slide" id="s9">
+    <p class="label">Traction</p>
+    <h2>Live prototype.<br>February 2026.</h2>
+    <p>Bettina Wegner — East German singer-songwriter. Full mediation layer. Source citations. Period-aware responses.<br>
+    <span style="opacity:0.5;">podobizna.vercel.app</span></p>
+  </div>
+
+  <!-- 10: MARKET -->
+  <div class="slide" id="s10">
+    <p class="label">Market</p>
+    <h2>60,000 museums<br>in the EU alone.</h2>
+    <div class="stats">
+      <div>
+        <div class="stat-num">€450M</div>
+        <div class="stat-label">museum tech market / year</div>
+      </div>
+      <div>
+        <div class="stat-num">+12%</div>
+        <div class="stat-label">annual growth</div>
+      </div>
+      <div>
+        <div class="stat-num">€2.8B</div>
+        <div class="stat-label">EU documentary market / year</div>
+      </div>
     </div>
   </div>
 
-  <p>Built on Next.js 14, GPT-4o, and Pinecone vector database. Dark archival interface with period photography. Password-gated for now: <code style="color:var(--gold); font-size:0.9rem;">malaemde</code></p>
-</section>
-
-<hr class="rule">
-
-<!-- GRANT -->
-<section id="grant">
-  <p class="section-label">Grant Application</p>
-  <h2>Creative Europe Innovation Lab 2026</h2>
-  <p>Podobizna is being developed as a Creative Europe CROSS strand project (CREA-CROSS-2026-INNOVLAB), seeking funding to build the full platform, develop the open Persona Contract specification, and run live institutional pilots across the audiovisual and museum sectors.</p>
-
-  <div class="cols">
-    <div class="col-item">
-      <h3>Deadline</h3>
-      <p>23 April 2026</p>
-    </div>
-    <div class="col-item">
-      <h3>Funding</h3>
-      <p>80% of eligible costs, up to €400,000 requested</p>
-    </div>
-    <div class="col-item">
-      <h3>Duration</h3>
-      <p>24 months</p>
+  <!-- 11: MODEL -->
+  <div class="slide" id="s11">
+    <p class="label">Business model</p>
+    <h2>SaaS licensing.<br>Open-source core.</h2>
+    <div class="two-col" style="margin-top:2.5rem;">
+      <div>
+        <div class="col-head">Cultural tier</div>
+        <div class="col-body">€5K–20K / year<br>Museums, archives</div>
+      </div>
+      <div>
+        <div class="col-head">Audiovisual tier</div>
+        <div class="col-body">€20K–60K / year<br>Production companies</div>
+      </div>
     </div>
   </div>
 
-  <p style="margin-top:2rem;">We are looking for consortium partners — museums and audiovisual producers — from EU member states. If you work in cultural heritage, documentary production, or interactive experience design and want to explore collaboration, get in touch.</p>
-</section>
+  <!-- 12: ASK -->
+  <div class="slide" id="s12">
+    <p class="label">Creative Europe · CREA-CROSS-2026-INNOVLAB</p>
+    <h2>We're raising €400K<br>to build the standard.</h2>
+    <p>Open Persona Contract specification. Platform v1. Two institutional pilots. Deadline: 23 April 2026.</p>
+    <p style="margin-top:1rem; opacity:0.5;">Seeking consortium partners — museums and documentary producers — from EU member states.</p>
+  </div>
 
-<hr class="rule">
+  <!-- 13: CTA -->
+  <div class="slide" id="s-cta">
+    <h2>Let's talk.</h2>
+    <p style="margin-top:1rem; opacity:0.55;">lars@laichter.house</p>
+    <a href="https://podobizna.vercel.app" class="cta-link" target="_blank">Try the prototype →</a>
+  </div>
 
-<!-- CONTACT -->
-<section id="contact">
-  <p class="section-label">Contact</p>
-  <h2>Get in touch.</h2>
-  <p>Podobizna is a project of <a href="https://laichter.house" style="color:var(--gold); text-decoration:none;">Nadační fond Laichterův dům</a>, Prague. The foundation operates from the historic Laichter House (1908, architect Jan Kotěra) — a listed cultural monument in Prague 2, Vinohrady.</p>
-  <p style="margin-top:1.5rem;"><a href="mailto:lars@laichter.house" class="btn btn-primary">lars@laichter.house</a></p>
-</section>
+</div><!-- /deck -->
 
-<footer>
-  <p>Podobizna · <a href="https://laichter.house">Nadační fond Laichterův dům</a> · Prague · <a href="https://github.com/laichter-house/podobizna" target="_blank">GitHub</a></p>
-</footer>
+<!-- UI -->
+<div id="progress"></div>
+<div id="slide-num"></div>
+<div id="nav-hint">← → to navigate</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progressEl = document.getElementById('progress');
+  const numEl = document.getElementById('slide-num');
+  let current = 0;
+  let animating = false;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.addEventListener('click', () => go(i));
+    progressEl.appendChild(d);
+  });
+
+  const dots = Array.from(document.querySelectorAll('.dot'));
+
+  function go(n) {
+    if (animating || n === current || n < 0 || n >= slides.length) return;
+    animating = true;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    numEl.textContent = `${current + 1} / ${slides.length}`;
+    setTimeout(() => { animating = false; }, 520);
+  }
+
+  function next() { go(current + 1); }
+  function prev() { go(current - 1); }
+
+  // Init
+  go(0);
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+  });
+
+  // Touch swipe
+  let tx = 0, ty = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = tx - e.changedTouches[0].clientX;
+    const dy = ty - e.changedTouches[0].clientY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) dx > 0 ? next() : prev();
+    else if (Math.abs(dy) > 40) dy > 0 ? next() : prev();
+  }, { passive: true });
+
+  // Click right half = next, left half = prev
+  document.getElementById('deck').addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    e.clientX > window.innerWidth / 2 ? next() : prev();
+  });
+
+  // Mouse wheel (debounced)
+  let wheelTimer = null;
+  document.addEventListener('wheel', e => {
+    e.preventDefault();
+    if (wheelTimer) return;
+    e.deltaY > 0 ? next() : prev();
+    wheelTimer = setTimeout(() => { wheelTimer = null; }, 600);
+  }, { passive: false });
+</script>
 
 </body>
 </html>
