@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podobizna — Provenance Icons</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0e0c09;
+      color: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      padding: 4rem 3rem;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 4rem;
+    }
+
+    .section-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      margin-bottom: 1.5rem;
+    }
+
+    .icon-row {
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 4rem;
+      align-items: flex-start;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    svg.icon {
+      width: 32px;
+      height: 32px;
+      color: #fff;
+    }
+
+    svg.icon-lg {
+      width: 48px;
+      height: 48px;
+      color: #fff;
+    }
+
+    .icon-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 3rem 0;
+    }
+
+    /* Example label */
+    .example {
+      margin-top: 1rem;
+    }
+
+    .example-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      margin-bottom: 1.5rem;
+    }
+
+    .artifact-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .artifact-name {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      font-family: Georgia, serif;
+      min-width: 160px;
+    }
+
+    .icon-pair {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .icon-pair svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    .artifact-source {
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* Download link */
+    .dl {
+      margin-top: 3rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.2);
+    }
+
+    .dl a { color: rgba(255,255,255,0.4); }
+  </style>
+</head>
+<body>
+
+<!-- Load sprite -->
+<div style="display:none" id="svg-sprite-container"></div>
+
+<h1>Podobizna — Provenance Icon System</h1>
+
+<!-- CONTENT TYPE -->
+<p class="section-title">Content type</p>
+<div class="icon-row">
+  <div class="icon-item">
+    <svg class="icon"><use href="#type-image"/></svg>
+    <span class="icon-label">image</span>
+  </div>
+  <div class="icon-item">
+    <svg class="icon"><use href="#type-text"/></svg>
+    <span class="icon-label">text</span>
+  </div>
+  <div class="icon-item">
+    <svg class="icon"><use href="#type-voice"/></svg>
+    <span class="icon-label">voice</span>
+  </div>
+  <div class="icon-item">
+    <svg class="icon"><use href="#type-video"/></svg>
+    <span class="icon-label">video</span>
+  </div>
+</div>
+
+<hr>
+
+<!-- PROVENANCE LEVEL -->
+<p class="section-title">Provenance level</p>
+<div class="icon-row">
+  <div class="icon-item">
+    <svg class="icon-lg"><use href="#prov-original"/></svg>
+    <span class="icon-label">original<br>unmodified archive</span>
+  </div>
+  <div class="icon-item">
+    <svg class="icon-lg"><use href="#prov-derived"/></svg>
+    <span class="icon-label">derived<br>edited or adapted</span>
+  </div>
+  <div class="icon-item">
+    <svg class="icon-lg"><use href="#prov-generated"/></svg>
+    <span class="icon-label">generated<br>AI from reference</span>
+  </div>
+</div>
+
+<hr>
+
+<!-- EXAMPLE -->
+<div class="example">
+  <p class="example-title">Example — Kopecký Speech Reconstruction</p>
+
+  <div class="artifact-label">
+    <span class="artifact-name">Photograph</span>
+    <div class="icon-pair">
+      <svg><use href="#type-image"/></svg>
+      <svg><use href="#prov-original"/></svg>
+    </div>
+    <span class="artifact-source">ČTK Archive, 1949</span>
+  </div>
+
+  <div class="artifact-label">
+    <span class="artifact-name">Speech text</span>
+    <div class="icon-pair">
+      <svg><use href="#type-text"/></svg>
+      <svg><use href="#prov-original"/></svg>
+    </div>
+    <span class="artifact-source">Parlamentní zápis, 24. 3. 1949</span>
+  </div>
+
+  <div class="artifact-label">
+    <span class="artifact-name">Voice</span>
+    <div class="icon-pair">
+      <svg><use href="#type-voice"/></svg>
+      <svg><use href="#prov-generated"/></svg>
+    </div>
+    <span class="artifact-source">Synthesized from archival recording (ČRo)</span>
+  </div>
+
+  <div class="artifact-label">
+    <span class="artifact-name">Video</span>
+    <div class="icon-pair">
+      <svg><use href="#type-video"/></svg>
+      <svg><use href="#prov-generated"/></svg>
+    </div>
+    <span class="artifact-source">AI-animated from photograph</span>
+  </div>
+
+</div>
+
+<p class="dl">SVG sprite: <a href="provenance-icons.svg">provenance-icons.svg</a></p>
+
+<script>
+  // Inline the SVG sprite
+  fetch('provenance-icons.svg')
+    .then(r => r.text())
+    .then(svg => {
+      document.body.insertAdjacentHTML('afterbegin', svg);
+    });
+</script>
+
+</body>
+</html>
