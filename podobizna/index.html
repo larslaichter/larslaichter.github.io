@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podobizna — Trustworthy AI Personas</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c9a84c;
+      --gold-dim: #8a6e32;
+      --bg: #0e0c09;
+      --bg2: #141209;
+      --text: #d4c9b0;
+      --text-dim: #7a7060;
+      --serif: 'Georgia', 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--serif);
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(14,12,9,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    nav .logo {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-weight: 300;
+    }
+
+    nav .back {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+
+    nav .back:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 2rem 4rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: normal;
+      line-height: 1.15;
+      color: #e8dfc8;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 560px;
+      margin-bottom: 3rem;
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border: 1px solid;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #0e0c09;
+      border-color: var(--gold);
+    }
+
+    .btn-primary:hover {
+      background: #dabb6a;
+      border-color: #dabb6a;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--gold);
+      border-color: var(--gold-dim);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+    }
+
+    /* ── DIVIDER ── */
+    .rule {
+      border: none;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      margin: 0;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: normal;
+      color: #e8dfc8;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    /* ── QUOTE ── */
+    blockquote {
+      border-left: 2px solid var(--gold);
+      margin: 2.5rem 0;
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: #c4b898;
+      line-height: 1.5;
+    }
+
+    /* ── DIAGRAM ── */
+    .diagram {
+      background: var(--bg2);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 2rem;
+      margin: 2.5rem 0;
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .diagram .highlight { color: var(--gold); }
+    .diagram .label { color: #5a8a6a; }
+
+    /* ── SCENARIO ── */
+    .scenario {
+      background: var(--bg2);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 2rem;
+      margin: 2.5rem 0;
+    }
+
+    .scenario-line {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .scenario-line:last-child { margin-bottom: 0; }
+
+    .scenario-speaker {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .scenario-text { color: var(--text); }
+
+    .scenario-meta {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: #4a8a5a;
+      font-style: italic;
+      margin-top: 0.5rem;
+    }
+
+    .scenario-intervene {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+
+    .scenario-intervene .scenario-speaker { color: #6a9a7a; }
+
+    /* ── THREE COLS ── */
+    .cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .col-item h3 {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .col-item p {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      font-family: var(--sans);
+      font-weight: 300;
+    }
+
+    /* ── PROTOTYPE CALLOUT ── */
+    .callout {
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 2rem;
+      margin: 2.5rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .callout-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    .callout h3 {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .callout p {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding: 3rem 2rem;
+      text-align: center;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    footer a { color: var(--gold-dim); text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+
+    /* ── PORTRAIT HEADER IMG ── */
+    .portrait-strip {
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+      margin-bottom: 4rem;
+      opacity: 0.4;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem; }
+      section { padding: 3.5rem 1.25rem; }
+      .hero { padding: 5rem 1.25rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">PODOBIZNA</a>
+  <a href="https://larslaichter.com" class="back">← larslaichter.com</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-tag">Creative Europe Innovation Lab · 2026</p>
+  <h1>Infrastructure for AI personas<br>that must be <em>trustworthy</em>.</h1>
+  <p class="hero-sub">Every AI persona today optimizes for fluency. None optimize for accountability. Podobizna fixes this at the architecture level.</p>
+  <div class="hero-cta">
+    <a href="https://podobizna.vercel.app" class="btn btn-primary" target="_blank">Try the prototype →</a>
+    <a href="#how" class="btn btn-secondary">How it works</a>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- PROBLEM -->
+<section id="problem">
+  <p class="section-label">The Problem</p>
+  <h2>AI personas are exploding.<br>None of them are accountable.</h2>
+  <p>Museums are deploying AI visitor kiosks. Documentary producers are using AI for historical research. Educational publishers are building AI tutors modeled on real people. They all share the same failure mode:</p>
+
+  <blockquote>"The model says something it shouldn't — and no one can explain why."</blockquote>
+
+  <p>This creates reputational risk, legal exposure, and regulatory problems — especially as the EU AI Act takes effect in 2026. Yet no affordable, standardized tool exists to help institutions deploy AI responsibly for historical representation.</p>
+
+  <p>Current solutions are either unconstrained (fluent but unaccountable) or bespoke (€80,000–300,000 per deployment, non-interoperable, inaccessible to smaller institutions).</p>
+</section>
+
+<hr class="rule">
+
+<!-- SOLUTION -->
+<section id="how">
+  <p class="section-label">The Solution</p>
+  <h2>A governance layer between the user and the persona.</h2>
+  <p>Podobizna enables organizations to deploy AI representations of people that are explicitly constrained by evidence, role, and risk. The key architectural insight:</p>
+
+  <blockquote>Users never interact with personas directly.</blockquote>
+
+  <div class="diagram">
+    USER &nbsp;→&nbsp; <span class="highlight">MEDIATION LAYER</span> &nbsp;→&nbsp; PERSONA ENGINE &nbsp;→&nbsp; RESPONSE<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">│</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Intent filtering</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Source enforcement</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Uncertainty injection</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">• Intervention when needed</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">│</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">PERSONA CONTRACT</span><br>
+    &nbsp;&nbsp;&nbsp;<span class="label">(evidence · role · risk boundaries)</span>
+  </div>
+
+  <p>The <strong>Persona Contract</strong> is a formal specification — an open standard — that defines what sources a persona may draw from, what claims are permitted, how uncertainty must be expressed, and when the system must refuse rather than hallucinate. The model doesn't role-play. It operates under contract.</p>
+</section>
+
+<hr class="rule">
+
+<!-- DEMO -->
+<section id="demo">
+  <p class="section-label">In Practice</p>
+  <h2>Friction is the feature.</h2>
+  <p>A museum visitor approaches a kiosk running a persona of Jan Masaryk, Czech diplomat and statesman:</p>
+
+  <div class="scenario">
+    <div class="scenario-line">
+      <div class="scenario-speaker">Visitor</div>
+      <div class="scenario-text">"Pan Masaryk, what did you think about the Munich Agreement?"</div>
+      <div class="scenario-meta">→ Mediation layer: legitimate historical question, sources available. Proceeds.</div>
+    </div>
+    <div class="scenario-line">
+      <div class="scenario-speaker">Masaryk (AI)</div>
+      <div class="scenario-text">"It was a catastrophe. As I wrote to Lord Halifax in October 1938: 'We have been basely betrayed.'"</div>
+      <div class="scenario-meta">Source: MZV Archive, Document 1938-X-15 ↗</div>
+    </div>
+
+    <div class="scenario-line scenario-intervene">
+      <div class="scenario-speaker">Visitor</div>
+      <div class="scenario-text">"Would you support NATO today?"</div>
+      <div class="scenario-meta">→ Mediation layer: anachronistic question. Intercepts.</div>
+    </div>
+    <div class="scenario-line">
+      <div class="scenario-speaker">Mediator</div>
+      <div class="scenario-text">"Masaryk died in 1948, before NATO existed. I can share what he wrote about collective security and alliances in his time. Would that help?"</div>
+    </div>
+  </div>
+
+  <p>Every response is grounded in verified sources. Every overreach is intercepted. Every refusal is explained. The system's accountability is structural — not a prompt engineering trick.</p>
+</section>
+
+<hr class="rule">
+
+<!-- SECTORS -->
+<section id="sectors">
+  <p class="section-label">Who It's For</p>
+  <h2>Two sectors. One infrastructure.</h2>
+
+  <div class="cols">
+    <div class="col-item">
+      <h3>Museums</h3>
+      <p>Interactive visitor experiences with historical figures — grounded in the archive, not the imagination. Scalable to any size institution.</p>
+    </div>
+    <div class="col-item">
+      <h3>Audiovisual</h3>
+      <p>Documentary research, historical drama script consultation, character canon enforcement for production teams. AI that cites its sources.</p>
+    </div>
+    <div class="col-item">
+      <h3>Education</h3>
+      <p>Historical figures in curriculum materials, university research tools, archival access interfaces. EU AI Act compliant by design.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- PROTOTYPE -->
+<section id="prototype">
+  <p class="section-label">Current Status</p>
+  <h2>Live since February 2026.</h2>
+
+  <div class="callout">
+    <div class="callout-icon">🎭</div>
+    <div>
+      <h3>Bettina — Prototype Persona</h3>
+      <p>Converse with an AI persona of <strong>Bettina Wegner</strong> — East German singer-songwriter, arrested in 1968 for protesting the Warsaw Pact invasion of Czechoslovakia. Navigate her life across decades using a time-slider. All responses include source citations. The archivist module provides access to underlying documents.</p>
+      <a href="https://podobizna.vercel.app" class="btn btn-secondary" target="_blank" style="font-size:0.8rem; padding: 0.5rem 1.25rem;">Open prototype →</a>
+    </div>
+  </div>
+
+  <p>Built on Next.js 14, GPT-4o, and Pinecone vector database. Dark archival interface with period photography. Password-gated for now: <code style="color:var(--gold); font-size:0.9rem;">malaemde</code></p>
+</section>
+
+<hr class="rule">
+
+<!-- GRANT -->
+<section id="grant">
+  <p class="section-label">Grant Application</p>
+  <h2>Creative Europe Innovation Lab 2026</h2>
+  <p>Podobizna is being developed as a Creative Europe CROSS strand project (CREA-CROSS-2026-INNOVLAB), seeking funding to build the full platform, develop the open Persona Contract specification, and run live institutional pilots across the audiovisual and museum sectors.</p>
+
+  <div class="cols">
+    <div class="col-item">
+      <h3>Deadline</h3>
+      <p>23 April 2026</p>
+    </div>
+    <div class="col-item">
+      <h3>Funding</h3>
+      <p>80% of eligible costs, up to €400,000 requested</p>
+    </div>
+    <div class="col-item">
+      <h3>Duration</h3>
+      <p>24 months</p>
+    </div>
+  </div>
+
+  <p style="margin-top:2rem;">We are looking for consortium partners — museums and audiovisual producers — from EU member states. If you work in cultural heritage, documentary production, or interactive experience design and want to explore collaboration, get in touch.</p>
+</section>
+
+<hr class="rule">
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Contact</p>
+  <h2>Get in touch.</h2>
+  <p>Podobizna is a project of <a href="https://laichter.house" style="color:var(--gold); text-decoration:none;">Nadační fond Laichterův dům</a>, Prague. The foundation operates from the historic Laichter House (1908, architect Jan Kotěra) — a listed cultural monument in Prague 2, Vinohrady.</p>
+  <p style="margin-top:1.5rem;"><a href="mailto:lars@laichter.house" class="btn btn-primary">lars@laichter.house</a></p>
+</section>
+
+<footer>
+  <p>Podobizna · <a href="https://laichter.house">Nadační fond Laichterův dům</a> · Prague · <a href="https://github.com/laichter-house/podobizna" target="_blank">GitHub</a></p>
+</footer>
+
+</body>
+</html>
