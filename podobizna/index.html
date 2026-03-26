@@ -11,22 +11,18 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      --serif: 'EB Garamond', Georgia, serif;
-      --blue: #7ab3e0;
-
-      /* unified type scale */
-      --t-label: clamp(0.65rem, 1vw, 0.78rem);
-      --t-body:  clamp(1rem, 1.8vw, 1.3rem);
-      --t-head:  clamp(1.8rem, 4vw, 3.6rem);
-      --t-large: clamp(2.2rem, 5vw, 4.5rem);
+      --ui:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --text:  'EB Garamond', Georgia, serif;
+      --blue:  #7ab3e0;
+      --big:   clamp(2rem, 4.5vw, 4rem);
+      --sm:    clamp(1rem, 1.8vw, 1.3rem);
+      --label: clamp(0.62rem, 0.9vw, 0.74rem);
     }
 
     html, body { width: 100%; height: 100%; background: #000; color: #fff; overflow: hidden; }
-
     #deck { width: 100%; height: 100%; position: relative; }
 
-    /* ── SLIDES ── */
+    /* slides */
     .slide {
       position: absolute; inset: 0;
       display: flex; flex-direction: column; justify-content: center;
@@ -34,256 +30,151 @@
       opacity: 0; pointer-events: none;
       transition: opacity 0.45s ease;
     }
-    .slide.active { opacity: 1; pointer-events: all; }
-    .slide.center { align-items: center; justify-content: center; text-align: center; padding: 0; }
+    .slide.active   { opacity: 1; pointer-events: all; }
+    .slide.center   { align-items: center; justify-content: center; text-align: center; padding: 4rem; }
 
-    /* ── LABEL ── */
+    /* label — only element using --ui */
     .label {
-      font-family: var(--sans);
-      font-size: var(--t-label);
+      font-family: var(--ui);
+      font-size: var(--label);
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 1.8rem;
+      color: rgba(255,255,255,0.28);
+      margin-bottom: 1.6rem;
     }
 
-    /* ── HEADINGS ── */
+    /* all content uses --text */
+    h2, p, .wordmark, .sub, .caption,
+    .card-head, .card-body, .step-text, .layer-body, .stat-l, .cta-link {
+      font-family: var(--text);
+    }
+
     h2 {
-      font-family: var(--sans);
-      font-weight: 600;
-      font-size: var(--t-head);
-      line-height: 1.12;
-      letter-spacing: -0.02em;
+      font-size: var(--big);
+      font-weight: 400;
+      line-height: 1.15;
       color: #fff;
     }
-
-    h2.large {
-      font-size: var(--t-large);
-      font-weight: 300;
-      line-height: 1.15;
-    }
-
     h2 i {
-      font-style: italic;
-      font-weight: inherit;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.42);
     }
 
-    /* ── BODY ── */
     p {
-      font-family: var(--serif);
-      font-size: var(--t-body);
-      line-height: 1.6;
-      color: rgba(255,255,255,0.6);
-      max-width: 780px;
+      font-size: var(--sm);
+      font-weight: 400;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.58);
+      max-width: 760px;
       margin-top: 1.4rem;
     }
-
     p em { font-style: normal; color: #fff; }
-    p strong { font-weight: normal; color: var(--blue); }
 
-    /* ── COVER ── */
-    .cover-img {
-      height: 36vh;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto;
-    }
+    /* cover */
+    .cover-img { height: 36vh; object-fit: contain; display: block; margin: 0 auto; }
     .cover-img.pixel { image-rendering: pixelated; opacity: 0.85; }
     .cover-img.photo { opacity: 0.8; }
 
     .caption {
-      font-family: var(--serif);
-      font-size: clamp(0.85rem, 1.4vw, 1rem);
+      font-size: var(--sm);
       font-style: italic;
-      color: rgba(255,255,255,0.65);
+      color: rgba(255,255,255,0.6);
       line-height: 1.6;
-      margin-top: 1.8rem;
+      margin-top: 1.6rem;
     }
     .caption span {
       font-style: normal;
-      font-family: var(--sans);
-      font-size: clamp(0.7rem, 1vw, 0.8rem);
-      letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.35);
+      font-family: var(--ui);
+      font-size: var(--label);
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
       display: block;
-      margin-top: 0.25rem;
+      margin-top: 0.3rem;
     }
 
     .wordmark {
-      font-family: var(--serif);
-      font-size: clamp(1.6rem, 3.5vw, 3rem);
+      font-size: clamp(1.8rem, 3.5vw, 3.2rem);
       font-weight: 700;
-      font-style: normal;
-      letter-spacing: 0.05em;
       color: #fff;
-      margin-top: 1.8rem;
+      margin-top: 1.6rem;
     }
 
     .sub {
-      font-family: var(--serif);
-      font-size: var(--t-body);
-      color: rgba(255,255,255,0.38);
+      font-size: var(--sm);
       font-style: italic;
-      margin-top: 0.7rem;
+      color: rgba(255,255,255,0.36);
+      margin-top: 0.6rem;
       line-height: 1.5;
     }
 
-    /* ── GAME LOOP ── */
-    .loop { margin-top: 2.2rem; }
-
-    .loop-step {
-      display: flex; align-items: baseline; gap: 1.4rem;
-      padding: 0.5rem 0;
-    }
-
+    /* loop */
+    .loop { margin-top: 2rem; }
+    .loop-step { display: flex; align-items: baseline; gap: 1.4rem; padding: 0.45rem 0; }
     .step-num {
-      font-family: var(--sans);
-      font-size: var(--t-label);
-      font-weight: 600;
+      font-family: var(--ui);
+      font-size: var(--label);
       letter-spacing: 0.15em;
       color: var(--blue);
-      min-width: 1.8rem;
+      min-width: 1.6rem;
       text-align: right;
     }
-
-    .step-text {
-      font-family: var(--serif);
-      font-size: var(--t-body);
-      color: rgba(255,255,255,0.65);
-      line-height: 1.45;
-    }
+    .step-text { font-size: var(--sm); color: rgba(255,255,255,0.62); line-height: 1.45; }
     .step-text em { color: #fff; font-style: normal; }
+    .loop-rule { width: 1px; height: 0.9rem; background: rgba(255,255,255,0.1); margin-left: calc(1.6rem + 0.7rem); }
 
-    .loop-rule {
-      width: 1px; height: 1rem;
-      background: rgba(255,255,255,0.1);
-      margin-left: calc(1.8rem + 1.4rem / 2);
-    }
-
-    /* ── CARDS ── */
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5vw;
-      margin-top: 2.2rem;
-      max-width: 860px;
-    }
-
-    .card {
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 1.6rem 1.8rem;
-    }
-
+    /* cards */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 2vw; margin-top: 2rem; max-width: 840px; }
+    .card { border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 1.6rem; }
     .card-tag {
-      font-family: var(--sans);
-      font-size: var(--t-label);
+      font-family: var(--ui);
+      font-size: var(--label);
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--blue);
-      margin-bottom: 0.6rem;
-    }
-
-    .card-head {
-      font-family: var(--sans);
-      font-size: clamp(1rem, 1.8vw, 1.4rem);
-      font-weight: 600;
-      color: #fff;
       margin-bottom: 0.5rem;
     }
+    .card-head { font-size: var(--sm); font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+    .card-body { font-size: var(--sm); color: rgba(255,255,255,0.5); line-height: 1.55; }
 
-    .card-body {
-      font-family: var(--serif);
-      font-size: clamp(0.85rem, 1.4vw, 1rem);
-      color: rgba(255,255,255,0.5);
-      line-height: 1.55;
-    }
-
-    /* ── PRIVACY LAYERS ── */
-    .layers { margin-top: 2rem; max-width: 780px; }
-
-    .layer {
-      padding: 1.2rem 1.6rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .layer-on { background: rgba(122,179,224,0.07); border-left: 2px solid var(--blue); }
-    .layer-off { background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.18); }
-
+    /* privacy layers */
+    .layers { margin-top: 1.8rem; max-width: 760px; }
+    .layer { padding: 1.1rem 1.5rem; margin-bottom: 0.3rem; }
+    .layer-on  { background: rgba(122,179,224,0.06); border-left: 2px solid var(--blue); }
+    .layer-off { background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.15); }
     .layer-tag {
-      font-family: var(--sans);
-      font-size: var(--t-label);
+      font-family: var(--ui);
+      font-size: var(--label);
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.28);
       margin-bottom: 0.4rem;
     }
     .layer-on .layer-tag { color: var(--blue); }
-
-    .layer-body {
-      font-family: var(--serif);
-      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
-      color: rgba(255,255,255,0.6);
-      line-height: 1.55;
-    }
+    .layer-body { font-size: var(--sm); color: rgba(255,255,255,0.58); line-height: 1.55; }
     .layer-body em { font-style: normal; color: #fff; }
 
-    /* ── STATS ── */
+    /* stats */
     .stats { display: flex; gap: clamp(2rem, 6vw, 6rem); margin-top: 2.5rem; flex-wrap: wrap; }
+    .stat-n { font-family: var(--ui); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1; color: #fff; }
+    .stat-l { font-size: var(--sm); color: rgba(255,255,255,0.36); margin-top: 0.3rem; }
 
-    .stat-n {
-      font-family: var(--sans);
-      font-size: clamp(2.5rem, 6.5vw, 5.5rem);
-      font-weight: 700;
-      line-height: 1;
-      color: #fff;
-    }
-
-    .stat-l {
-      font-family: var(--serif);
-      font-size: clamp(0.8rem, 1.4vw, 1rem);
-      color: rgba(255,255,255,0.38);
-      margin-top: 0.35rem;
-    }
-
-    /* ── CTA ── */
+    /* cta */
     .cta-link {
-      display: inline-block;
-      margin-top: 2rem;
-      font-family: var(--sans);
-      font-size: var(--t-body);
-      letter-spacing: 0.06em;
-      color: rgba(255,255,255,0.45);
+      display: inline-block; margin-top: 2rem;
+      font-size: var(--sm); font-style: italic;
+      color: rgba(255,255,255,0.42);
       text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.18);
-      padding-bottom: 0.2em;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding-bottom: 0.15em;
       transition: color 0.2s, border-color 0.2s;
     }
     .cta-link:hover { color: #fff; border-color: #fff; }
 
-    /* ── UI ── */
-    #progress {
-      position: fixed; bottom: 1.8rem; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 6px; z-index: 100;
-    }
-    .dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      transition: background 0.3s, transform 0.3s;
-      cursor: pointer;
-    }
+    /* nav */
+    #progress { position: fixed; bottom: 1.8rem; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 100; }
+    .dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.3s, transform 0.3s; cursor: pointer; }
     .dot.active { background: #fff; transform: scale(1.4); }
-
-    #slide-num {
-      position: fixed; bottom: 1.8rem; right: 2.5rem;
-      font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.16); z-index: 100;
-    }
-    #nav-hint {
-      position: fixed; bottom: 1.8rem; left: 2.5rem;
-      font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.05em;
-      color: rgba(255,255,255,0.14); z-index: 100;
-    }
+    #slide-num { position: fixed; bottom: 1.8rem; right: 2.5rem; font-family: var(--ui); font-size: 0.65rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.15); z-index: 100; }
+    #nav-hint  { position: fixed; bottom: 1.8rem; left:  2.5rem; font-family: var(--ui); font-size: 0.65rem; letter-spacing: 0.05em; color: rgba(255,255,255,0.13); z-index: 100; }
 
     @media (max-width: 640px) {
       .slide { padding: 10vw 7vw; }
@@ -293,67 +184,63 @@
   </style>
 </head>
 <body>
-
 <div id="deck">
 
-  <!-- 1: real portrait -->
+  <!-- 1 -->
   <div class="slide center active" id="s1">
     <img src="head-real.png" alt="Dolní Věstonice Portrait Head" class="cover-img photo">
     <p class="caption">Dolní Věstonice Portrait Head<span>The oldest known human portrait in the world</span></p>
   </div>
 
-  <!-- 2: pixel + wordmark -->
+  <!-- 2 -->
   <div class="slide center" id="s2">
     <img src="head-pixel.png" alt="Dolní Věstonice Portrait Head — pixel" class="cover-img pixel">
     <div class="wordmark">podobizna</div>
     <div class="sub">Historical sites as games.<br>AI agents who lived there.</div>
   </div>
 
-  <!-- 3: problem -->
+  <!-- 3 -->
   <div class="slide" id="s3">
     <p class="label">The problem</p>
-    <h2 class="large">Visitors walk past<br>the most compelling stories<br><i>in 90 seconds.</i></h2>
+    <h2>Visitors walk past<br>the most compelling stories<br><i>in 90 seconds.</i></h2>
   </div>
 
-  <!-- 4: failed approaches -->
+  <!-- 4 -->
   <div class="slide" id="s4">
     <p class="label">Why existing tools fail</p>
-    <h2>Audio guides inform.<br>AR entertains.<br>Neither makes the artifact<br>the destination.</h2>
+    <h2>Audio guides inform.<br>AR entertains.<br>Neither makes the artifact<br><i>the destination.</i></h2>
   </div>
 
-  <!-- 5: insight -->
+  <!-- 5 -->
   <div class="slide" id="s5">
     <p class="label">The insight</p>
-    <h2 class="large">What a site can offer<br>isn't context.<br><i>It's voice.</i></h2>
+    <h2>What a site can offer<br>isn't context.<br><i>It's voice.</i></h2>
   </div>
 
-  <!-- 6: what we do -->
+  <!-- 6 -->
   <div class="slide" id="s6">
     <p class="label">What Podobizna does</p>
     <h2>Location-aware AI agents<br>at historical sites.</h2>
-    <p>Agents activate when a visitor enters a space. They speak from evidence. They direct attention back to the original object.</p>
-    <p><em>The agent is the reason to go there. The artifact is the destination.</em></p>
+    <p>Agents activate when a visitor enters a space. They speak from evidence. They direct attention back to the original object. <em>The artifact is the destination.</em></p>
   </div>
 
-  <!-- 7: the cast -->
+  <!-- 7 -->
   <div class="slide" id="s7">
     <p class="label">The cast — any number per site</p>
     <h2>Real personas.<br>Temporal simulations.</h2>
     <div class="cards">
       <div class="card">
         <div class="card-tag">Real personas</div>
-        <div class="card-head">Historical individuals</div>
-        <div class="card-body">Speak from letters, diaries, inventories. Every claim traceable to a source.</div>
+        <div class="card-body">Historical individuals. Speak from letters, diaries, inventories. Every claim traceable to a source.</div>
       </div>
       <div class="card">
         <div class="card-tag">Temporal simulations</div>
-        <div class="card-head">Inhabitants of the period</div>
         <div class="card-body">A 13th-century monk. A guild craftsman. Period-accurate, no individual identity.</div>
       </div>
     </div>
   </div>
 
-  <!-- 8: game loop -->
+  <!-- 8 -->
   <div class="slide" id="s8">
     <p class="label">The experience</p>
     <h2>A game.<br>The prizes are real things<br>in glass cases.</h2>
@@ -370,14 +257,14 @@
     </div>
   </div>
 
-  <!-- 9: investigation -->
+  <!-- 9 -->
   <div class="slide" id="s9">
     <p class="label">The game is not a quiz</p>
-    <h2 class="large">"Find the inventory entry<br>that contradicts<br><i>what I just told you."</i></h2>
+    <h2>"Find the inventory entry<br>that contradicts<br><i>what I just told you."</i></h2>
     <p>Agents disagree. Withhold. React to where you've been. <em>It's an investigation.</em></p>
   </div>
 
-  <!-- 10: privacy -->
+  <!-- 10 -->
   <div class="slide" id="s10">
     <p class="label">Privacy architecture</p>
     <h2>Runs on local WiFi.<br>The collection never<br>leaves the building.</h2>
@@ -393,7 +280,7 @@
     </div>
   </div>
 
-  <!-- 11: pilot -->
+  <!-- 11 -->
   <div class="slide" id="s11">
     <p class="label">Pilot — Prague, Czech Republic</p>
     <h2>Laichterův dům.<br>A publishing house<br>that published Masaryk.</h2>
@@ -409,24 +296,18 @@
     </div>
   </div>
 
-  <!-- 12: market -->
+  <!-- 12 -->
   <div class="slide" id="s12">
     <p class="label">The opportunity</p>
     <h2>Anywhere the authentic<br>thing is present.</h2>
     <div class="stats">
-      <div>
-        <div class="stat-n">60k</div>
-        <div class="stat-l">museums in the EU</div>
-      </div>
-      <div>
-        <div class="stat-n">€450M</div>
-        <div class="stat-l">museum tech / year</div>
-      </div>
+      <div><div class="stat-n">60k</div><div class="stat-l">museums in the EU</div></div>
+      <div><div class="stat-n">€450M</div><div class="stat-l">museum tech / year</div></div>
     </div>
     <p>Museums · heritage trails · historic districts · archaeological sites</p>
   </div>
 
-  <!-- 13: model -->
+  <!-- 13 -->
   <div class="slide" id="s13">
     <p class="label">Business model</p>
     <h2>Site license.<br>Institution owns<br>the content.</h2>
@@ -444,7 +325,7 @@
     </div>
   </div>
 
-  <!-- 14: ask -->
+  <!-- 14 -->
   <div class="slide" id="s14">
     <p class="label">Creative Europe · CREA-CROSS-2026-INNOVLAB</p>
     <h2>Raising €400K<br>to build the standard.</h2>
@@ -452,10 +333,10 @@
     <p><em>Deadline 23 April 2026.</em> Seeking consortium partners — museums, heritage sites.</p>
   </div>
 
-  <!-- 15: cta -->
+  <!-- 15 -->
   <div class="slide center" id="s-cta">
     <h2>The game ends<br>at the original.</h2>
-    <p style="margin-top:1.2rem;">lars@laichter.house</p>
+    <p style="margin-top:1rem;">lars@laichter.house</p>
     <a href="https://podobizna.vercel.app" class="cta-link" target="_blank">See the prototype →</a>
   </div>
 
@@ -522,6 +403,5 @@
     wt = setTimeout(() => { wt = null; }, 600);
   }, { passive: false });
 </script>
-
 </body>
 </html>
