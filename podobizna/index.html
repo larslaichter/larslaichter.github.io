@@ -10,6 +10,8 @@
     :root {
       --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --serif: 'Georgia', 'Times New Roman', serif;
+      --gold: #c9a84c;
+      --gold-dim: rgba(201,168,76,0.35);
     }
 
     html, body {
@@ -19,13 +21,11 @@
       overflow: hidden;
     }
 
-    /* ── DECK ── */
     #deck {
       width: 100%; height: 100%;
       position: relative;
     }
 
-    /* ── SLIDES ── */
     .slide {
       position: absolute;
       inset: 0;
@@ -43,7 +43,6 @@
       pointer-events: all;
     }
 
-    /* ── TYPOGRAPHY ── */
     .slide h1 {
       font-family: var(--sans);
       font-weight: 700;
@@ -65,9 +64,9 @@
     .slide p {
       font-family: var(--serif);
       font-size: clamp(1.1rem, 2.5vw, 2rem);
-      line-height: 1.5;
-      color: rgba(255,255,255,0.7);
-      max-width: 800px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.65);
+      max-width: 820px;
       margin-top: 1.5rem;
     }
 
@@ -77,7 +76,7 @@
       font-size: clamp(0.7rem, 1.2vw, 0.9rem);
       letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.3);
       margin-bottom: 2rem;
     }
 
@@ -87,33 +86,36 @@
     }
 
     .slide strong {
-      color: #fff;
+      color: var(--gold);
       font-weight: normal;
     }
 
-    /* ── SLIDE 1: LOGO ── */
+    /* ── SLIDE 1: COVER ── */
     #s1 {
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-bottom: 12vh;
     }
 
-    #s1 h1 {
-      font-size: clamp(4rem, 14vw, 13rem);
-      letter-spacing: 0.15em;
+    #s1 .wordmark {
+      font-family: var(--sans);
+      font-size: clamp(2rem, 5vw, 4.5rem);
       font-weight: 200;
+      letter-spacing: 0.3em;
+      text-transform: lowercase;
+      color: #fff;
     }
 
-    #s1 .tagline {
+    #s1 .sub {
       font-family: var(--serif);
-      font-size: clamp(0.9rem, 2vw, 1.4rem);
+      font-size: clamp(0.9rem, 1.8vw, 1.4rem);
       color: rgba(255,255,255,0.4);
-      margin-top: 1.5rem;
-      letter-spacing: 0.05em;
+      margin-top: 1rem;
+      letter-spacing: 0.04em;
+      font-style: italic;
     }
 
-    /* ── SLIDE: QUOTE-STYLE ── */
+    /* ── QUOTE SLIDES ── */
     .slide.quote h2 {
       font-weight: 300;
       font-size: clamp(1.8rem, 4.5vw, 4.5rem);
@@ -122,22 +124,135 @@
 
     .slide.quote h2 em {
       font-style: italic;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.45);
     }
 
-    /* ── SLIDE: DIAGRAM ── */
-    .diagram {
-      font-family: var(--sans);
-      font-size: clamp(0.85rem, 1.8vw, 1.4rem);
-      color: rgba(255,255,255,0.5);
-      line-height: 2.2;
+    /* ── GAME LOOP ── */
+    .loop {
       margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
-    .diagram .hi { color: #fff; font-weight: 600; }
-    .diagram .arr { color: rgba(255,255,255,0.25); }
+    .loop-step {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: 0.6rem 0;
+    }
 
-    /* ── SLIDE: STATS ROW ── */
+    .loop-step .step-num {
+      font-family: var(--sans);
+      font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      min-width: 2rem;
+      text-align: right;
+    }
+
+    .loop-step .step-text {
+      font-family: var(--serif);
+      font-size: clamp(1rem, 2vw, 1.6rem);
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+    }
+
+    .loop-step .step-text em {
+      color: #fff;
+      font-style: normal;
+      font-weight: normal;
+    }
+
+    .loop-divider {
+      width: 1px;
+      height: 1.2rem;
+      background: rgba(255,255,255,0.12);
+      margin-left: calc(2rem + 1.5rem / 2);
+    }
+
+    /* ── AGENTS GRID ── */
+    .agents {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3vw;
+      margin-top: 2.5rem;
+      max-width: 900px;
+    }
+
+    .agent-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 2rem;
+    }
+
+    .agent-type {
+      font-family: var(--sans);
+      font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .agent-head {
+      font-family: var(--sans);
+      font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.6rem;
+    }
+
+    .agent-body {
+      font-family: var(--serif);
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* ── PRIVACY DIAGRAM ── */
+    .privacy-layers {
+      margin-top: 2.5rem;
+      max-width: 820px;
+    }
+
+    .layer {
+      padding: 1.4rem 2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .layer-local {
+      background: rgba(201,168,76,0.08);
+      border-left: 3px solid var(--gold);
+    }
+
+    .layer-cloud {
+      background: rgba(255,255,255,0.04);
+      border-left: 3px solid rgba(255,255,255,0.2);
+    }
+
+    .layer-tag {
+      font-family: var(--sans);
+      font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 0.5rem;
+    }
+
+    .layer-local .layer-tag { color: var(--gold); opacity: 0.85; }
+
+    .layer-items {
+      font-family: var(--serif);
+      font-size: clamp(0.9rem, 1.7vw, 1.3rem);
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    .layer-items em { color: #fff; font-style: normal; }
+
+    /* ── STATS ── */
     .stats {
       display: flex;
       gap: clamp(2rem, 6vw, 6rem);
@@ -156,35 +271,38 @@
     .stat-label {
       font-family: var(--serif);
       font-size: clamp(0.85rem, 1.5vw, 1.1rem);
-      color: rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.4);
       margin-top: 0.4rem;
     }
 
-    /* ── SLIDE: TWO COL ── */
-    .two-col {
+    /* ── PILOT ── */
+    .pilot-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4vw;
-      margin-top: 3rem;
+      gap: 3vw;
+      margin-top: 2.5rem;
+      max-width: 900px;
     }
 
-    .two-col .col-head {
+    .pilot-col-head {
       font-family: var(--sans);
-      font-size: clamp(1.2rem, 2.5vw, 2rem);
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 0.75rem;
+      font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.8rem;
     }
 
-    .two-col .col-body {
+    .pilot-item {
       font-family: var(--serif);
-      font-size: clamp(0.9rem, 1.6vw, 1.25rem);
-      color: rgba(255,255,255,0.55);
-      line-height: 1.6;
-      margin-top: 0;
+      font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
     }
 
-    /* ── SLIDE: CTA ── */
+    .pilot-item em { color: #fff; font-style: normal; }
+
+    /* ── CTA ── */
     #s-cta {
       align-items: center;
       justify-content: center;
@@ -199,15 +317,12 @@
       letter-spacing: 0.1em;
       color: rgba(255,255,255,0.5);
       text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.25);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
       padding-bottom: 0.2em;
       transition: color 0.2s, border-color 0.2s;
     }
 
-    .cta-link:hover {
-      color: #fff;
-      border-color: #fff;
-    }
+    .cta-link:hover { color: #fff; border-color: #fff; }
 
     /* ── PROGRESS ── */
     #progress {
@@ -223,43 +338,37 @@
     .dot {
       width: 5px; height: 5px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.2);
       transition: background 0.3s, transform 0.3s;
       cursor: pointer;
     }
 
-    .dot.active {
-      background: #fff;
-      transform: scale(1.4);
-    }
+    .dot.active { background: #fff; transform: scale(1.4); }
 
-    /* ── SLIDE NUMBER ── */
     #slide-num {
       position: fixed;
-      bottom: 2rem;
-      right: 2.5rem;
+      bottom: 2rem; right: 2.5rem;
       font-family: var(--sans);
       font-size: 0.7rem;
       letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.2);
-      z-index: 100;
-    }
-
-    /* ── NAV HINT ── */
-    #nav-hint {
-      position: fixed;
-      bottom: 2rem;
-      left: 2.5rem;
-      font-family: var(--sans);
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
       color: rgba(255,255,255,0.18);
       z-index: 100;
     }
 
-    @media (max-width: 600px) {
+    #nav-hint {
+      position: fixed;
+      bottom: 2rem; left: 2.5rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.15);
+      z-index: 100;
+    }
+
+    @media (max-width: 640px) {
       .slide { padding: 10vw 7vw; }
-      .two-col { grid-template-columns: 1fr; gap: 2rem; }
+      .agents { grid-template-columns: 1fr; }
+      .pilot-grid { grid-template-columns: 1fr; }
       .stats { gap: 2.5rem; }
     }
   </style>
@@ -268,143 +377,191 @@
 
 <div id="deck">
 
-  <!-- 1: LOGO -->
+  <!-- 1: COVER -->
   <div class="slide active" id="s1">
-    <img src="head-pixel.png" alt="Dolní Věstonice Portrait Head — pixel" style="position: absolute; right: 8vw; top: 50%; transform: translateY(-50%); height: 55vh; object-fit: contain; image-rendering: pixelated;">
-    <p class="label">Trustworthy AI personas for cultural heritage</p>
-    <h1 style="font-size: clamp(1.4rem, 3.5vw, 3rem); font-weight: 700; letter-spacing: -0.01em; font-family: var(--sans); text-transform: none;">podobizna</h1>
-    <p style="position: absolute; top: 2.5rem; right: 3rem; font-family: var(--serif); font-size: 0.9rem; letter-spacing: 0.03em; color: rgba(255,255,255,0.6); text-align: right; max-width: 320px; line-height: 1.6; margin: 0; font-style: italic;">Dolní Věstonice Portrait Head<br><span style="font-style: normal; font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.08em; color: rgba(255,255,255,0.35);">The oldest known human portrait in the world</span></p>
+    <img src="head-real.png" alt="Dolní Věstonice Portrait Head"
+      style="position:absolute; right:8vw; top:50%; transform:translateY(-50%); height:60vh; object-fit:contain; opacity:0.5; filter:grayscale(30%);">
+    <p class="label" style="margin-bottom:3rem;">Cultural heritage · AI agents · Location-based play</p>
+    <div class="wordmark">podobizna</div>
+    <div class="sub">Turn historical sites into games.<br>Played through AI agents who lived there.</div>
+    <p style="position:absolute; top:2.5rem; right:3rem; font-family:var(--serif); font-size:0.82rem; color:rgba(255,255,255,0.28); text-align:right; max-width:260px; line-height:1.6; margin:0; font-style:italic;">Dolní Věstonice Portrait Head<br><span style="font-style:normal; font-family:var(--sans); font-size:0.68rem; letter-spacing:0.08em; color:rgba(255,255,255,0.18);">The oldest known human portrait in the world</span></p>
   </div>
 
-  <!-- 2: MEANING -->
-  <div class="slide" id="s1b">
-    <img src="head-real.png" alt="Dolní Věstonice Portrait Head" style="position: absolute; right: 8vw; top: 50%; transform: translateY(-50%); height: 55vh; object-fit: contain; opacity: 0.9;">
-    <p class="label">Czech</p>
-    <h2><em>po·do·biz·na</em></h2>
-    <p style="margin-top: 2rem; font-size: clamp(1.2rem, 3vw, 2.2rem); color: rgba(255,255,255,0.6); font-family: var(--serif);">A portrait. A likeness.<br>The image of a person.</p>
-    <p style="margin-top: 1.5rem;">We make AI portraits that stay true to their subject.</p>
-  </div>
-
-  <!-- 3: PROBLEM -->
+  <!-- 2: THE PROBLEM -->
   <div class="slide quote" id="s2">
     <p class="label">The problem</p>
-    <h2>"Every AI persona today<br>optimizes for <em>fluency</em>.<br>None optimize for <em>accountability</em>."</h2>
+    <h2>Museums are full of the most<br>compelling stories ever produced.<br><em>And visitors walk past them<br>in 90 seconds.</em></h2>
   </div>
 
-  <!-- 3: CONSEQUENCE -->
+  <!-- 3: FAILED APPROACHES -->
   <div class="slide" id="s3">
-    <p class="label">The consequence</p>
-    <h2>The model says something<br>it shouldn't.</h2>
-    <p>One wrong answer. In a museum. In front of a school class.</p>
-    <p>The persona invents a quote. Attributes a belief the person never held. Answers a question about events that happened after they died.</p>
-    <p>Reputational risk. Legal exposure. EU AI Act liability.<br>And no one can explain why it happened.</p>
+    <p class="label">Why existing solutions fail</p>
+    <h2>Audio guides inform.<br>AR entertains.<br>Neither makes the artifact<br>the destination.</h2>
+    <p>Labels assume information transfer. AR adds a dragon to the castle and forgets the castle. Both approaches fail at the same thing: making the visitor <em style="color:#fff">want to look</em> at what's actually there.</p>
   </div>
 
-  <!-- 4: WHO CARES -->
-  <div class="slide" id="s4">
-    <p class="label">Who this hurts</p>
-    <h2>Museums. Documentaries.<br>Education publishers.</h2>
-    <p>All deploying AI personas of real people. All without a governance framework.</p>
-    <p>The museum that put an AI version of Anne Frank in an exhibit. The documentary that used AI to reconstruct testimony. The textbook publisher whose AI tutor put words in Darwin's mouth.</p>
-    <p>Bespoke solutions cost €80,000–300,000 per deployment. Most institutions can't afford them. So they ship without guardrails, or don't ship at all.</p>
-  </div>
-
-  <!-- 5: INSIGHT -->
-  <div class="slide quote" id="s5">
+  <!-- 4: INSIGHT -->
+  <div class="slide quote" id="s4">
     <p class="label">The insight</p>
-    <h2>The problem isn't the model.<br>It's that there's <em>nothing between</em><br>the user and the model.</h2>
+    <h2>The most powerful thing<br>a site can offer isn't <em>context</em>.<br>It's <em>voice</em>.</h2>
   </div>
 
-  <!-- 6: SOLUTION -->
+  <!-- 5: WHAT WE DO -->
+  <div class="slide" id="s5">
+    <p class="label">What Podobizna does</p>
+    <h2>Location-aware AI agents<br>at historical sites.</h2>
+    <p>When a visitor enters a space or approaches an artifact, agents activate — grounded in that site, that period, those objects. They speak from evidence. They direct the visitor back to the original thing.</p>
+    <p style="margin-top:1rem; color:rgba(255,255,255,0.4); font-size:clamp(0.9rem,1.8vw,1.4rem);">The agent is the reason to go there.<br><strong style="color:#fff; font-weight:normal;">The artifact is the destination.</strong></p>
+  </div>
+
+  <!-- 6: TWO AGENT TYPES -->
   <div class="slide" id="s6">
-    <p class="label">The solution</p>
-    <h2>A governance layer.<br>Between every user<br>and every persona.</h2>
-  </div>
-
-  <!-- 7: HOW IT WORKS -->
-  <div class="slide" id="s7">
-    <p class="label">Architecture</p>
-    <h2>The Persona Contract</h2>
-    <div class="diagram">
-      <span class="arr">user →</span> <span class="hi">mediation layer</span> <span class="arr">→ persona → response</span><br>
-      <span style="opacity:0.3; padding-left:2.5em;">│</span><br>
-      <span style="padding-left:1.5em; color:rgba(255,255,255,0.4);">intent filter · source enforcement · uncertainty · refusal</span><br>
-      <span style="opacity:0.3; padding-left:2.5em;">│</span><br>
-      <span style="padding-left:1.5em; color:rgba(255,255,255,0.4);">Persona Contract: evidence · role · risk</span>
+    <p class="label">The cast</p>
+    <h2>Any number of agents<br>per site.</h2>
+    <div class="agents">
+      <div class="agent-card">
+        <div class="agent-type">Real personas</div>
+        <div class="agent-head">Historical individuals</div>
+        <div class="agent-body">Speak from documented sources — letters, inventories, diaries, trial records. Cannot speculate beyond evidence. Every claim traceable to a source.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">Temporal simulations</div>
+        <div class="agent-head">Inhabitants of the period</div>
+        <div class="agent-body">A 13th-century Benedictine monk. A medieval guild craftsman. No individual identity — grounded in period-accurate knowledge, material culture, plausible social role.</div>
+      </div>
     </div>
-    <p>The model doesn't role-play. It operates under contract.</p>
   </div>
 
-  <!-- 8: DEMO MOMENT -->
-  <div class="slide" id="s8">
-    <p class="label">In practice</p>
-    <h2>"Would Masaryk support<br>NATO today?"</h2>
-    <p><em style="color:rgba(255,255,255,0.5); font-style:italic;">The system intercepts.</em><br>"Masaryk died in 1948, before NATO existed. I can share what he wrote about collective security. Would that help?"</p>
-    <p style="margin-top:1rem;">Friction is the feature.</p>
+  <!-- 7: THE GAME LOOP -->
+  <div class="slide" id="s7">
+    <p class="label">The experience</p>
+    <h2>A game.<br>The prizes are real<br>things in glass cases.</h2>
+    <div class="loop">
+      <div class="loop-step">
+        <span class="step-num">01</span>
+        <span class="step-text"><em>Enter a space.</em> An agent activates.</span>
+      </div>
+      <div class="loop-divider"></div>
+      <div class="loop-step">
+        <span class="step-num">02</span>
+        <span class="step-text"><em>Dialogue</em> — constrained by evidence, period, role.</span>
+      </div>
+      <div class="loop-divider"></div>
+      <div class="loop-step">
+        <span class="step-num">03</span>
+        <span class="step-text">Agent reveals <em>something the artifact contains.</em></span>
+      </div>
+      <div class="loop-divider"></div>
+      <div class="loop-step">
+        <span class="step-num">04</span>
+        <span class="step-text">Visitor <em>examines the original.</em></span>
+      </div>
+      <div class="loop-divider"></div>
+      <div class="loop-step">
+        <span class="step-num">05</span>
+        <span class="step-text"><em>Unlock</em> — next agent, next space, next layer of story.</span>
+      </div>
+    </div>
   </div>
 
-  <!-- 9: PROTOTYPE -->
+  <!-- 8: THE INVESTIGATION -->
+  <div class="slide quote" id="s8">
+    <p class="label">The game is not a quiz</p>
+    <h2>"Find the inventory entry<br>that contradicts<br>what I just told you."</h2>
+    <p style="margin-top:2rem;">Agents disagree. Withhold. React to what the visitor has already seen. Issue challenges. The cast is a <em>stateful cast</em> — they know where you've been.</p>
+    <p style="margin-top:0.5rem;"><em>It's an investigation.</em></p>
+  </div>
+
+  <!-- 9: PRIVACY -->
   <div class="slide" id="s9">
-    <p class="label">Traction</p>
-    <h2>Live prototype.<br>February 2026.</h2>
-    <p>Bettina Wegner — East German singer-songwriter. Full mediation layer. Source citations. Period-aware responses.<br>
-    <span style="opacity:0.5;">podobizna.vercel.app</span></p>
+    <p class="label">Privacy architecture</p>
+    <h2>Runs on local WiFi.<br>The collection never leaves<br>the building.</h2>
+    <div class="privacy-layers">
+      <div class="layer layer-local">
+        <div class="layer-tag">On-premises only</div>
+        <div class="layer-items"><em>AI agents · dialogue engine</em> · high-resolution artifact media · visitor game state · all interaction data</div>
+      </div>
+      <div class="layer layer-cloud">
+        <div class="layer-tag">Cloud — second-level derivations only</div>
+        <div class="layer-items">Summaries · translated texts · gameplay completion records — <em>no raw artifact media, no transcripts, no visitor identification</em></div>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem; font-size:clamp(0.9rem,1.6vw,1.25rem);">The architecture most institutions have been waiting for.</p>
   </div>
 
-  <!-- 10: MARKET -->
+  <!-- 10: PILOT -->
   <div class="slide" id="s10">
-    <p class="label">Market</p>
-    <h2>60,000 museums<br>in the EU alone.</h2>
+    <p class="label">Pilot site — Prague, Czech Republic</p>
+    <h2>Laichterův dům.<br>A publishing house<br>that changed Czech history.</h2>
+    <div class="pilot-grid">
+      <div>
+        <div class="pilot-col-head">The space</div>
+        <div class="pilot-item">
+          Intact turn-of-century house. Jan Laichter published <em>Masaryk, Čapek, the avant-garde</em> — 1895 to 1949. The original Boston Platen Press is still in the basement.
+        </div>
+      </div>
+      <div>
+        <div class="pilot-col-head">The game</div>
+        <div class="pilot-item">
+          <em>Reconstruct the decision</em> to publish Wolfgang Langhoff's concentration camp memoir in 1936 — the book that nearly destroyed the house.<br><br>
+          Agents: Jan Laichter · František Laichter · Helena Malířová · a 1930s Prague typesetter
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11: MARKET -->
+  <div class="slide" id="s11">
+    <p class="label">The opportunity</p>
+    <h2>Anywhere the authentic<br>thing is physically present.</h2>
     <div class="stats">
       <div>
+        <div class="stat-num">60k</div>
+        <div class="stat-label">museums in the EU alone</div>
+      </div>
+      <div>
         <div class="stat-num">€450M</div>
-        <div class="stat-label">museum tech market / year</div>
-      </div>
-      <div>
-        <div class="stat-num">+12%</div>
-        <div class="stat-label">annual growth</div>
-      </div>
-      <div>
-        <div class="stat-num">€2.8B</div>
-        <div class="stat-label">EU documentary market / year</div>
+        <div class="stat-label">museum tech / year</div>
       </div>
     </div>
+    <p style="margin-top:2rem; font-size:clamp(0.9rem,1.7vw,1.3rem); color:rgba(255,255,255,0.45);">Museums → heritage trails → historic districts → archaeological sites → battlefield parks → restored industrial sites</p>
   </div>
 
-  <!-- 11: MODEL -->
-  <div class="slide" id="s11">
-    <p class="label">Business model</p>
-    <h2>SaaS licensing.<br>Open-source core.</h2>
-    <div class="two-col" style="margin-top:2.5rem;">
-      <div>
-        <div class="col-head">Cultural tier</div>
-        <div class="col-body">€5K–20K / year<br>Museums, archives</div>
-      </div>
-      <div>
-        <div class="col-head">Audiovisual tier</div>
-        <div class="col-body">€20K–60K / year<br>Production companies</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 12: ASK -->
+  <!-- 12: MODEL -->
   <div class="slide" id="s12">
+    <p class="label">Business model</p>
+    <h2>Site license.<br>Content development.<br>Institution owns the content.</h2>
+    <div class="agents" style="margin-top:2.5rem;">
+      <div class="agent-card">
+        <div class="agent-type">Small site (1–3 rooms)</div>
+        <div class="agent-head">€6,000 / year</div>
+        <div class="agent-body">+ €15–30k content build (one-time)</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">Mid-size (4–10 rooms)</div>
+        <div class="agent-head">€15,000 / year</div>
+        <div class="agent-body">+ €30–80k content build (one-time)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13: ASK -->
+  <div class="slide" id="s13">
     <p class="label">Creative Europe · CREA-CROSS-2026-INNOVLAB</p>
-    <h2>We're raising €400K<br>to build the standard.</h2>
-    <p>Open Persona Contract specification. Platform v1. Two institutional pilots. Deadline: 23 April 2026.</p>
-    <p style="margin-top:1rem; opacity:0.5;">Seeking consortium partners — museums and documentary producers — from EU member states.</p>
+    <h2>Raising €400K<br>to build the standard.</h2>
+    <p>Local-first platform. Laichterův dům pilot. One partner institution, second EU country. Open evidence-constraint methodology for cultural institutions.<br><br>
+    <span style="opacity:0.45;">Deadline: 23 April 2026 · Seeking consortium partners from EU member states — museums, heritage sites, research institutions.</span></p>
   </div>
 
-  <!-- 13: CTA -->
+  <!-- 14: CTA -->
   <div class="slide" id="s-cta">
-    <h2>Let's talk.</h2>
-    <p style="margin-top:1rem; opacity:0.55;">lars@laichter.house</p>
-    <a href="https://podobizna.vercel.app" class="cta-link" target="_blank">Try the prototype →</a>
+    <h2>The game ends<br>at the original.</h2>
+    <p style="margin-top:1.5rem; opacity:0.5;">lars@laichter.house</p>
+    <a href="https://podobizna.vercel.app" class="cta-link" target="_blank">See the prototype →</a>
   </div>
 
-</div><!-- /deck -->
+</div>
 
-<!-- UI -->
 <div id="progress"></div>
 <div id="slide-num"></div>
 <div id="nav-hint">← → to navigate</div>
@@ -416,7 +573,6 @@
   let current = 0;
   let animating = false;
 
-  // Build dots
   slides.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'dot';
@@ -440,16 +596,13 @@
   function next() { go(current + 1); }
   function prev() { go(current - 1); }
 
-  // Init
   go(0);
 
-  // Keyboard
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
     if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
   });
 
-  // Touch swipe
   let tx = 0, ty = 0;
   document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
   document.addEventListener('touchend', e => {
@@ -459,13 +612,11 @@
     else if (Math.abs(dy) > 40) dy > 0 ? next() : prev();
   }, { passive: true });
 
-  // Click right half = next, left half = prev
   document.getElementById('deck').addEventListener('click', e => {
     if (e.target.closest('a')) return;
     e.clientX > window.innerWidth / 2 ? next() : prev();
   });
 
-  // Mouse wheel (debounced)
   let wheelTimer = null;
   document.addEventListener('wheel', e => {
     e.preventDefault();
