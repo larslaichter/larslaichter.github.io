@@ -210,6 +210,19 @@
       .slide { padding: 10vw 7vw; }
       .cards { grid-template-columns: 1fr; }
       .stats { gap: 2rem; }
+
+      /* Cover slides: stack image above text on mobile */
+      #s1, #s2 { justify-content: center; align-items: center; flex-direction: column; padding: 8vw 7vw; }
+      .cover-img, .cover-svg { height: 28vw; margin-bottom: 1.5rem; }
+      .cover-text-side {
+        position: static !important;
+        transform: none !important;
+        left: auto !important;
+        width: 100% !important;
+        text-align: center;
+      }
+      .cover-text-side .caption { text-align: center; }
+      .cover-text-side span[style] { display: block; text-align: center; }
     }
   </style>
 </head>
@@ -219,7 +232,7 @@
   <!-- 1 -->
   <div class="slide center active" id="s1">
     <img src="head-real.png" alt="Dolní Věstonice Portrait Head" class="cover-img photo">
-    <div style="position:absolute; left:62.5%; width:25%; top:50%; transform:translateY(-50%);">
+    <div class="cover-text-side" style="position:absolute; left:62.5%; width:25%; top:50%; transform:translateY(-50%);">
       <p class="caption" style="text-align:left; margin:0;"><span style="font-family:Georgia,serif; text-transform:lowercase; color:rgba(255,255,255,0.36); font-style:normal; display:block; margin-bottom:0.2rem; font-size:1.1em;">dolní věstonice portrait head</span><span>The oldest known portrait. 26 000 years old.</span></p>
     </div>
   </div>
@@ -322,7 +335,7 @@
       <rect class="logo-rect" fill="#fff" x="200.98" y="54" width="9" height="9"/>
       <rect class="logo-rect" fill="#fff" x="209.98" y="54" width="9" height="9"/>
     </svg>
-    <div style="position:absolute; left:62.5%; width:25%; top:50%; transform:translateY(-50%);">
+    <div class="cover-text-side" style="position:absolute; left:62.5%; width:25%; top:50%; transform:translateY(-50%);">
       <p class="caption" style="text-align:left; margin:0;"><span style="font-family:Georgia,serif; text-transform:lowercase; color:#fff; font-style:normal; display:block; margin-bottom:0.2rem; font-size:1.1em;">podobizna</span><span>A depiction that emphasizes faithful likeness rather than an interpretation.</span></p>
     </div>
   </div>
