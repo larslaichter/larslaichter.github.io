@@ -96,11 +96,6 @@
       to   { opacity: 1; }
     }
 
-    @keyframes rect-breathe {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.45; }
-    }
-
     .logo-rect {
       opacity: 0;
       stroke: #fff;
@@ -504,12 +499,7 @@
       const base = (xs[i] - xMin) / (xMax - xMin);
       const jitter = (Math.random() - 0.5) * 0.35;
       const appear = Math.max(0, Math.min(0.82, (base + jitter) * 0.82));
-      const breathDur = (2.5 + Math.random() * 2).toFixed(2);
-      const breathPhase = (Math.random() * -3).toFixed(2);
-      r.style.animation = [
-        `rect-appear 0.18s ease ${appear.toFixed(3)}s forwards`,
-        `rect-breathe ${breathDur}s ease-in-out ${breathPhase}s infinite`
-      ].join(', ');
+      r.style.animation = `rect-appear 0.18s ease ${appear.toFixed(3)}s forwards`;
     });
   }
 
