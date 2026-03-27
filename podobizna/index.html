@@ -11,7 +11,7 @@
     :root {
       --ui:    'Helvetica Neue', Helvetica, Arial, sans-serif;
       --text:  Georgia, serif;
-      --blue:  #7ab3e0;
+      --blue:  rgba(255,255,255,0.45);
       --big:   clamp(2rem, 4.5vw, 4rem);
       --sm:    clamp(1rem, 1.8vw, 1.3rem);
       --label: clamp(0.62rem, 0.9vw, 0.74rem);
@@ -54,9 +54,10 @@
       font-weight: 400;
       line-height: 1.15;
       color: #fff;
+      text-transform: lowercase;
     }
     h2 i {
-      color: rgba(255,255,255,0.42);
+      color: rgba(255,255,255,0.36);
     }
 
     p {
@@ -143,7 +144,7 @@
       font-family: var(--ui);
       font-size: var(--label);
       letter-spacing: 0.15em;
-      color: var(--blue);
+      color: rgba(255,255,255,0.35);
       min-width: 1.6rem;
       text-align: right;
     }
@@ -159,7 +160,7 @@
       font-size: var(--label);
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--blue);
+      color: rgba(255,255,255,0.45);
       margin-bottom: 0.5rem;
     }
     .card-head { font-size: var(--sm); font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
@@ -168,8 +169,8 @@
     /* privacy layers */
     .layers { margin-top: 1.8rem; max-width: 760px; }
     .layer { padding: 1.1rem 1.5rem; margin-bottom: 0.3rem; }
-    .layer-on  { background: rgba(122,179,224,0.06); border-left: 2px solid var(--blue); }
-    .layer-off { background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.15); }
+    .layer-on  { background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.22); }
+    .layer-off { background: rgba(255,255,255,0.02); border-left: 2px solid rgba(255,255,255,0.1); }
     .layer-tag {
       font-family: var(--ui);
       font-size: var(--label);
@@ -178,7 +179,7 @@
       color: rgba(255,255,255,0.28);
       margin-bottom: 0.4rem;
     }
-    .layer-on .layer-tag { color: var(--blue); }
+    .layer-on .layer-tag { color: rgba(255,255,255,0.55); }
     .layer-body { font-size: var(--sm); color: rgba(255,255,255,0.58); line-height: 1.55; }
     .layer-body em { font-style: normal; color: #fff; }
 
