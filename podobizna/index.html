@@ -426,10 +426,16 @@
   const dots = Array.from(document.querySelectorAll('.dot'));
 
   function resetLogoAnim() {
-    const rects = document.querySelectorAll('.logo-rect');
-    rects.forEach(r => { r.classList.remove('playing'); r.style.opacity = '0'; });
-    document.getElementById('logo-svg').getBoundingClientRect(); // force reflow
-    rects.forEach(r => r.classList.add('playing'));
+    const rects = Array.from(document.querySelectorAll('.logo-rect'));
+    const n = rects.length;
+    const delays = rects.map((_, i) => (i / (n - 1)) * 1.85);
+    for (let i = delays.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [delays[i], delays[j]] = [delays[j], delays[i]];
+    }
+    rects.forEach(r => { r.classList.remove('playing'); r.style.opacity = '0'; r.style.animationDelay = ''; });
+    document.getElementById('logo-svg').getBoundingClientRect();
+    rects.forEach((r, i) => { r.style.animationDelay = delays[i].toFixed(3) + 's'; r.classList.add('playing'); });
   }
 
   function go(n) {
