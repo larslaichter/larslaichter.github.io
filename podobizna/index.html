@@ -4,15 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Podobizna</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --ui:    'Helvetica Neue', Helvetica, Arial, sans-serif;
-      --text:  'EB Garamond', Georgia, serif;
+      --text:  Georgia, serif;
       --blue:  #7ab3e0;
       --big:   clamp(2rem, 4.5vw, 4rem);
       --sm:    clamp(1rem, 1.8vw, 1.3rem);
@@ -43,10 +41,12 @@
       margin-bottom: 1.6rem;
     }
 
-    /* all content uses --text */
-    h2, p, .wordmark, .sub, .caption,
+    /* titles in Georgia serif, everything else sans-serif */
+    h2 { font-family: var(--text); }
+
+    p, .wordmark, .sub, .caption,
     .card-head, .card-body, .step-text, .layer-body, .stat-l, .cta-link {
-      font-family: var(--text);
+      font-family: var(--ui);
     }
 
     h2 {
