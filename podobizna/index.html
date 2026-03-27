@@ -98,7 +98,13 @@
 
     .logo-rect {
       opacity: 0;
-      animation: rect-appear 0.18s ease forwards;
+      animation-duration: 0.18s;
+      animation-timing-function: ease;
+      animation-fill-mode: forwards;
+    }
+
+    .logo-rect.playing {
+      animation-name: rect-appear;
     }
     .cover-img.pixel { image-rendering: pixelated; opacity: 0.85; }
     .cover-img.photo { opacity: 0.8; }
@@ -421,9 +427,9 @@
 
   function resetLogoAnim() {
     const rects = document.querySelectorAll('.logo-rect');
-    rects.forEach(r => { r.style.animation = 'none'; });
+    rects.forEach(r => { r.classList.remove('playing'); r.style.opacity = '0'; });
     document.getElementById('logo-svg').getBoundingClientRect(); // force reflow
-    rects.forEach(r => { r.style.animation = ''; });
+    rects.forEach(r => r.classList.add('playing'));
   }
 
   function go(n) {
