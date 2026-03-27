@@ -96,17 +96,15 @@
       to   { opacity: 1; }
     }
 
-    .logo-rect {
-      opacity: 0;
-      animation-duration: 0.18s;
-      animation-timing-function: ease;
-      animation-fill-mode: forwards;
-      stroke: #fff;
-      stroke-width: 1;
+    @keyframes rect-breathe {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.45; }
     }
 
-    .logo-rect.playing {
-      animation-name: rect-appear;
+    .logo-rect {
+      opacity: 0;
+      stroke: #fff;
+      stroke-width: 1;
     }
     .cover-img.pixel { image-rendering: pixelated; opacity: 0.85; }
     .cover-img.photo { opacity: 0.8; }
@@ -500,14 +498,18 @@
     const rects = Array.from(document.querySelectorAll('.logo-rect'));
     const xs = rects.map(r => parseFloat(r.getAttribute('x')));
     const xMin = Math.min(...xs), xMax = Math.max(...xs);
-    rects.forEach(r => { r.classList.remove('playing'); r.style.opacity = '0'; });
+    rects.forEach(r => { r.style.animation = 'none'; r.style.opacity = '0'; });
     document.getElementById('logo-svg').getBoundingClientRect();
     rects.forEach((r, i) => {
       const base = (xs[i] - xMin) / (xMax - xMin);
       const jitter = (Math.random() - 0.5) * 0.35;
-      const delay = Math.max(0, Math.min(0.82, (base + jitter) * 0.82));
-      r.style.animationDelay = delay.toFixed(3) + 's';
-      r.classList.add('playing');
+      const appear = Math.max(0, Math.min(0.82, (base + jitter) * 0.82));
+      const breathDur = (2.5 + Math.random() * 2).toFixed(2);
+      const breathPhase = (Math.random() * -3).toFixed(2);
+      r.style.animation = [
+        `rect-appear 0.18s ease ${appear.toFixed(3)}s forwards`,
+        `rect-breathe ${breathDur}s ease-in-out ${breathPhase}s infinite`
+      ].join(', ');
     });
   }
 
