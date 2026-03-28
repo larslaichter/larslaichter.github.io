@@ -629,7 +629,7 @@ new p5(function(p) {
     cols  = Math.floor(p.width  / CELL);
     rows  = Math.floor(p.height / CELL);
     grid  = Array.from({length: cols}, () =>
-      Array.from({length: rows}, () => p.random() < 0.06 ? 1 : 0));
+      Array.from({length: rows}, () => p.random() < 0.25 ? 1 : 0));
     nextGrid = Array.from({length: cols}, () => new Array(rows).fill(0));
     bright   = Array.from({length: cols}, () =>
       Array.from({length: rows}, () => p.random(50, 185)));
