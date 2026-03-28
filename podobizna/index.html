@@ -209,6 +209,17 @@
     #slide-num { position: fixed; bottom: 1.8rem; right: 2.5rem; font-family: var(--ui); font-size: 0.65rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.15); z-index: 100; }
     #nav-hint  { position: fixed; bottom: 1.8rem; left:  2.5rem; font-family: var(--ui); font-size: 0.65rem; letter-spacing: 0.05em; color: rgba(255,255,255,0.13); z-index: 100; }
 
+    /* Split layout: text left, image right */
+    .slide-split {
+      flex-direction: row;
+      align-items: center;
+      padding: 6vw 8vw;
+      gap: 6vw;
+    }
+    .slide-split .split-text { flex: 1; min-width: 0; }
+    .slide-split .split-img  { flex: 0 0 auto; height: 40vh; display: flex; align-items: center; }
+    .slide-split .split-img img { height: 40vh; width: auto; display: block; opacity: 0.85; image-rendering: pixelated; }
+
     @media (max-width: 640px) {
       .slide { padding: 10vw 7vw; }
       .cards { grid-template-columns: 1fr; }
@@ -226,6 +237,11 @@
       }
       .cover-text-side .caption { text-align: center; }
       .cover-text-side span[style] { display: block; text-align: center; }
+
+      /* Image slides: stack vertically on mobile */
+      .slide-split { flex-direction: column; padding: 8vw 7vw; gap: 4vw; justify-content: center; }
+      .slide-split .split-img { height: auto; width: 100%; justify-content: center; order: -1; }
+      .slide-split .split-img img { height: 28vw; width: auto; }
     }
   </style>
 </head>
@@ -344,45 +360,45 @@
   </div>
 
   <!-- 3 -->
-  <div class="slide" id="s3" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s3">
+    <div class="split-text">
       <p class="label">The problem</p>
       <h2><i>how do we make an AI podobizna?</i><br>visitors spend only seconds in front of an artifact.</h2>
       <p>Existing AI tools cannot be trusted with historical personas. They hallucinate, invent, and embarrass institutions.</p>
     </div>
     <div style="flex:0 0 auto; height:80vh; display:flex; align-items:center;">
-      <img src="portrait.png" alt="Portrait" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+      <img src="portrait.png" alt="Portrait" style="opacity:0.85;">
     </div>
   </div>
 
   <!-- 4 -->
-  <div class="slide" id="s4" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s4">
+    <div class="split-text">
       <p class="label">The insight</p>
       <h2>Institutions already have the data.<br><i>They need the architecture.</i></h2>
       <p>Letters, inventories, diaries, photographs, 3D objects. The problem is not a lack of data. It is misrepresentation and data safety.</p>
     </div>
     <div style="flex:0 0 auto; height:80vh; display:flex; align-items:center;">
-      <img src="portrait-tutankhamun.png" alt="Portrait" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+      <img src="portrait-tutankhamun.png" alt="Portrait" style="opacity:0.85;">
     </div>
   </div>
 
   <!-- 5 -->
-  <div class="slide" id="s5" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s5">
+    <div class="split-text">
       <p class="label">What Podobizna does</p>
       <h2>A visitor enters a room.<br>A historical persona<br><i>begins a conversation.</i></h2>
       <p>Grounded in the institution's own archive. Speaking only from documented evidence.</p>
       <p>For the institution: a new revenue stream, a reason to return, and a new life for collections that currently sit unnoticed.</p>
     </div>
     <div style="flex:0 0 auto; height:80vh; display:flex; align-items:center;">
-      <img src="portrait-s5.png" alt="Portrait" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+      <img src="portrait-s5.png" alt="Portrait" style="opacity:0.85;">
     </div>
   </div>
 
   <!-- 6 -->
-  <div class="slide" id="s6" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s6">
+    <div class="split-text">
       <p class="label">How it works</p>
       <h2>The Corpus.<br><i>The Contract.</i></h2>
       <div class="layers">
@@ -397,26 +413,26 @@
       </div>
     </div>
     <div style="flex:0 0 auto; height:80vh; display:flex; align-items:center;">
-      <img src="portrait-s6.png" alt="Portrait" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+      <img src="portrait-s6.png" alt="Portrait" style="opacity:0.85;">
     </div>
   </div>
 
   <!-- 7 -->
-  <div class="slide" id="s7" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s7">
+    <div class="split-text">
       <p class="label">The experience</p>
       <h2>An investigation,<br><i>not a lecture.</i></h2>
       <p>Each space contains active personas, documented individuals or period-accurate figures, who speak only from evidence.</p>
       <p>The interface is chosen by the institution: a personal phone, a mounted tablet, a projected voice, or a period object repurposed as a device.</p>
     </div>
-    <div style="flex:0 0 auto; height:40vh; display:flex; align-items:center;">
-      <img src="portrait-s7.png" alt="Portrait" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+    <div class="split-img">
+      <img src="portrait-s7.png" alt="Portrait" style="opacity:0.85;">
     </div>
   </div>
 
   <!-- 8 -->
-  <div class="slide" id="s8" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s8">
+    <div class="split-text">
       <p class="label">Pilot — Prague, Czech Republic</p>
       <h2>Laichter House.<br>Liquidated in 1949<br><i>by the communists.</i></h2>
       <div class="cards" style="grid-template-columns:1fr 1fr;">
@@ -431,7 +447,7 @@
       </div>
     </div>
     <div style="flex:0 0 auto; height:80vh; display:flex; align-items:center;">
-      <img src="portrait-kopecky.png" alt="Portrait" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+      <img src="portrait-kopecky.png" alt="Portrait" style="opacity:0.85;">
     </div>
   </div>
 
@@ -456,15 +472,15 @@
   </div>
 
   <!-- 10 -->
-  <div class="slide" id="s10" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s10">
+    <div class="split-text">
       <p class="label">Who it is for</p>
       <h2>cultural institutions.<br><i>Next opportunities: </i></h2>
       <p>Screen and documentary productions needing historically grounded personas.</p>
       <p>Local historians and heritage volunteers making undervisited sites legible to new audiences.</p>
     </div>
-    <div style="flex:0 0 auto; height:40vh; display:flex; align-items:center;">
-      <img src="portrait-s10.png" alt="Institution" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+    <div class="split-img">
+      <img src="portrait-s10.png" alt="Institution" style="opacity:0.85;">
     </div>
   </div>
 
@@ -476,8 +492,8 @@
   </div>
 
   <!-- 12 -->
-  <div class="slide" id="s12" style="flex-direction:row; align-items:center; padding:6vw 8vw; gap:6vw;">
-    <div style="flex:1; min-width:0;">
+  <div class="slide slide-split" id="s12">
+    <div class="split-text">
       <p class="label">Partners</p>
       <h2>Built with major European institutions.</h2>
       <div class="layers">
@@ -495,8 +511,8 @@
         </div>
       </div>
     </div>
-    <div style="flex:0 0 auto; height:40vh; display:flex; align-items:center;">
-      <img src="portrait-s12.png" alt="Institution" style="height:40vh; width:auto; display:block; opacity:0.85; image-rendering:pixelated;">
+    <div class="split-img">
+      <img src="portrait-s12.png" alt="Institution" style="opacity:0.85;">
     </div>
   </div>
 
