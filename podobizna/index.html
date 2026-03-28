@@ -622,11 +622,18 @@
 new p5(function(p) {
   const CELL = 9;
   const GAP  = 2;
-  let cols, rows, grid, next;
+  let cols, rows, grid, bright, nextGrid, nextBright;
 
   function makeGrid(density) {
-    return Array.from({length: cols}, () =>
-      Array.from({length: rows}, () => p.random() < density ? 1 : 0));
+    let g = [], b = [];
+    for (let i = 0; i < cols; i++) {
+      g[i] = []; b[i] = [];
+      for (let j = 0; j < rows; j++) {
+        g[i][j] = p.random() < density ? 1 : 0;
+        b[i][j] = p.random(50, 180); // random gray shade on birth
+      }
+    }
+    return [g, b];
   }
 
   function neighbors(g, x, y) {
@@ -640,35 +647,41 @@ new p5(function(p) {
   function init() {
     cols = Math.floor(p.width  / CELL);
     rows = Math.floor(p.height / CELL);
-    grid = makeGrid(0.2);
-    next = makeGrid(0);
+    [grid, bright] = makeGrid(0.2);
+    nextGrid  = Array.from({length: cols}, () => new Array(rows).fill(0));
+    nextBright = Array.from({length: cols}, () => new Array(rows).fill(0));
   }
 
   p.setup = function() {
     let cnv = p.createCanvas(p.windowWidth, p.windowHeight);
     cnv.parent('cta-life');
     cnv.style('display', 'block');
-    p.frameRate(7);
+    p.frameRate(4);
     init();
   };
 
   p.draw = function() {
     p.background(0);
     p.noStroke();
-    p.fill(255);
     for (let i = 0; i < cols; i++)
       for (let j = 0; j < rows; j++)
-        if (grid[i][j])
+        if (grid[i][j]) {
+          p.fill(bright[i][j]);
           p.rect(i*CELL + GAP, j*CELL + GAP, CELL - GAP*2, CELL - GAP*2);
+        }
 
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
         let s = grid[i][j], n = neighbors(grid, i, j);
-        next[i][j] = (s && n===2) || n===3 ? 1 : 0;
-        if (p.random() < 0.0004) next[i][j] = 1; // random seeding to keep alive
+        let alive = (s && n===2) || n===3 ? 1 : 0;
+        if (p.random() < 0.0004) alive = 1;
+        nextGrid[i][j] = alive;
+        // new cell gets new random shade; surviving cell keeps its shade
+        nextBright[i][j] = (alive && !s) ? p.random(40, 190) : bright[i][j];
       }
     }
-    [grid, next] = [next, grid];
+    [grid, nextGrid]   = [nextGrid, grid];
+    [bright, nextBright] = [nextBright, bright];
   };
 
   p.windowResized = function() {
