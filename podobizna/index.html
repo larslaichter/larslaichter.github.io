@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Podobizna</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -531,9 +532,9 @@
   </div>
 
   <!-- 15 -->
-  <div class="slide center" id="s-cta" style="overflow:hidden;">
-    <canvas id="cta-grid" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
-    <div style="position:relative; z-index:1;">
+  <div class="slide center" id="s-cta">
+    <div id="cta-life" style="position:absolute;inset:0;z-index:0;overflow:hidden;"></div>
+    <div style="position:relative;z-index:1;">
       <h2>The conversation starts<br>at the original.</h2>
       <p style="margin-top:1rem;">lars@laichter.house</p>
       <a href="https://podobizna.vercel.app" class="cta-link" target="_blank">See the prototype →</a>
@@ -617,49 +618,64 @@
     wt = setTimeout(() => { wt = null; }, 600);
   }, { passive: false });
 
-// CTA grid animation
-(function() {
-  const canvas = document.getElementById('cta-grid');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const SIZE = 6;    // square size px
-  const GAP  = 3;    // gap between squares
-  const STEP = SIZE + GAP;
-  const MAX_ALPHA = 0.22;
-  const SPAWN_RATE = 0.0003; // chance per cell per frame to light up
+// Game of Life — CTA slide
+new p5(function(p) {
+  const CELL = 9;
+  const GAP  = 2;
+  let cols, rows, grid, next;
 
-  let cols, rows, cells;
-
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    cols = Math.ceil(canvas.width  / STEP) + 1;
-    rows = Math.ceil(canvas.height / STEP) + 1;
-    cells = new Float32Array(cols * rows); // alpha 0..1
+  function makeGrid(density) {
+    return Array.from({length: cols}, () =>
+      Array.from({length: rows}, () => p.random() < density ? 1 : 0));
   }
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const i = r * cols + c;
-        let a = cells[i];
-        if (a > 0) {
-          ctx.fillStyle = `rgba(255,255,255,${a * MAX_ALPHA})`;
-          ctx.fillRect(c * STEP, r * STEP, SIZE, SIZE);
-          cells[i] = Math.max(0, a - 0.004); // fade out speed
-        } else if (Math.random() < SPAWN_RATE) {
-          cells[i] = 1; // spawn
-        }
+  function neighbors(g, x, y) {
+    let s = 0;
+    for (let dx = -1; dx <= 1; dx++)
+      for (let dy = -1; dy <= 1; dy++)
+        if (dx || dy) s += g[(x+dx+cols)%cols][(y+dy+rows)%rows];
+    return s;
+  }
+
+  function init() {
+    cols = Math.floor(p.width  / CELL);
+    rows = Math.floor(p.height / CELL);
+    grid = makeGrid(0.2);
+    next = makeGrid(0);
+  }
+
+  p.setup = function() {
+    let cnv = p.createCanvas(p.windowWidth, p.windowHeight);
+    cnv.parent('cta-life');
+    cnv.style('display', 'block');
+    p.frameRate(7);
+    init();
+  };
+
+  p.draw = function() {
+    p.background(0);
+    p.noStroke();
+    p.fill(255);
+    for (let i = 0; i < cols; i++)
+      for (let j = 0; j < rows; j++)
+        if (grid[i][j])
+          p.rect(i*CELL + GAP, j*CELL + GAP, CELL - GAP*2, CELL - GAP*2);
+
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        let s = grid[i][j], n = neighbors(grid, i, j);
+        next[i][j] = (s && n===2) || n===3 ? 1 : 0;
+        if (p.random() < 0.0004) next[i][j] = 1; // random seeding to keep alive
       }
     }
-    requestAnimationFrame(draw);
-  }
+    [grid, next] = [next, grid];
+  };
 
-  resize();
-  window.addEventListener('resize', resize);
-  draw();
-})();
+  p.windowResized = function() {
+    p.resizeCanvas(p.windowWidth, p.windowHeight);
+    init();
+  };
+}, 'cta-life');
 </script>
 </body>
 </html>
