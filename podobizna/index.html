@@ -647,7 +647,7 @@ new p5(function(p) {
   function init() {
     cols = Math.floor(p.width  / CELL);
     rows = Math.floor(p.height / CELL);
-    [grid, bright] = makeGrid(0.2);
+    [grid, bright] = makeGrid(0.003);
     nextGrid  = Array.from({length: cols}, () => new Array(rows).fill(0));
     nextBright = Array.from({length: cols}, () => new Array(rows).fill(0));
   }
@@ -674,7 +674,7 @@ new p5(function(p) {
       for (let j = 0; j < rows; j++) {
         let s = grid[i][j], n = neighbors(grid, i, j);
         let alive = (s && n===2) || n===3 ? 1 : 0;
-        if (p.random() < 0.0004) alive = 1;
+        if (p.random() < 0.0008) alive = 1;
         nextGrid[i][j] = alive;
         // new cell gets new random shade; surviving cell keeps its shade
         nextBright[i][j] = (alive && !s) ? p.random(40, 190) : bright[i][j];
