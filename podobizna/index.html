@@ -622,17 +622,17 @@
   const canvas = document.getElementById('cta-grid');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const SIZE = 18;   // square size px
-  const GAP  = 4;    // gap between squares
+  const SIZE = 6;    // square size px
+  const GAP  = 3;    // gap between squares
   const STEP = SIZE + GAP;
-  const MAX_ALPHA = 0.18;
-  const SPAWN_RATE = 0.012; // chance per cell per frame to light up
+  const MAX_ALPHA = 0.22;
+  const SPAWN_RATE = 0.0003; // chance per cell per frame to light up
 
   let cols, rows, cells;
 
   function resize() {
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
     cols = Math.ceil(canvas.width  / STEP) + 1;
     rows = Math.ceil(canvas.height / STEP) + 1;
     cells = new Float32Array(cols * rows); // alpha 0..1
@@ -647,7 +647,7 @@
         if (a > 0) {
           ctx.fillStyle = `rgba(255,255,255,${a * MAX_ALPHA})`;
           ctx.fillRect(c * STEP, r * STEP, SIZE, SIZE);
-          cells[i] = Math.max(0, a - 0.018); // fade out speed
+          cells[i] = Math.max(0, a - 0.004); // fade out speed
         } else if (Math.random() < SPAWN_RATE) {
           cells[i] = 1; // spawn
         }
