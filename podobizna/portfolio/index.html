@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podobizna — Portfolio</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ui:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --text:  Georgia, serif;
+      --big:   clamp(1.8rem, 3.5vw, 3.2rem);
+      --med:   clamp(1.3rem, 2.4vw, 2.2rem);
+      --sm:    clamp(0.88rem, 1.2vw, 1.05rem);
+      --label: clamp(0.62rem, 0.85vw, 0.72rem);
+    }
+
+    html {
+      background: #000;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: var(--ui);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- scroll reveal --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(2rem);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- sections --- */
+    section {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5vw 8vw;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .label {
+      font-family: var(--ui);
+      font-size: var(--label);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 1.4rem;
+    }
+
+    h1, h2 {
+      font-family: var(--text);
+      font-weight: 400;
+      line-height: 1.12;
+      text-transform: lowercase;
+    }
+    h1 { font-size: var(--big); }
+    h2 { font-size: var(--med); }
+    h1 i, h2 i { color: rgba(255,255,255,0.3); }
+
+    p {
+      font-family: var(--ui);
+      font-size: var(--sm);
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+      max-width: 680px;
+      margin-top: 1.2rem;
+    }
+    p em { font-style: normal; color: #fff; }
+
+    /* --- hero (matches slide 2 layout) --- */
+    .hero {
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .hero-logo-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .hero-logo {
+      height: 25vh;
+      display: block;
+      position: relative;
+      z-index: 2;
+      transition: opacity 0.5s;
+    }
+    .hero-photo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 25vh;
+      width: auto;
+      opacity: 0;
+      z-index: 1;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .hero-logo-wrap:hover .hero-logo { opacity: 0; }
+    .hero-logo-wrap:hover .hero-photo { opacity: 0.85; }
+    .hero-text-side {
+      position: absolute;
+      right: 8vw;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 25%;
+      text-align: left;
+    }
+    .hero-text-side h1 {
+      font-size: var(--big);
+      margin-bottom: 0.5rem;
+    }
+    .hero-text-side p {
+      max-width: none;
+      margin-top: 0.5rem;
+    }
+
+    /* SVG logo animation */
+    @keyframes rect-appear {
+      from { opacity: 0; transform: scale(0.4); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .logo-rect {
+      opacity: 0;
+      transform-origin: center;
+    }
+
+    /* --- divider --- */
+    .divider {
+      width: 1px;
+      height: 4rem;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.12), rgba(255,255,255,0));
+      margin: 0 auto;
+    }
+
+    /* --- two-col with image --- */
+    .split {
+      display: flex;
+      align-items: center;
+      gap: 5vw;
+    }
+    .split-text { flex: 1; min-width: 0; }
+    .split-img {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+    }
+    .split-img img {
+      height: 30vh;
+      width: auto;
+      display: block;
+      opacity: 0.8;
+      image-rendering: pixelated;
+      transition: opacity 0.4s;
+    }
+    .split-img img:hover { opacity: 1; }
+    .split.reverse { flex-direction: row-reverse; }
+
+    /* --- layers --- */
+    .layers { margin-top: 1.6rem; max-width: 680px; }
+    .layer {
+      padding: 1rem 1.4rem;
+      margin-bottom: 2px;
+      background: rgba(255,255,255,0.03);
+      border-left: 2px solid rgba(255,255,255,0.18);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .layer:hover {
+      background: rgba(255,255,255,0.06);
+      border-left-color: rgba(255,255,255,0.4);
+    }
+    .layer-tag {
+      font-family: var(--ui);
+      font-size: var(--label);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+    .layer-body {
+      font-family: var(--ui);
+      font-size: var(--sm);
+      color: rgba(255,255,255,0.5);
+      line-height: 1.55;
+    }
+    .layer-body em { font-style: normal; color: #fff; }
+
+    /* --- cards --- */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      margin-top: 2rem;
+      max-width: 760px;
+      background: rgba(255,255,255,0.08);
+    }
+    .card {
+      background: #000;
+      padding: 1.5rem 1.6rem;
+      transition: background 0.3s;
+    }
+    .card:hover { background: rgba(255,255,255,0.03); }
+    .card-tag {
+      font-family: var(--ui);
+      font-size: var(--label);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .card-body {
+      font-family: var(--ui);
+      font-size: var(--sm);
+      color: rgba(255,255,255,0.45);
+      line-height: 1.55;
+    }
+
+    /* --- partners --- */
+    .partners {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      margin-top: 2rem;
+      max-width: 960px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* --- skills grid --- */
+    .skills {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-top: 2rem;
+      max-width: 960px;
+      background: rgba(255,255,255,0.08);
+    }
+    .skill {
+      background: #000;
+      padding: 1.8rem 1.5rem;
+      transition: background 0.3s;
+    }
+    .skill:hover { background: rgba(255,255,255,0.03); }
+    .skill-name {
+      font-family: var(--ui);
+      font-size: var(--sm);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .skill-desc {
+      font-family: var(--ui);
+      font-size: var(--label);
+      color: rgba(255,255,255,0.4);
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+    }
+
+    /* --- stats row --- */
+    .stats {
+      display: flex;
+      gap: clamp(3rem, 6vw, 6rem);
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .stat-n {
+      font-family: var(--ui);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+    }
+    .stat-l {
+      font-family: var(--ui);
+      font-size: var(--sm);
+      color: rgba(255,255,255,0.36);
+      margin-top: 0.3rem;
+    }
+
+    /* --- full-width text section --- */
+    .text-section h2 { max-width: 680px; }
+
+    /* --- partner logos (text-based) --- */
+    .logo-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5vw;
+      margin-top: 2.5rem;
+      max-width: 600px;
+    }
+    .logo-row img {
+      width: 100%;
+      height: clamp(5rem, 8vw, 7rem);
+      object-fit: contain;
+      object-position: left center;
+      opacity: 0.35;
+      transition: opacity 0.3s;
+      filter: grayscale(1) brightness(2);
+    }
+    .logo-row img:hover { opacity: 0.7; }
+
+    /* --- password gate --- */
+    #gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+    }
+    #gate.hidden { display: none; }
+    #gate p {
+      font-family: var(--ui);
+      font-size: var(--sm);
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      margin: 0;
+    }
+    #gate input {
+      font-family: var(--ui);
+      font-size: var(--sm);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 0.6rem 1rem;
+      width: 220px;
+      text-align: center;
+      letter-spacing: 0.1em;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    #gate input:focus { border-color: rgba(255,255,255,0.5); }
+    #gate input.wrong {
+      border-color: rgba(255,80,80,0.6);
+      animation: shake 0.3s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    /* --- cta --- */
+    .cta-section {
+      position: relative;
+      text-align: center;
+      padding: 0;
+      max-width: none;
+      overflow: hidden;
+      min-height: 80vh;
+    }
+    #cta-life {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      padding: 10vw 8vw;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .cta-content h2 { display: inline-block; }
+    .cta-content p { margin-left: auto; margin-right: auto; }
+    .cta-link {
+      display: inline-block;
+      margin-top: 1.8rem;
+      font-family: var(--ui);
+      font-size: var(--sm);
+      font-style: italic;
+      color: rgba(255,255,255,0.42);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding-bottom: 0.15em;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .cta-link:hover { color: #fff; border-color: #fff; }
+
+    /* --- nav buttons --- */
+    .nav-buttons {
+      position: fixed;
+      bottom: 2rem;
+      right: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 200;
+    }
+    .nav-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.4);
+      font-family: var(--ui);
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      padding: 0;
+      line-height: 1;
+    }
+    .nav-btn:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.08);
+    }
+    .nav-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* --- responsive --- */
+    @media (max-width: 768px) {
+      section { padding: 10vw 7vw; min-height: 70vh; }
+      .hero { padding-top: 16vw; flex-direction: column; align-items: center; min-height: 100vh; }
+      .hero-logo-wrap { margin-bottom: 1.5rem; }
+      .hero-logo, .hero-photo { height: 40vw; }
+      .hero-text-side {
+        position: static;
+        transform: none;
+        width: 100%;
+        text-align: center;
+      }
+      .hero-text-side h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
+      .hero-text-side p { text-align: center; }
+      .split, .split.reverse { flex-direction: column; gap: 5vw; }
+      .split-img { order: -1; }
+      .split-img img { height: 30vw; max-height: 25vh; }
+      .cards, .partners { grid-template-columns: 1fr; }
+      .skills { grid-template-columns: 1fr; }
+      .stats { gap: 2rem; }
+      .logo-row { grid-template-columns: 1fr 1fr; gap: 4vw; }
+      .logo-row img { height: clamp(3.5rem, 12vw, 5rem); object-position: center; }
+      .cta-content { padding: 16vw 7vw; }
+      .nav-buttons { bottom: 1.2rem; right: 1.2rem; }
+      .nav-btn { width: 32px; height: 32px; }
+      #gate input { width: 180px; }
+      h2 { font-size: clamp(1.1rem, 5vw, 1.8rem); }
+      .layer { padding: 0.8rem 1rem; }
+      .divider { height: 2.5rem; }
+    }
+
+    @media (max-width: 420px) {
+      section { padding: 10vw 6vw; }
+      .skills { grid-template-columns: 1fr; }
+      .logo-row { gap: 3vw; }
+      .logo-row img { height: clamp(3rem, 14vw, 4rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Password gate -->
+  <div id="gate">
+    <p>password</p>
+    <input type="password" id="gate-input" autofocus autocomplete="off">
+  </div>
+
+  <!-- Hero — animated logo top center -->
+  <section class="hero">
+    <div class="hero-logo-wrap">
+    <img src="../head-real.png" alt="Dolni Vestonice Portrait Head" class="hero-photo">
+    <svg class="hero-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 383.96 243" id="logo-svg">
+      <rect x="74.98" width="243" height="243" fill="#000"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="36" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="36" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="36" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="45" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="45" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="63" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="63" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="63" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="63" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="63" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="209.98" y="63" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="218.98" y="63" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="209.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="218.98" y="72" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="146.98" y="81" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="81" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="81" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="227.98" y="81" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="90" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="90" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="90" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="90" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="209.98" y="90" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="99" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="99" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="99" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="99" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="209.98" y="99" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="209.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="218.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="227.98" y="108" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="117" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="117" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="117" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="146.98" y="126" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="126" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="126" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="126" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="126" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="218.98" y="126" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="146.98" y="135" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="135" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="135" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="135" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="135" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="218.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="227.98" y="144" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="153" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="153" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="153" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="153" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="153" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="153" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="218.98" y="153" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="155.98" y="162" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="162" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="162" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="162" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="171" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="171" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="171" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="171" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="171" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="164.98" y="180" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="180" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="180" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="173.98" y="189" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="189" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="189" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="182.98" y="198" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="198" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="198" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="191.98" y="54" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="200.98" y="54" width="9" height="9"/>
+      <rect class="logo-rect" fill="#fff" x="209.98" y="54" width="9" height="9"/>
+    </svg>
+    </div>
+    <div class="hero-text-side">
+      <h1>podobizna</h1>
+      <p>Next generation AI driven history storytelling for cultural heritage.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- What we do -->
+  <section>
+    <div class="split reveal">
+      <div class="split-text">
+        <p class="label">What we do</p>
+        <h2>we bring history alive with AI.<br><i>hire us to build yours.</i></h2>
+        <p>We turn archives into conversations. LLMs, generative visuals, and voice — combined with deep archival research — to create experiences where people talk to history, not read about it.</p>
+        <p>Museums and heritage sites. Historical films and documentaries. Historically themed games. Interactive installations. Anywhere the past needs to speak.</p>
+      </div>
+      <div class="split-img">
+        <img src="../portrait.png" alt="Portrait">
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities -->
+  <section class="text-section">
+    <div class="reveal">
+      <p class="label">Capabilities</p>
+      <h2>what we bring.</h2>
+      <div class="skills">
+        <div class="skill">
+          <div class="skill-name">LLMs</div>
+          <div class="skill-desc">RAG pipelines, persona architecture, multi-turn dialogue</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Generative visuals</div>
+          <div class="skill-desc">Image generation, style transfer, archival reconstruction</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Fine-tuning</div>
+          <div class="skill-desc">Domain adaptation, historical language, institutional voice</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Voice & speech</div>
+          <div class="skill-desc">TTS, voice cloning, multilingual narration</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Data & archives</div>
+          <div class="skill-desc">OCR, document processing, knowledge graphs</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Spatial & 3D</div>
+          <div class="skill-desc">Photogrammetry, NeRF, archival 3D reconstruction</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Compliance</div>
+          <div class="skill-desc">EU AI Act, GDPR, local-first, data sovereignty</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Creative direction</div>
+          <div class="skill-desc">Exhibition design, visitor journeys, narrative strategy</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Case study -->
+  <section>
+    <div class="split reverse reveal">
+      <div class="split-text">
+        <p class="label">Case study — Prague</p>
+        <h2>Laichter House.<br>a publishing house liquidated<br><i>by the communists in 1949.</i></h2>
+        <p>Three AI personas — the founder, his son, and the minister who signed the liquidation order — reconstruct the final years through conversation. Built from the surviving archive.</p>
+      </div>
+      <div class="split-img">
+        <img src="../portrait-kopecky.png" alt="Portrait">
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners -->
+  <section class="text-section" style="min-height:100vh">
+    <div class="reveal">
+      <p class="label">Working with</p>
+      <div class="logo-row">
+        <img src="logos/PN-logo-white-tranparent.png" alt="Pamet naroda">
+        <img src="logos/postbellum_transparent.png" alt="Post Bellum">
+        <img src="logos/house-of-lobkowicz.png" alt="House of Lobkowicz">
+        <img src="logos/lh_logo_transparent.png" alt="Laichter House">
+      </div>
+    </div>
+  </section>
+
+  <!-- Nav buttons -->
+  <div class="nav-buttons">
+    <button class="nav-btn" id="nav-up" aria-label="Previous section"><svg viewBox="0 0 14 14"><polyline points="2 9 7 4 12 9"/></svg></button>
+    <button class="nav-btn" id="nav-down" aria-label="Next section"><svg viewBox="0 0 14 14"><polyline points="2 5 7 10 12 5"/></svg></button>
+  </div>
+
+  <!-- CTA with Game of Life -->
+  <section class="cta-section">
+    <div id="cta-life"></div>
+    <div class="cta-content reveal">
+      <h2>let's bring your<br>history alive.</h2>
+      <p style="text-align:center; margin: 1rem auto 0;">lars@laichter.house</p>
+      <a href="mailto:lars@laichter.house" class="cta-link">get in touch</a>
+    </div>
+  </section>
+
+<script>
+// --- Password gate ---
+(function() {
+  const hash = s => Array.from(s).reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0);
+  const KEY = 1434626428;
+  const gate = document.getElementById('gate');
+  const input = document.getElementById('gate-input');
+  if (sessionStorage.getItem('pb-auth') === '1') {
+    gate.classList.add('hidden');
+  } else {
+    document.body.style.overflow = 'hidden';
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        if (hash(input.value) === KEY) {
+          sessionStorage.setItem('pb-auth', '1');
+          gate.classList.add('hidden');
+          document.body.style.overflow = '';
+        } else {
+          input.classList.add('wrong');
+          setTimeout(() => input.classList.remove('wrong'), 400);
+          input.value = '';
+        }
+      }
+    });
+  }
+})();
+
+// --- Animated logo ---
+(function() {
+  const rects = Array.from(document.querySelectorAll('.logo-rect'));
+  const xs = rects.map(r => parseFloat(r.getAttribute('x')));
+  const xMin = Math.min(...xs), xMax = Math.max(...xs);
+  rects.forEach((r, i) => {
+    const base = (xs[i] - xMin) / (xMax - xMin);
+    const jitter = (Math.random() - 0.5) * 0.35;
+    const appear = Math.max(0, Math.min(0.82, (base + jitter) * 0.82));
+    r.style.animation = `rect-appear 0.22s cubic-bezier(0.16,1,0.3,1) ${appear.toFixed(3)}s forwards`;
+  });
+})();
+
+// --- Scroll reveal ---
+(function() {
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  els.forEach(el => obs.observe(el));
+})();
+
+// --- Section nav buttons ---
+(function() {
+  const sections = Array.from(document.querySelectorAll('section'));
+  function currentIndex() {
+    const mid = window.innerHeight / 2;
+    let best = 0;
+    sections.forEach((s, i) => {
+      if (s.getBoundingClientRect().top <= mid) best = i;
+    });
+    return best;
+  }
+  document.getElementById('nav-up').addEventListener('click', () => {
+    const i = Math.max(0, currentIndex() - 1);
+    sections[i].scrollIntoView({ behavior: 'smooth' });
+  });
+  document.getElementById('nav-down').addEventListener('click', () => {
+    const i = Math.min(sections.length - 1, currentIndex() + 1);
+    sections[i].scrollIntoView({ behavior: 'smooth' });
+  });
+})();
+
+// --- Game of Life — CTA ---
+new p5(function(p) {
+  const CELL = 9;
+  const GAP  = 2;
+  const FADE = 0.18;
+  let cols, rows, grid, nextGrid, bright, alpha;
+
+  function init() {
+    cols = Math.floor(p.width / CELL);
+    rows = Math.floor(p.height / CELL);
+    grid = Array.from({length: cols}, () =>
+      Array.from({length: rows}, () => p.random() < 0.30 ? 1 : 0));
+    nextGrid = Array.from({length: cols}, () => new Array(rows).fill(0));
+    bright = Array.from({length: cols}, () =>
+      Array.from({length: rows}, () => p.random(50, 185)));
+    alpha = Array.from({length: cols}, () =>
+      Array.from({length: rows}, () => 0));
+  }
+
+  function neighbors(g, x, y) {
+    let s = 0;
+    for (let dx = -1; dx <= 1; dx++)
+      for (let dy = -1; dy <= 1; dy++)
+        if (dx || dy) s += g[(x+dx+cols)%cols][(y+dy+rows)%rows];
+    return s;
+  }
+
+  p.setup = function() {
+    const el = document.getElementById('cta-life');
+    const cnv = p.createCanvas(el.offsetWidth, el.offsetHeight);
+    cnv.parent('cta-life');
+    cnv.style('display', 'block');
+    p.frameRate(10);
+    init();
+  };
+
+  p.draw = function() {
+    p.background(0);
+    p.noStroke();
+    if (p.frameCount % 3 === 0) {
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          let s = grid[i][j], n = neighbors(grid, i, j);
+          let alive = (s && n===2) || n===3 ? 1 : 0;
+          if (p.random() < 0.0005) alive = 1;
+          nextGrid[i][j] = alive;
+          if (alive && !s) bright[i][j] = p.random(45, 185);
+        }
+      }
+      [grid, nextGrid] = [nextGrid, grid];
+    }
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        let target = grid[i][j] ? 1 : 0;
+        alpha[i][j] += (target - alpha[i][j]) * FADE;
+        if (alpha[i][j] > 0.01) {
+          let v = Math.round(bright[i][j] * alpha[i][j]);
+          p.fill(v);
+          p.rect(i*CELL + GAP, j*CELL + GAP, CELL - GAP*2, CELL - GAP*2);
+        }
+      }
+    }
+  };
+
+  p.windowResized = function() {
+    const el = document.getElementById('cta-life');
+    p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+    init();
+  };
+}, 'cta-life');
+</script>
+</body>
+</html>
