@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Dense Splat Viewer</title>
+    <meta
+      name="description"
+      content="Interactive 3D viewer for Lars's dense Gaussian splat."
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-0: #050505;
+        --bg-1: #121212;
+        --fg: #f5f1e8;
+        --muted: rgba(245, 241, 232, 0.7);
+        --accent: #d8b97c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at top, rgba(216, 185, 124, 0.16), transparent 28%),
+          linear-gradient(180deg, var(--bg-1), var(--bg-0) 42%);
+        color: var(--fg);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      body {
+        overflow: hidden;
+      }
+
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      .hud {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        top: max(16px, env(safe-area-inset-top));
+        z-index: 10;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        pointer-events: none;
+      }
+
+      .card {
+        max-width: min(560px, calc(100vw - 32px));
+        padding: 14px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        background: rgba(12, 12, 12, 0.68);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+
+      .status {
+        color: var(--accent);
+      }
+
+      .error {
+        color: #ffb1a1;
+      }
+
+      .bottom {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: max(16px, env(safe-area-inset-bottom));
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .bottom .card {
+        text-align: center;
+        font-size: 0.88rem;
+      }
+
+      a {
+        color: var(--fg);
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.1.0/spark.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div class="hud">
+      <div class="card">
+        <h1>Dense Splat</h1>
+        <p id="status" class="status">Loading 3D scene…</p>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="card">
+        Drag to orbit. Pinch to zoom. Two-finger drag to pan.
+      </div>
+    </div>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+
+      const app = document.getElementById("app");
+      const statusEl = document.getElementById("status");
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x080808);
+
+      const camera = new THREE.PerspectiveCamera(
+        50,
+        window.innerWidth / window.innerHeight,
+        0.01,
+        100
+      );
+      camera.position.set(0, 0, 2.4);
+
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      app.appendChild(renderer.domElement);
+
+      const spark = new SparkRenderer({ renderer });
+      scene.add(spark);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.minDistance = 0.45;
+      controls.maxDistance = 8;
+      controls.target.set(0, 0, -0.3);
+      controls.update();
+
+      const ambient = new THREE.AmbientLight(0xffffff, 1.2);
+      scene.add(ambient);
+
+      const splat = new SplatMesh({
+        url: "./gaussian_dense_train_final.spz",
+      });
+
+      splat.position.set(0, -0.05, -0.35);
+      splat.scale.setScalar(1.15);
+      scene.add(splat);
+
+      try {
+        await splat.initialized;
+        statusEl.textContent = "Loaded. Move the scene with your fingers.";
+      } catch (error) {
+        console.error(error);
+        statusEl.textContent = "Viewer failed to load.";
+        statusEl.classList.remove("status");
+        statusEl.classList.add("error");
+      }
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      renderer.setAnimationLoop(() => {
+        controls.update();
+        renderer.render(scene, camera);
+      });
+    </script>
+  </body>
+</html>
