@@ -147,6 +147,7 @@
     <script type="module">
       import * as THREE from "three";
       import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { PLYLoader } from "three/addons/loaders/PLYLoader.js";
       import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
 
       const app = document.getElementById("app");
@@ -185,22 +186,89 @@
       const ambient = new THREE.AmbientLight(0xffffff, 1.2);
       scene.add(ambient);
 
-      const splat = new SplatMesh({
-        url: "./img2034-runpod-final.spz",
-      });
+      let activeObject = null;
 
-      splat.position.set(0, -0.05, -0.35);
-      splat.scale.setScalar(1.15);
-      scene.add(splat);
+      const setStatus = (text, type = "status") => {
+        statusEl.textContent = text;
+        statusEl.classList.remove("status", "error");
+        statusEl.classList.add(type);
+      };
+
+      const clearActiveObject = () => {
+        if (!activeObject) {
+          return;
+        }
+        scene.remove(activeObject);
+        activeObject = null;
+      };
+
+      const loadPointCloudFallback = () =>
+        new Promise((resolve, reject) => {
+          const loader = new PLYLoader();
+          loader.load(
+            "../img2034-3d/points3D.ply",
+            (geometry) => {
+              geometry.computeBoundingSphere();
+              geometry.center();
+
+              const hasColor = geometry.hasAttribute("color");
+              const material = new THREE.PointsMaterial({
+                size: 0.01,
+                sizeAttenuation: true,
+                vertexColors: hasColor,
+                color: hasColor ? 0xffffff : 0xd8b97c,
+              });
+
+              const points = new THREE.Points(geometry, material);
+              const radius = geometry.boundingSphere?.radius ?? 0.5;
+              points.scale.setScalar(radius > 0 ? 1 / radius : 1);
+              points.position.set(0, 0, -0.1);
+
+              clearActiveObject();
+              activeObject = points;
+              scene.add(points);
+
+              camera.position.set(0, 0, 2.2);
+              controls.target.set(0, 0, 0);
+              controls.update();
+
+              resolve();
+            },
+            undefined,
+            reject
+          );
+        });
+
+      const loadPrimarySplat = async () => {
+        const splat = new SplatMesh({
+          url: "./img2034-runpod-final.spz",
+        });
+
+        splat.position.set(0, -0.05, -0.35);
+        splat.scale.setScalar(1.15);
+        scene.add(splat);
+        activeObject = splat;
+
+        await splat.initialized;
+      };
 
       try {
-        await splat.initialized;
-        statusEl.textContent = "Loaded. Move the scene with your fingers.";
+        await loadPrimarySplat();
+        setStatus("Loaded. Move the scene with your fingers.");
       } catch (error) {
         console.error(error);
-        statusEl.textContent = "Viewer failed to load.";
-        statusEl.classList.remove("status");
-        statusEl.classList.add("error");
+
+        try {
+          await loadPointCloudFallback();
+          setStatus(
+            "Full splat unavailable on this device. Showing the reconstructed 3D fallback.",
+            "error"
+          );
+        } catch (fallbackError) {
+          console.error(fallbackError);
+          clearActiveObject();
+          setStatus("Viewer failed to load.", "error");
+        }
       }
 
       window.addEventListener("resize", () => {
