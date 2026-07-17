@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Garden360 SuperSplat</title>
+    <meta
+      name="description"
+      content="Open the final Garden360 Gaussian splat in SuperSplat or download the exported files."
+    />
+    <style>
+      :root {
+        --bg: #0b0d10;
+        --panel: rgba(17, 20, 24, 0.88);
+        --text: #f3efe7;
+        --muted: rgba(243, 239, 231, 0.72);
+        --accent: #e09b43;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background:
+          radial-gradient(circle at top, rgba(224, 155, 67, 0.18), transparent 32%),
+          linear-gradient(180deg, #17120d 0%, var(--bg) 46%, #040506 100%);
+        color: var(--text);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      main {
+        width: min(680px, 100%);
+        padding: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 24px;
+        background: var(--panel);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+      }
+
+      p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 18px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #16110a;
+      }
+
+      .secondary {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Garden360</h1>
+      <p>
+        This page opens the final Garden360 export in SuperSplat. If the redirect does not fire,
+        use the links below.
+      </p>
+      <div class="actions">
+        <a class="button primary" id="open-link" href="./garden360_final.sog">Open in SuperSplat</a>
+        <a class="button secondary" href="./garden360_final.sog">Download SOG</a>
+      </div>
+    </main>
+    <script>
+      const assetUrl = new URL("./garden360_final.sog", window.location.href).toString();
+      const supersplatUrl = `https://superspl.at/editor?content=${encodeURIComponent(assetUrl)}`;
+      document.getElementById("open-link").href = supersplatUrl;
+      window.location.replace(supersplatUrl);
+    </script>
+  </body>
+</html>
