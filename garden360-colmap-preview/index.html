@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Garden360 COLMAP Preview</title>
+    <meta
+      name="description"
+      content="Interactive sparse point-cloud preview for the Garden360 COLMAP reconstruction."
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-0: #06090d;
+        --bg-1: #101922;
+        --fg: #f3efe5;
+        --muted: rgba(243, 239, 229, 0.74);
+        --accent: #86d0c2;
+        --warn: #f1c27d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at top, rgba(134, 208, 194, 0.14), transparent 34%),
+          linear-gradient(180deg, var(--bg-1), var(--bg-0) 42%);
+        color: var(--fg);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      body {
+        overflow: hidden;
+      }
+
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      .hud,
+      .bottom {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .hud {
+        top: max(16px, env(safe-area-inset-top));
+      }
+
+      .bottom {
+        bottom: max(16px, env(safe-area-inset-bottom));
+      }
+
+      .card {
+        width: min(640px, calc(100vw - 32px));
+        padding: 14px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        background: rgba(9, 12, 16, 0.72);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.34);
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.94rem;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+
+      .status {
+        color: var(--accent);
+      }
+
+      .warning {
+        color: var(--warn);
+      }
+
+      .error {
+        color: #ffb1a1;
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div class="hud">
+      <div class="card">
+        <h1>Garden360 COLMAP Preview</h1>
+        <p id="status" class="status">Loading sparse point cloud…</p>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="card">
+        <p id="summary">
+          Drag to orbit. Pinch to zoom. Two-finger drag to pan. This is the sparse COLMAP reconstruction, meant as a sanity check before GPU training.
+        </p>
+      </div>
+    </div>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { PLYLoader } from "three/addons/loaders/PLYLoader.js";
+
+      const app = document.getElementById("app");
+      const statusEl = document.getElementById("status");
+      const summaryEl = document.getElementById("summary");
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x070b10);
+
+      const camera = new THREE.PerspectiveCamera(
+        52,
+        window.innerWidth / window.innerHeight,
+        0.001,
+        100
+      );
+      camera.position.set(0, 0, 1.8);
+
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      app.appendChild(renderer.domElement);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.minDistance = 0.08;
+      controls.maxDistance = 10;
+      controls.update();
+
+      scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+
+      fetch("./summary.json")
+        .then((response) => response.ok ? response.json() : null)
+        .then((summary) => {
+          if (!summary) {
+            return;
+          }
+          const ratio = typeof summary.registered_ratio === "number"
+            ? `${(summary.registered_ratio * 100).toFixed(1)}%`
+            : "n/a";
+          const readiness = summary.ready_for_gpu_training ? "passes" : "fails";
+          summaryEl.textContent =
+            `${summary.title}: ${summary.registered_images}/${summary.total_images} images registered (${ratio}), ` +
+            `${summary.registered_camera_count} camera groups, ${summary.sparse_point_count} sparse points. ` +
+            `Automatic sanity check ${readiness}; still review the shape with your eyes.`;
+          if (!summary.ready_for_gpu_training) {
+            statusEl.classList.remove("status");
+            statusEl.classList.add("warning");
+            statusEl.textContent = "Sparse model loaded, but automatic sanity checks did not pass.";
+          }
+        })
+        .catch(() => {});
+
+      const loader = new PLYLoader();
+      loader.load(
+        "./points3D.ply",
+        (geometry) => {
+          geometry.computeBoundingSphere();
+          geometry.center();
+
+          const hasColor = geometry.hasAttribute("color");
+          const material = new THREE.PointsMaterial({
+            size: 0.01,
+            sizeAttenuation: true,
+            vertexColors: hasColor,
+            color: hasColor ? 0xffffff : 0x86d0c2,
+          });
+
+          const points = new THREE.Points(geometry, material);
+          const radius = geometry.boundingSphere?.radius ?? 0.5;
+          points.scale.setScalar(radius > 0 ? 1 / radius : 1);
+          scene.add(points);
+
+          camera.position.set(0, 0, 2.2);
+          controls.target.set(0, 0, 0);
+          controls.update();
+
+          if (!statusEl.classList.contains("warning")) {
+            statusEl.textContent = "Sparse model loaded. Review the overall structure before GPU training.";
+          }
+        },
+        undefined,
+        (error) => {
+          console.error(error);
+          statusEl.textContent = "Viewer failed to load.";
+          statusEl.classList.remove("status", "warning");
+          statusEl.classList.add("error");
+        }
+      );
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      renderer.setAnimationLoop(() => {
+        controls.update();
+        renderer.render(scene, camera);
+      });
+    </script>
+  </body>
+</html>

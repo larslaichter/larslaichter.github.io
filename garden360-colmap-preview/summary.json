@@ -1,0 +1,10 @@
+{
+  "title": "garden360_dataset_v5_cropped",
+  "registered_images": 3176,
+  "total_images": 3739,
+  "registered_ratio": 0.8494249799411607,
+  "camera_count": 6,
+  "registered_camera_count": 6,
+  "sparse_point_count": 689907,
+  "ready_for_gpu_training": true
+}
