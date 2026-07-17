@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Garden360 Mobile Splat</title>
+    <meta
+      name="description"
+      content="Interactive Garden360 Gaussian splat viewer using the smaller mobile SPZ export."
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-0: #050607;
+        --bg-1: #0f1718;
+        --fg: #f4efe4;
+        --muted: rgba(244, 239, 228, 0.72);
+        --accent: #8ed7bf;
+        --error: #ffb1a1;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at top, rgba(142, 215, 191, 0.14), transparent 32%),
+          linear-gradient(180deg, var(--bg-1), var(--bg-0) 42%);
+        color: var(--fg);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      body {
+        overflow: hidden;
+      }
+
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      .hud,
+      .bottom {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .hud {
+        top: max(16px, env(safe-area-inset-top));
+      }
+
+      .bottom {
+        bottom: max(16px, env(safe-area-inset-bottom));
+      }
+
+      .card {
+        width: min(680px, calc(100vw - 32px));
+        padding: 14px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        background: rgba(9, 12, 15, 0.74);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.34);
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.94rem;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+
+      .status {
+        color: var(--accent);
+      }
+
+      .error {
+        color: var(--error);
+      }
+
+      a {
+        color: inherit;
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.1.0/spark.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div class="hud">
+      <div class="card">
+        <h1>Garden360 Mobile Splat</h1>
+        <p id="status" class="status">Loading the smaller Garden360 splat…</p>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="card">
+        <p>
+          Drag to orbit. Pinch to zoom. Two-finger drag to pan. This page tries the real mobile
+          splat first, then falls back to the sparse reconstruction only if the device refuses to render it.
+        </p>
+      </div>
+    </div>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { PLYLoader } from "three/addons/loaders/PLYLoader.js";
+      import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+
+      const app = document.getElementById("app");
+      const statusEl = document.getElementById("status");
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x06090b);
+
+      const camera = new THREE.PerspectiveCamera(
+        50,
+        window.innerWidth / window.innerHeight,
+        0.01,
+        100
+      );
+      camera.position.set(0, 0, 2.4);
+
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      app.appendChild(renderer.domElement);
+
+      const spark = new SparkRenderer({ renderer });
+      scene.add(spark);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.minDistance = 0.45;
+      controls.maxDistance = 8;
+      controls.target.set(0, 0, -0.15);
+      controls.update();
+
+      scene.add(new THREE.AmbientLight(0xffffff, 1.25));
+
+      let activeObject = null;
+
+      const setStatus = (text, type = "status") => {
+        statusEl.textContent = text;
+        statusEl.classList.remove("status", "error");
+        statusEl.classList.add(type);
+      };
+
+      const clearActiveObject = () => {
+        if (!activeObject) {
+          return;
+        }
+        scene.remove(activeObject);
+        activeObject = null;
+      };
+
+      const loadPointCloudFallback = () =>
+        new Promise((resolve, reject) => {
+          const loader = new PLYLoader();
+          loader.load(
+            "../garden360-colmap-preview/points3D.ply",
+            (geometry) => {
+              geometry.computeBoundingSphere();
+              geometry.center();
+
+              const hasColor = geometry.hasAttribute("color");
+              const material = new THREE.PointsMaterial({
+                size: 0.01,
+                sizeAttenuation: true,
+                vertexColors: hasColor,
+                color: hasColor ? 0xffffff : 0x8ed7bf,
+              });
+
+              const points = new THREE.Points(geometry, material);
+              const radius = geometry.boundingSphere?.radius ?? 0.5;
+              points.scale.setScalar(radius > 0 ? 1 / radius : 1);
+              points.position.set(0, 0, -0.1);
+
+              clearActiveObject();
+              activeObject = points;
+              scene.add(points);
+
+              camera.position.set(0, 0, 2.2);
+              controls.target.set(0, 0, 0);
+              controls.update();
+
+              resolve();
+            },
+            undefined,
+            reject
+          );
+        });
+
+      const loadPrimarySplat = async () => {
+        const splat = new SplatMesh({
+          url: "./garden360_mobile.spz",
+        });
+
+        splat.position.set(0, -0.06, -0.28);
+        splat.scale.setScalar(1.2);
+        scene.add(splat);
+        activeObject = splat;
+
+        await splat.initialized;
+      };
+
+      try {
+        await loadPrimarySplat();
+        setStatus("Loaded. This is the actual mobile splat.");
+      } catch (error) {
+        console.error(error);
+
+        try {
+          await loadPointCloudFallback();
+          setStatus(
+            "This device would not render the splat. Showing the sparse fallback instead.",
+            "error"
+          );
+        } catch (fallbackError) {
+          console.error(fallbackError);
+          clearActiveObject();
+          setStatus("Viewer failed to load.", "error");
+        }
+      }
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      renderer.setAnimationLoop(() => {
+        controls.update();
+        renderer.render(scene, camera);
+      });
+    </script>
+  </body>
+</html>
