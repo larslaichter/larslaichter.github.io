@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Garden360 SuperSplat</title>
+    <title>Garden360 Viewer</title>
     <meta
       name="description"
-      content="Open the final Garden360 Gaussian splat in SuperSplat or download the exported files."
+      content="Open a lighter or full Garden360 Gaussian splat in SuperSplat, with direct download links."
     />
     <style>
       :root {
@@ -15,6 +15,7 @@
         --text: #f3efe7;
         --muted: rgba(243, 239, 231, 0.72);
         --accent: #e09b43;
+        --accent-2: #7cc4a7;
       }
 
       * {
@@ -55,11 +56,39 @@
         line-height: 1.5;
       }
 
+      .note {
+        margin-top: 14px;
+        font-size: 0.98rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+        margin-top: 22px;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+      }
+
+      .meta {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
       .actions {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
-        margin-top: 20px;
       }
 
       a {
@@ -82,6 +111,11 @@
         color: #16110a;
       }
 
+      .recommended {
+        background: var(--accent-2);
+        color: #08110d;
+      }
+
       .secondary {
         border: 1px solid rgba(255, 255, 255, 0.18);
       }
@@ -91,19 +125,39 @@
     <main>
       <h1>Garden360</h1>
       <p>
-        This page opens the final Garden360 export in SuperSplat. If the redirect does not fire,
-        use the links below.
+        The full export is large enough to choke some phones. Start with the lighter version
+        below, then try the full one if your device behaves.
       </p>
-      <div class="actions">
-        <a class="button primary" id="open-link" href="./garden360_final.sog">Open in SuperSplat</a>
-        <a class="button secondary" href="./garden360_final.sog">Download SOG</a>
+      <p class="note">
+        No automatic redirect on this page anymore. Blank pages are boring and stupid.
+      </p>
+      <div class="grid">
+        <section class="card">
+          <h2>Lite</h2>
+          <p class="meta">Recommended first try. Smaller file, faster load, lower quality.</p>
+          <div class="actions">
+            <a class="button recommended" id="open-lite-link" href="./garden360_lite.sog">Open Lite in SuperSplat</a>
+            <a class="button secondary" href="./garden360_lite.sog">Download Lite SOG</a>
+          </div>
+        </section>
+        <section class="card">
+          <h2>Full</h2>
+          <p class="meta">Higher quality export from July 17, 2026. Much heavier.</p>
+          <div class="actions">
+            <a class="button primary" id="open-full-link" href="./garden360_final.sog">Open Full in SuperSplat</a>
+            <a class="button secondary" href="./garden360_final.sog">Download Full SOG</a>
+            <a class="button secondary" href="./garden360_final.spz">Download Full SPZ</a>
+          </div>
+        </section>
       </div>
     </main>
     <script>
-      const assetUrl = new URL("./garden360_final.sog", window.location.href).toString();
-      const supersplatUrl = `https://superspl.at/editor?content=${encodeURIComponent(assetUrl)}`;
-      document.getElementById("open-link").href = supersplatUrl;
-      window.location.replace(supersplatUrl);
+      const makeSupersplatUrl = (path) =>
+        `https://superspl.at/editor?content=${encodeURIComponent(
+          new URL(path, window.location.href).toString()
+        )}`;
+      document.getElementById("open-lite-link").href = makeSupersplatUrl("./garden360_lite.sog");
+      document.getElementById("open-full-link").href = makeSupersplatUrl("./garden360_final.sog");
     </script>
   </body>
 </html>
