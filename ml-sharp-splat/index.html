@@ -4,6 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Gaussian Splat Particles</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
+        }
+      }
+    </script>
     <style>
       * {
         margin: 0;
@@ -64,8 +72,8 @@
       <a href="#laichter">laichter</a>
     </nav>
     <script type="module">
-      import * as THREE from "https://esm.sh/three@0.166.1";
-      import { GPUComputationRenderer } from "https://esm.sh/three@0.166.1/examples/jsm/misc/GPUComputationRenderer.js";
+      import * as THREE from "three";
+      import { GPUComputationRenderer } from "three/addons/misc/GPUComputationRenderer.js";
 
       const canvas = document.querySelector("canvas.webgl");
       const renderer = new THREE.WebGLRenderer({
@@ -206,6 +214,7 @@
           vec2 uv = gl_FragCoord.xy / resolution.xy;
           vec4 particle = texture2D(uParticles, uv);
           vec4 base = texture2D(uBase, uv);
+          float streamMask = smoothstep(0.93, 0.995, fract(base.a * 19.731 + 0.137));
 
           if (particle.a >= 1.0) {
             particle.a = mod(particle.a, 1.0);
@@ -214,15 +223,18 @@
             float strength = simplexNoise4d(vec4(base.xyz * 2.0, time + 1.0));
             float influence = (uFlowFieldInfluence - 0.5) * -2.0;
             strength = smoothstep(influence, 1.0, strength);
+            strength *= streamMask;
             vec3 flowField = vec3(
-              (simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 0.0, time)) + 0.5) * 0.5,
-              (simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 1.0, time)) + 0.25) * 0.25,
-              (simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 2.0, time)) + 0.5) * -0.25
+              (simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 0.0, time)) + 0.45) * 0.38,
+              (simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 1.0, time)) + 0.18) * 0.18,
+              (simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 2.0, time)) + 0.45) * -0.2
             );
             flowField = normalize(flowField);
+            particle.xyz = mix(particle.xyz, base.xyz, uDeltaTime * mix(6.5, 0.28, streamMask));
             particle.xyz += flowField * uDeltaTime * strength * uFlowFieldStrength;
             particle.xy += ${"uPointer not available here"}; 
-            particle.a += uDeltaTime * 0.3;
+            particle.a += uDeltaTime * mix(0.0, 0.2, streamMask);
+            particle.a = mix(0.32 + base.a * 0.08, particle.a, streamMask);
           }
           gl_FragColor = particle;
         }
@@ -234,9 +246,9 @@
         uTime: { value: 0 },
         uDeltaTime: { value: 0 },
         uBase: { value: baseTexture },
-        uFlowFieldInfluence: { value: 0.2 },
-        uFlowFieldStrength: { value: 1.5 },
-        uFlowFieldFrequency: { value: 2.0 },
+        uFlowFieldInfluence: { value: 0.34 },
+        uFlowFieldStrength: { value: 0.58 },
+        uFlowFieldFrequency: { value: 1.55 },
       });
       const gpuError = gpu.init();
       if (gpuError) throw new Error(gpuError);
@@ -250,7 +262,7 @@
           if (index >= splat.count) break;
           particleUvs[index * 2] = (x + 0.5) / textureSize;
           particleUvs[index * 2 + 1] = (y + 0.5) / textureSize;
-          particleSizes[index] = 0.58 + splat.seed[index] * 0.82;
+          particleSizes[index] = 0.7 + splat.seed[index] * 0.66;
         }
       }
 
@@ -264,7 +276,7 @@
 
       const material = new THREE.ShaderMaterial({
         uniforms: {
-          uSize: { value: 0.028 },
+          uSize: { value: 0.024 },
           uPixelRatio: { value: renderer.getPixelRatio() },
           uParticlesTexture: { value: null },
         },
@@ -286,7 +298,7 @@
             float sizeOut = 1.0 - smoothstep(0.7, 1.0, particle.a);
             float lifeSize = min(sizeIn, sizeOut);
             gl_PointSize = lifeSize * aSize * opacity * uSize * uPixelRatio * (300.0 / -mvPosition.z);
-            vAlpha = opacity * (0.82 + 0.18 * lifeSize);
+            vAlpha = opacity * (0.9 + 0.1 * lifeSize);
           }
         `,
         fragmentShader: `
@@ -297,7 +309,7 @@
             float dist = dot(centered, centered);
             if (dist > 0.25) discard;
             float alpha = smoothstep(0.25, 0.2, dist);
-            vec3 displayColor = pow(vColor, vec3(0.78)) * 1.45;
+            vec3 displayColor = pow(vColor, vec3(0.82)) * 1.38;
             gl_FragColor = vec4(displayColor, alpha * vAlpha);
           }
         `,
@@ -332,7 +344,7 @@
         gpu.compute();
         material.uniforms.uParticlesTexture.value = gpu.getCurrentRenderTarget(particleVariable).texture;
         material.uniforms.uPixelRatio.value = renderer.getPixelRatio();
-        points.rotation.y = elapsed * 0.015;
+        points.rotation.y = elapsed * 0.01;
         updateCamera();
         renderer.render(scene, camera);
         requestAnimationFrame(render);
