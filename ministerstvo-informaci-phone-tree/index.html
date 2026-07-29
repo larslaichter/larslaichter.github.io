@@ -305,6 +305,7 @@
 
   <script>
     const keyOrder = ["1", "2", "3", "A", "4", "5", "B", "C"];
+    const assetVersion = "fixed-keypad-v2";
     const history = [];
     let data;
     let current;
@@ -399,7 +400,7 @@
       textEl.textContent = node().text;
       fullTextEl.textContent = node().text;
       fileEl.textContent = `Soubor: ${node().file}`;
-      player.src = `${data.audioBase}${node().file}`;
+      player.src = `${data.audioBase}${node().file}?v=${assetVersion}`;
       renderKeypad();
       renderChoices();
       renderFixedKeys();
@@ -417,7 +418,7 @@
       }
     });
 
-    fetch("tree-data.json")
+    fetch(`tree-data.json?v=${assetVersion}`)
       .then(response => response.json())
       .then(json => {
         data = json;
