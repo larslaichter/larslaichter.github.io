@@ -313,7 +313,7 @@
 
   <script>
     const keyOrder = ["1", "2", "3", "4", "5", "A", "B", "C"];
-    const assetVersion = "fixed-keypad-v4";
+    const assetVersion = "fixed-keypad-v5";
     const keyPositions = {
       "1": [1, 1],
       "2": [2, 1],
@@ -362,12 +362,12 @@
         return;
       }
       if (key === "A") {
-        history.push("english");
-        loadNode("english");
+        goHome();
         return;
       }
       if (key === "B") {
-        goHome();
+        history.push("english");
+        loadNode("english");
         return;
       }
       if (key === "C") {

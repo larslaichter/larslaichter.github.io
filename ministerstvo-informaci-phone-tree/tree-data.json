@@ -1,8 +1,8 @@
 {
   "audioBase": "audio/",
   "globalKeys": {
-    "A": "English",
-    "B": "Ústředna",
+    "A": "Ústředna",
+    "B": "English",
     "C": "Znovu"
   },
   "keyLabels": {
@@ -11,8 +11,8 @@
     "3": "Volba 3",
     "4": "Volba 4",
     "5": "Volba 5",
-    "A": "English",
-    "B": "Ústředna",
+    "A": "Ústředna",
+    "B": "English",
     "C": "Znovu"
   },
   "start": "start",
@@ -20,7 +20,7 @@
     "start": {
       "title": "Ústředna 1949",
       "file": "v2_00_ustredna.mp3",
-      "text": "Vítá vás Ministerstvo informací. For English press A. Pro zopakování hlášení stiskněte C. Pro návrat na ústřednu stiskněte B. Pro cenzurní poradnu stiskněte jedničku. Pro zásah v nakladatelství stiskněte dvojku. Pro hlas ministra stiskněte trojku. Pro archivní chybu stiskněte čtyřku. Pro rychlý test knihy stiskněte pětku.",
+      "text": "Vítá vás Ministerstvo informací. For English press B. Pro zopakování hlášení stiskněte C. Pro návrat na ústřednu stiskněte A. Pro cenzurní poradnu stiskněte jedničku. Pro zásah v nakladatelství stiskněte dvojku. Pro hlas ministra stiskněte trojku. Pro archivní chybu stiskněte čtyřku. Pro rychlý test knihy stiskněte pětku.",
       "options": {
         "1": {
           "label": "Cenzurní poradna",
@@ -462,7 +462,7 @@
     "english": {
       "title": "English line",
       "file": "v2_01_english.mp3",
-      "text": "Welcome to the Ministry of Information. Press C to repeat this message. Press B to return to the switchboard. Press one for a book test. Press two to hear what happened in 1949. Press three for the Minister. Press four to allow the book. Press five to investigate it.",
+      "text": "Welcome to the Ministry of Information. Press C to repeat this message. Press A to return to the switchboard. Press one for a book test. Press two to hear what happened in 1949. Press three for the Minister. Press four to allow the book. Press five to investigate it.",
       "options": {
         "1": {
           "label": "Book test",
@@ -521,8 +521,8 @@
     }
   },
   "keyIcons": {
-    "A": "◎",
-    "B": "⌂",
+    "A": "⌂",
+    "B": "◎",
     "C": "↻"
   }
 }
