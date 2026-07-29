@@ -1,135 +1,224 @@
 {
   "audioBase": "audio/",
   "globalKeys": {
-    "1": "Znovu",
-    "5": "Ústředna"
+    "A": "English",
+    "B": "Ústředna",
+    "C": "Znovu"
   },
   "keyLabels": {
-    "1": "Znovu",
-    "2": "Případ",
-    "3": "Důkaz",
-    "4": "Hlas",
-    "5": "Ústředna",
-    "A": "Povolit",
-    "B": "Prověřit",
-    "C": "Zničit"
+    "1": "Volba 1",
+    "2": "Volba 2",
+    "3": "Volba 3",
+    "4": "Volba 4",
+    "5": "Volba 5",
+    "A": "English",
+    "B": "Ústředna",
+    "C": "Znovu"
   },
   "start": "start",
   "nodes": {
     "start": {
       "title": "Ústředna 1949",
       "file": "v2_00_ustredna.mp3",
-      "text": "Vítá vás Ministerstvo informací. For English press A. Tlačítko jedna opakuje poslední hlášení. Tlačítko pět vás vždy vrátí na ústřednu. Pro cenzurní poradnu stiskněte dvojku. Pro zásah v nakladatelství stiskněte trojku. Pro hlas ministra stiskněte čtyřku. Pro archivní chybu stiskněte B. Pro rychlý test knihy stiskněte C.",
+      "text": "Vítá vás Ministerstvo informací. For English press A. Pro zopakování hlášení stiskněte C. Pro návrat na ústřednu stiskněte B. Pro cenzurní poradnu stiskněte jedničku. Pro zásah v nakladatelství stiskněte dvojku. Pro hlas ministra stiskněte trojku. Pro archivní chybu stiskněte čtyřku. Pro rychlý test knihy stiskněte pětku.",
       "options": {
-        "2": { "label": "Cenzurní poradna", "target": "cenzura" },
-        "3": { "label": "Zásah v nakladatelství", "target": "zasah" },
-        "4": { "label": "Hlas ministra", "target": "ministr" },
-        "A": { "label": "English line", "target": "english" },
-        "B": { "label": "Archivní chyba", "target": "archiv" },
-        "C": { "label": "Rychlý test knihy", "target": "test" }
+        "1": {
+          "label": "Cenzurní poradna",
+          "target": "cenzura"
+        },
+        "2": {
+          "label": "Zásah v nakladatelství",
+          "target": "zasah"
+        },
+        "3": {
+          "label": "Hlas ministra",
+          "target": "ministr"
+        },
+        "4": {
+          "label": "Archivní chyba",
+          "target": "archiv"
+        },
+        "5": {
+          "label": "Rychlý test knihy",
+          "target": "test"
+        }
       }
     },
     "cenzura": {
       "title": "Cenzurní poradna",
       "file": "v2_02_cenzurni_poradna.mp3",
-      "text": "Cenzurní poradna, oddělení předběžné opatrnosti. Držíte v ruce spornou knihu. Tlačítkem dvojka označíte náboženskou závadnost. Trojkou kapitalistickou ideologii. Čtyřkou cizí vliv. Áčkem knihu povolíte. Béčkem ji pošlete k prověření. Céčkem navrhnete likvidaci.",
+      "text": "Cenzurní poradna, oddělení předběžné opatrnosti. Držíte v ruce spornou knihu. Jedničkou označíte náboženskou závadnost. Dvojkou kapitalistickou ideologii. Trojkou cizí vliv. Čtyřkou knihu povolíte. Pětkou ji pošlete k prověření. Céčkem zopakujete hlášení.",
       "options": {
-        "2": { "label": "Náboženství", "target": "cenzura_nabozenstvi" },
-        "3": { "label": "Kapitalismus", "target": "cenzura_kapitalismus" },
-        "4": { "label": "Cizí vliv", "target": "cenzura_cizina" },
-        "A": { "label": "Povolit", "target": "cenzura_povolit" },
-        "B": { "label": "Prověřit", "target": "cenzura_proverit" },
-        "C": { "label": "Zničit", "target": "cenzura_znicit" }
+        "1": {
+          "label": "Náboženství",
+          "target": "cenzura_nabozenstvi"
+        },
+        "2": {
+          "label": "Kapitalismus",
+          "target": "cenzura_kapitalismus"
+        },
+        "3": {
+          "label": "Cizí vliv",
+          "target": "cenzura_cizina"
+        },
+        "4": {
+          "label": "Povolit",
+          "target": "cenzura_povolit"
+        },
+        "5": {
+          "label": "Prověřit",
+          "target": "cenzura_proverit"
+        }
       }
     },
     "cenzura_nabozenstvi": {
       "title": "Náboženská závadnost",
       "file": "v2_02_2_nabozenstvi.mp3",
-      "text": "Náboženská závadnost zaznamenána. Kniha mluví o svědomí, vině, víře nebo odpovědnosti před něčím vyšším než úřad. To je pro úřad nepříjemné: člověk s vlastním svědomím se hůř třídí do kolonek. Pro další cenzurní případ stiskněte dvojku. Pro archivní důkaz trojku. Pro ministra čtyřku.",
+      "text": "Náboženská závadnost zaznamenána. Kniha mluví o svědomí, vině, víře nebo odpovědnosti před něčím vyšším než úřad. To je pro úřad nepříjemné: člověk s vlastním svědomím se hůř třídí do kolonek. Pro další cenzurní případ stiskněte jedničku. Pro archivní důkaz čtyřku. Pro ministra trojku.",
       "options": {
-        "2": { "label": "Další případ", "target": "cenzura" },
-        "3": { "label": "Archiv", "target": "archiv" },
-        "4": { "label": "Ministr", "target": "ministr" }
+        "1": {
+          "label": "Další případ",
+          "target": "cenzura"
+        },
+        "3": {
+          "label": "Ministr",
+          "target": "ministr"
+        },
+        "4": {
+          "label": "Archiv",
+          "target": "archiv"
+        }
       }
     },
     "cenzura_kapitalismus": {
       "title": "Kapitalistická ideologie",
       "file": "v2_02_3_kapitalismus.mp3",
-      "text": "Kapitalistická ideologie potvrzena. Kniha chválí soukromou práci, samostatné podnikání nebo člověka, který něco vybudoval bez povolení dějin. Závěr poradny: titul zadržet, katalog označit, náklad sepsat. Pro další případ stiskněte dvojku. Pro zásah v nakladatelství trojku.",
+      "text": "Kapitalistická ideologie potvrzena. Kniha chválí soukromou práci, samostatné podnikání nebo člověka, který něco vybudoval bez povolení dějin. Závěr poradny: titul zadržet, katalog označit, náklad sepsat. Pro další případ stiskněte jedničku. Pro zásah v nakladatelství dvojku.",
       "options": {
-        "2": { "label": "Další případ", "target": "cenzura" },
-        "3": { "label": "Zásah", "target": "zasah" }
+        "1": {
+          "label": "Další případ",
+          "target": "cenzura"
+        },
+        "2": {
+          "label": "Zásah",
+          "target": "zasah"
+        }
       }
     },
     "cenzura_cizina": {
       "title": "Cizí vliv",
       "file": "v2_02_4_cizi_vliv.mp3",
-      "text": "Cizí vliv nalezen. Překlad, dopis ze zahraničí, demokracie, humanismus, slovo Evropa vyslovené bez dozoru. V kartotéce to vypadá jako technická poznámka. Ve skutečnosti je to zavírání oken. Pro archivní chybu stiskněte B.",
+      "text": "Cizí vliv nalezen. Překlad, dopis ze zahraničí, demokracie, humanismus, slovo Evropa vyslovené bez dozoru. V kartotéce to vypadá jako technická poznámka. Ve skutečnosti je to zavírání oken. Pro archivní chybu stiskněte čtyřku.",
       "options": {
-        "B": { "label": "Archivní chyba", "target": "archiv" }
+        "4": {
+          "label": "Archivní chyba",
+          "target": "archiv"
+        }
       }
     },
     "cenzura_povolit": {
       "title": "Povolit",
       "file": "v2_02_a_povolit.mp3",
-      "text": "Kniha je povolena k dočasné existenci. Schválení neznamená svobodu. Znamená jen, že se dnes vejde do kolonky a že se kolonka zítra může změnit. Pro další případ stiskněte dvojku.",
+      "text": "Kniha je povolena k dočasné existenci. Schválení neznamená svobodu. Znamená jen, že se dnes vejde do kolonky a že se kolonka zítra může změnit. Pro další případ stiskněte jedničku.",
       "options": {
-        "2": { "label": "Další případ", "target": "cenzura" }
+        "1": {
+          "label": "Další případ",
+          "target": "cenzura"
+        }
       }
     },
     "cenzura_proverit": {
       "title": "Prověřit",
       "file": "v2_02_b_proverit.mp3",
-      "text": "Pochybnost je první stupeň závadnosti. Zapište autora, nakladatele, náklad a počet stran. Pak položte jedinou otázku: komu by tato kniha mohla dodat odvahu? Pro rychlý test knihy stiskněte C.",
+      "text": "Pochybnost je první stupeň závadnosti. Zapište autora, nakladatele, náklad a počet stran. Pak položte jedinou otázku: komu by tato kniha mohla dodat odvahu? Pro rychlý test knihy stiskněte pětku. Pro návrh likvidace stiskněte trojku.",
       "options": {
-        "C": { "label": "Rychlý test", "target": "test" }
+        "3": {
+          "label": "Zničit",
+          "target": "cenzura_znicit"
+        },
+        "5": {
+          "label": "Rychlý test",
+          "target": "test"
+        }
       }
     },
     "cenzura_znicit": {
       "title": "Zničit",
       "file": "v2_02_c_znicit.mp3",
-      "text": "Návrh na likvidaci přijat. Kniha má být odstraněna, jako by nikdy nebyla. Jenže papír mizí rychleji než paměť. A dům si někdy pamatuje déle než stát. Pro archivní důkaz stiskněte B.",
+      "text": "Návrh na likvidaci přijat. Kniha má být odstraněna, jako by nikdy nebyla. Jenže papír mizí rychleji než paměť. A dům si někdy pamatuje déle než stát. Pro archivní důkaz stiskněte čtyřku.",
       "options": {
-        "B": { "label": "Archivní důkaz", "target": "archiv" }
+        "4": {
+          "label": "Archivní důkaz",
+          "target": "archiv"
+        }
       }
     },
     "zasah": {
       "title": "Zásah v nakladatelství",
       "file": "v2_03_zasah.mp3",
-      "text": "Nacházíte se v bývalém nakladatelství. Dvojkou zahájíte soupis majetku. Trojkou kontrolu katalogu. Čtyřkou zabezpečení skladu. Áčkem povolíte provoz. Béčkem předvoláte nakladatele. Céčkem spustíte likvidaci.",
+      "text": "Nacházíte se v bývalém nakladatelství. Jedničkou zahájíte soupis majetku. Dvojkou kontrolu katalogu. Trojkou zabezpečení skladu. Čtyřkou povolíte provoz. Pětkou spustíte likvidaci.",
       "options": {
-        "2": { "label": "Soupis majetku", "target": "zasah_soupis" },
-        "3": { "label": "Kontrola katalogu", "target": "zasah_katalog" },
-        "4": { "label": "Sklad", "target": "zasah_sklad" },
-        "A": { "label": "Povolit provoz", "target": "zasah_povolit" },
-        "B": { "label": "Předvolat", "target": "zasah_predvolat" },
-        "C": { "label": "Likvidace", "target": "zasah_likvidace" }
+        "1": {
+          "label": "Soupis majetku",
+          "target": "zasah_soupis"
+        },
+        "2": {
+          "label": "Kontrola katalogu",
+          "target": "zasah_katalog"
+        },
+        "3": {
+          "label": "Sklad",
+          "target": "zasah_sklad"
+        },
+        "4": {
+          "label": "Povolit provoz",
+          "target": "zasah_povolit"
+        },
+        "5": {
+          "label": "Likvidace",
+          "target": "zasah_likvidace"
+        }
       }
     },
     "zasah_soupis": {
       "title": "Soupis majetku",
       "file": "v2_03_2_soupis.mp3",
-      "text": "Zapište stoly, regály, sazbu, tiskopisy, účty a zásoby knih. Vypadá to jako administrativa. Ve skutečnosti se právě mění živá práce v položky inventáře. Pro kontrolu katalogu stiskněte trojku.",
+      "text": "Zapište stoly, regály, sazbu, tiskopisy, účty a zásoby knih. Vypadá to jako administrativa. Ve skutečnosti se právě mění živá práce v položky inventáře. Pro kontrolu katalogu stiskněte dvojku.",
       "options": {
-        "3": { "label": "Katalog", "target": "zasah_katalog" }
+        "2": {
+          "label": "Katalog",
+          "target": "zasah_katalog"
+        }
       }
     },
     "zasah_katalog": {
       "title": "Kontrola katalogu",
       "file": "v2_03_3_katalog.mp3",
-      "text": "Katalog není jen seznam knih. Je to mapa toho, co si společnost dovolila myslet. Najděte filosofii, dějiny, náboženství, demokracii. To bývají místa, kde začíná problém. Pro cenzurní poradnu stiskněte dvojku.",
+      "text": "Katalog není jen seznam knih. Je to mapa toho, co si společnost dovolila myslet. Najděte filosofii, dějiny, náboženství, demokracii. To bývají místa, kde začíná problém. Pro cenzurní poradnu stiskněte jedničku.",
       "options": {
-        "2": { "label": "Cenzura", "target": "cenzura" }
+        "1": {
+          "label": "Cenzura",
+          "target": "cenzura"
+        }
       }
     },
     "zasah_sklad": {
       "title": "Zabezpečení skladu",
       "file": "v2_03_4_sklad.mp3",
-      "text": "Sklad zabezpečen. Dveře zapečetit. Klíče předat. Knihy zatím zůstávají na místě, ale už nepatří svým autorům, nakladatelům ani čtenářům. Pro rozhodnutí stiskněte A, B nebo C.",
+      "text": "Sklad zabezpečen. Dveře zapečetit. Klíče předat. Knihy zatím zůstávají na místě, ale už nepatří svým autorům, nakladatelům ani čtenářům. Pro povolení stiskněte čtyřku. Pro prověření pětku. Pro likvidaci trojku.",
       "options": {
-        "A": { "label": "Povolit", "target": "zasah_povolit" },
-        "B": { "label": "Prověřit", "target": "zasah_predvolat" },
-        "C": { "label": "Zničit", "target": "zasah_likvidace" }
+        "3": {
+          "label": "Zničit",
+          "target": "zasah_likvidace"
+        },
+        "4": {
+          "label": "Povolit",
+          "target": "zasah_povolit"
+        },
+        "5": {
+          "label": "Prověřit",
+          "target": "zasah_predvolat"
+        }
       }
     },
     "zasah_povolit": {
@@ -141,9 +230,12 @@
     "zasah_predvolat": {
       "title": "Předvolat nakladatele",
       "file": "v2_03_b_predvolat.mp3",
-      "text": "Nakladatel se má dostavit k vysvětlení. Vysvětlení se zapíše, založí a použije. Někdy je výslech jen pomalejší forma razítka. Pro hlas ministra stiskněte čtyřku.",
+      "text": "Nakladatel se má dostavit k vysvětlení. Vysvětlení se zapíše, založí a použije. Někdy je výslech jen pomalejší forma razítka. Pro hlas ministra stiskněte trojku.",
       "options": {
-        "4": { "label": "Ministr", "target": "ministr" }
+        "3": {
+          "label": "Ministr",
+          "target": "ministr"
+        }
       }
     },
     "zasah_likvidace": {
@@ -151,29 +243,52 @@
       "file": "v2_03_c_likvidace.mp3",
       "text": "Rozhodnutí přijato. Nakladatelství se ruší. Knihy odvézt. Práva převést. Jméno vymazat. Na papíře je hotovo. V paměti domu se teprve začíná ozývat ticho.",
       "options": {
-        "B": { "label": "Archiv", "target": "archiv" }
+        "4": {
+          "label": "Archiv",
+          "target": "archiv"
+        }
       }
     },
     "ministr": {
       "title": "Hlas ministra",
       "file": "v2_04_ministr.mp3",
-      "text": "Archivní linka ministra informací. Dvojkou spustíte projev o lidu. Trojkou projev o kultuře. Čtyřkou projev o plánu. Áčkem položíte otázku lidu. Béčkem otázku úřadu. Céčkem uslyšíte ticho po projevu.",
+      "text": "Archivní linka ministra informací. Jedničkou spustíte projev o lidu. Dvojkou projev o kultuře. Trojkou projev o plánu. Čtyřkou otázku lidu. Pětkou ticho po projevu.",
       "options": {
-        "2": { "label": "O lidu", "target": "ministr_lid" },
-        "3": { "label": "O kultuře", "target": "ministr_kultura" },
-        "4": { "label": "O plánu", "target": "ministr_plan" },
-        "A": { "label": "Otázka lidu", "target": "ministr_otazka_lid" },
-        "B": { "label": "Otázka úřadu", "target": "ministr_otazka_urad" },
-        "C": { "label": "Ticho", "target": "ministr_ticho" }
+        "1": {
+          "label": "O lidu",
+          "target": "ministr_lid"
+        },
+        "2": {
+          "label": "O kultuře",
+          "target": "ministr_kultura"
+        },
+        "3": {
+          "label": "O plánu",
+          "target": "ministr_plan"
+        },
+        "4": {
+          "label": "Otázka lidu",
+          "target": "ministr_otazka_lid"
+        },
+        "5": {
+          "label": "Ticho",
+          "target": "ministr_ticho"
+        }
       }
     },
     "ministr_lid": {
       "title": "O lidu",
       "file": "v2_04_2_lid.mp3",
-      "text": "Soudružky a soudruzi, kniha musí patřit lidu. Otázka pro vás: patří lidu kniha víc, když ji může číst, nebo když ji za něj někdo vybere?",
+      "text": "Soudružky a soudruzi, kniha musí patřit lidu. Otázka pro vás: patří lidu kniha víc, když ji může číst, nebo když ji za něj někdo vybere? Pro povolení stiskněte čtyřku. Pro prověření pětku.",
       "options": {
-        "A": { "label": "Povolit", "target": "cenzura_povolit" },
-        "B": { "label": "Prověřit", "target": "cenzura_proverit" }
+        "4": {
+          "label": "Povolit",
+          "target": "cenzura_povolit"
+        },
+        "5": {
+          "label": "Prověřit",
+          "target": "cenzura_proverit"
+        }
       }
     },
     "ministr_kultura": {
@@ -181,7 +296,10 @@
       "file": "v2_04_3_kultura.mp3",
       "text": "Kultura má vychovávat nového člověka. Ale kdo vychová vychovatele? A kdo napíše knihu, která se nevejde do plánu?",
       "options": {
-        "3": { "label": "Důkaz", "target": "archiv" }
+        "4": {
+          "label": "Důkaz",
+          "target": "archiv"
+        }
       }
     },
     "ministr_plan": {
@@ -189,7 +307,10 @@
       "file": "v2_04_4_plan.mp3",
       "text": "Plán je krásná věc, dokud do něj nevstoupí čtenář. Čtenář se ptá, vrací, pochybuje a spojuje si věci, které měly zůstat oddělené. Proto plán potřebuje seznamy, razítka a ticho.",
       "options": {
-        "C": { "label": "Ticho", "target": "ministr_ticho" }
+        "5": {
+          "label": "Ticho",
+          "target": "ministr_ticho"
+        }
       }
     },
     "ministr_otazka_lid": {
@@ -197,7 +318,10 @@
       "file": "v2_04_a_otazka_lid.mp3",
       "text": "Otázka lidu zaznamenána. Může lid vlastnit kulturu, když nemůže rozhodovat, co bude číst? Systém odpovídá šumem ve sluchátku.",
       "options": {
-        "C": { "label": "Ticho", "target": "ministr_ticho" }
+        "5": {
+          "label": "Ticho",
+          "target": "ministr_ticho"
+        }
       }
     },
     "ministr_otazka_urad": {
@@ -205,7 +329,10 @@
       "file": "v2_04_b_otazka_urad.mp3",
       "text": "Otázka úřadu: kdo ručí za chybu v seznamu? Odpověď: další seznam. Pak další podpis. Pak krabice. Pak archiv.",
       "options": {
-        "B": { "label": "Archiv", "target": "archiv" }
+        "4": {
+          "label": "Archiv",
+          "target": "archiv"
+        }
       }
     },
     "ministr_ticho": {
@@ -217,14 +344,28 @@
     "archiv": {
       "title": "Archivní chyba",
       "file": "v2_05_archiv.mp3",
-      "text": "Chyba spojení. Do systému se dostal archiv. Dvojkou vyvoláte zapomenuté jméno. Trojkou přeživší knihu. Čtyřkou chybný záznam. Áčkem obnovíte stopu. Béčkem uložíte důkaz. Céčkem položíte otázku inspektorovi.",
+      "text": "Chyba spojení. Do systému se dostal archiv. Jedničkou vyvoláte zapomenuté jméno. Dvojkou přeživší knihu. Trojkou chybný záznam. Čtyřkou obnovíte stopu. Pětkou položíte otázku inspektorovi.",
       "options": {
-        "2": { "label": "Jméno", "target": "archiv_jmeno" },
-        "3": { "label": "Kniha", "target": "archiv_kniha" },
-        "4": { "label": "Chybný záznam", "target": "archiv_chyba" },
-        "A": { "label": "Obnovit stopu", "target": "archiv_obnovit" },
-        "B": { "label": "Uložit důkaz", "target": "archiv_dukaz" },
-        "C": { "label": "Otázka", "target": "archiv_otazka" }
+        "1": {
+          "label": "Jméno",
+          "target": "archiv_jmeno"
+        },
+        "2": {
+          "label": "Kniha",
+          "target": "archiv_kniha"
+        },
+        "3": {
+          "label": "Chybný záznam",
+          "target": "archiv_chyba"
+        },
+        "4": {
+          "label": "Obnovit stopu",
+          "target": "archiv_obnovit"
+        },
+        "5": {
+          "label": "Otázka",
+          "target": "archiv_otazka"
+        }
       }
     },
     "archiv_jmeno": {
@@ -232,7 +373,10 @@
       "file": "v2_05_2_jmeno.mp3",
       "text": "Na seznamu bylo téměř tři sta soukromých nakladatelů. Některá jména dnes znějí slavně. Jiná zmizela tak dokonale, že po nich zůstala jen kolonka.",
       "options": {
-        "A": { "label": "Obnovit", "target": "archiv_obnovit" }
+        "4": {
+          "label": "Obnovit",
+          "target": "archiv_obnovit"
+        }
       }
     },
     "archiv_kniha": {
@@ -240,7 +384,10 @@
       "file": "v2_05_3_kniha.mp3",
       "text": "Některé knihy přežily v knihovnách, na půdách, v krabicích a v paměti čtenářů. Když je dnes znovu otevřeme, nečteme jen text. Čteme i důkaz, že vymazání nebylo úplné.",
       "options": {
-        "B": { "label": "Uložit důkaz", "target": "archiv_dukaz" }
+        "4": {
+          "label": "Uložit důkaz",
+          "target": "archiv_dukaz"
+        }
       }
     },
     "archiv_chyba": {
@@ -248,7 +395,10 @@
       "file": "v2_05_4_chybny_zaznam.mp3",
       "text": "Chybný záznam nalezen. V kolonce stojí: vyřízeno. Archiv ale šeptá: nedořešeno. Tady začíná práce návštěvníka, který se na minulost neptá jen ze slušnosti.",
       "options": {
-        "C": { "label": "Otázka", "target": "archiv_otazka" }
+        "5": {
+          "label": "Otázka",
+          "target": "archiv_otazka"
+        }
       }
     },
     "archiv_obnovit": {
@@ -266,37 +416,74 @@
     "archiv_otazka": {
       "title": "Otázka inspektorovi",
       "file": "v2_05_c_otazka.mp3",
-      "text": "Inspektore, poslední otázka. Kdybyste měl rozhodnout o jedné knize, kterou jste nikdy nečetl: poslal byste ji dál, zadržel, nebo zničil? Stiskněte něco. I nečinnost je rozhodnutí.",
+      "text": "Inspektore, poslední otázka. Kdybyste měl rozhodnout o jedné knize, kterou jste nikdy nečetl: poslal byste ji dál, zadržel, nebo zničil? Pro povolení stiskněte jedničku. Pro prověření dvojku. Pro zničení trojku.",
       "options": {
-        "A": { "label": "Povolit", "target": "cenzura_povolit" },
-        "B": { "label": "Prověřit", "target": "cenzura_proverit" },
-        "C": { "label": "Zničit", "target": "cenzura_znicit" }
+        "1": {
+          "label": "Povolit",
+          "target": "cenzura_povolit"
+        },
+        "2": {
+          "label": "Prověřit",
+          "target": "cenzura_proverit"
+        },
+        "3": {
+          "label": "Zničit",
+          "target": "cenzura_znicit"
+        }
       }
     },
     "test": {
       "title": "Rychlý test knihy",
       "file": "v2_06_test.mp3",
-      "text": "Rychlý test knihy. Obsahuje kniha svědomí, víru nebo samostatné myšlení? Stiskněte dvojku. Soukromé podnikání nebo úspěch bez státu? Trojku. Cizinu nebo demokracii? Čtyřku. Pokud ji chcete povolit, stiskněte A. Pokud si nejste jistí, B. Pokud ji chcete zničit, C.",
+      "text": "Rychlý test knihy. Obsahuje kniha svědomí, víru nebo samostatné myšlení? Stiskněte jedničku. Soukromé podnikání nebo úspěch bez státu? Dvojku. Cizinu nebo demokracii? Trojku. Pokud ji chcete povolit, stiskněte čtyřku. Pokud si nejste jistí, pětku.",
       "options": {
-        "2": { "label": "Svědomí", "target": "cenzura_nabozenstvi" },
-        "3": { "label": "Podnikání", "target": "cenzura_kapitalismus" },
-        "4": { "label": "Cizina", "target": "cenzura_cizina" },
-        "A": { "label": "Povolit", "target": "cenzura_povolit" },
-        "B": { "label": "Prověřit", "target": "cenzura_proverit" },
-        "C": { "label": "Zničit", "target": "cenzura_znicit" }
+        "1": {
+          "label": "Svědomí",
+          "target": "cenzura_nabozenstvi"
+        },
+        "2": {
+          "label": "Podnikání",
+          "target": "cenzura_kapitalismus"
+        },
+        "3": {
+          "label": "Cizina",
+          "target": "cenzura_cizina"
+        },
+        "4": {
+          "label": "Povolit",
+          "target": "cenzura_povolit"
+        },
+        "5": {
+          "label": "Prověřit",
+          "target": "cenzura_proverit"
+        }
       }
     },
     "english": {
       "title": "English line",
       "file": "v2_01_english.mp3",
-      "text": "Welcome to the Ministry of Information. You are calling from the year 1949. Press two for a book test. Press three to hear what happened to private publishers. Press four for the Minister. Press A to allow the book. Press B to investigate. Press C to pulp it.",
+      "text": "Welcome to the Ministry of Information. Press C to repeat this message. Press B to return to the switchboard. Press one for a book test. Press two to hear what happened in 1949. Press three for the Minister. Press four to allow the book. Press five to investigate it.",
       "options": {
-        "2": { "label": "Book test", "target": "english_test" },
-        "3": { "label": "1949", "target": "english_1949" },
-        "4": { "label": "Minister", "target": "english_minister" },
-        "A": { "label": "Allow", "target": "cenzura_povolit" },
-        "B": { "label": "Investigate", "target": "cenzura_proverit" },
-        "C": { "label": "Pulp", "target": "cenzura_znicit" }
+        "1": {
+          "label": "Book test",
+          "target": "english_test"
+        },
+        "2": {
+          "label": "1949",
+          "target": "english_1949"
+        },
+        "3": {
+          "label": "Minister",
+          "target": "english_minister"
+        },
+        "4": {
+          "label": "Allow",
+          "target": "cenzura_povolit"
+        },
+        "5": {
+          "label": "Investigate",
+          "target": "cenzura_proverit"
+        }
       }
     },
     "english_test": {
@@ -304,7 +491,10 @@
       "file": "v2_01_2_book_test.mp3",
       "text": "Please inspect the book. Does it praise private initiative, religion, foreign democracy, or independent thought? In 1949, even a harmless book could become dangerous when the state decided what readers were allowed to know.",
       "options": {
-        "B": { "label": "Investigate", "target": "cenzura_proverit" }
+        "5": {
+          "label": "Investigate",
+          "target": "cenzura_proverit"
+        }
       }
     },
     "english_1949": {
@@ -312,7 +502,10 @@
       "file": "v2_01_3_1949.mp3",
       "text": "In 1949, private publishing houses in Czechoslovakia were liquidated by law. Editors lost their work. Families lost their businesses. Books were seized, pulped, or redirected into state control. The question is simple: who gets to decide what may be read?",
       "options": {
-        "3": { "label": "Archive", "target": "archiv" }
+        "4": {
+          "label": "Archive",
+          "target": "archiv"
+        }
       }
     },
     "english_minister": {
@@ -320,8 +513,16 @@
       "file": "v2_01_4_minister.mp3",
       "text": "This is the voice of the new cultural order. Books must serve the people. But when one office decides what serves the people, the people are no longer choosing for themselves.",
       "options": {
-        "4": { "label": "Czech minister", "target": "ministr" }
+        "3": {
+          "label": "Czech minister",
+          "target": "ministr"
+        }
       }
     }
+  },
+  "keyIcons": {
+    "A": "◎",
+    "B": "⌂",
+    "C": "↻"
   }
 }

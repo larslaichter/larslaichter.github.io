@@ -167,6 +167,18 @@
       display: none;
     }
 
+    .icon {
+      display: none;
+      margin-top: 0.35rem;
+      color: var(--accent);
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .special .icon {
+      display: block;
+    }
+
     .content {
       display: grid;
       align-content: center;
@@ -301,7 +313,7 @@
 
   <script>
     const keyOrder = ["1", "2", "3", "4", "5", "A", "B", "C"];
-    const assetVersion = "fixed-keypad-v3";
+    const assetVersion = "fixed-keypad-v4";
     const keyPositions = {
       "1": [1, 1],
       "2": [2, 1],
@@ -342,11 +354,24 @@
 
     function press(key) {
       if (key === "1") {
-        playCurrent();
+        const target = node().options?.[key]?.target;
+        if (target) {
+          history.push(target);
+          loadNode(target);
+        }
         return;
       }
-      if (key === "5") {
+      if (key === "A") {
+        history.push("english");
+        loadNode("english");
+        return;
+      }
+      if (key === "B") {
         goHome();
+        return;
+      }
+      if (key === "C") {
+        playCurrent();
         return;
       }
       const target = node().options?.[key]?.target;
@@ -359,14 +384,15 @@
       keypadEl.innerHTML = "";
       keyOrder.forEach(key => {
         const option = node().options?.[key];
-        const isGlobal = key === "1" || key === "5";
+        const isGlobal = key === "A" || key === "B" || key === "C";
         const button = document.createElement("button");
+        const icon = data.keyIcons?.[key] || "";
         button.type = "button";
-        button.className = `${isGlobal ? "global" : ""} ${!isGlobal && !option ? "inactive" : ""}`;
+        button.className = `${isGlobal ? "global special" : ""} ${!isGlobal && !option ? "inactive" : ""}`;
         button.dataset.key = key;
         button.style.gridRow = keyPositions[key][0];
         button.style.gridColumn = keyPositions[key][1];
-        button.innerHTML = `<span class="digit">${key}</span><span class="label">${data.keyLabels[key]}</span>`;
+        button.innerHTML = `<span class="digit">${key}</span><span class="icon">${icon}</span><span class="label">${data.keyLabels[key]}</span>`;
         button.addEventListener("click", () => press(key));
         keypadEl.appendChild(button);
       });
