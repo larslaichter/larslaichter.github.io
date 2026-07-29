@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ministerstvo informací - telefonní strom</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #e9e4d8;
+      --muted: #a8a193;
+      --line: rgba(233, 228, 216, 0.18);
+      --panel: rgba(21, 23, 24, 0.84);
+      --accent: #d2b36b;
+      --red: #a63d35;
+      --green: #70845a;
+      --blue: #57758c;
+      --black: #0d0f10;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 16% 18%, rgba(210, 179, 107, 0.12), transparent 24rem),
+        linear-gradient(135deg, #161819 0%, #0d0f10 52%, #171310 100%);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(18rem, 30rem) minmax(18rem, 1fr);
+      gap: 2rem;
+      align-items: stretch;
+      padding: clamp(1rem, 3vw, 2.5rem);
+    }
+
+    .phone {
+      align-self: center;
+      width: min(100%, 28rem);
+      margin: 0 auto;
+      padding: 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: 0.5rem;
+      background: linear-gradient(180deg, rgba(36, 37, 36, 0.95), rgba(15, 16, 16, 0.95));
+      box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.32);
+    }
+
+    .speaker {
+      height: 0.65rem;
+      width: 8rem;
+      margin: 0.25rem auto 1.25rem;
+      border-radius: 999px;
+      background: #050606;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .screen {
+      min-height: 13rem;
+      padding: 1rem;
+      border-radius: 0.35rem;
+      border: 1px solid rgba(118, 143, 109, 0.5);
+      background: #182018;
+      box-shadow: inset 0 0 2rem rgba(0, 0, 0, 0.45);
+      color: #dce9d2;
+    }
+
+    .kicker {
+      margin: 0 0 0.65rem;
+      color: #9ab189;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 5vw, 3.6rem);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 0.8rem;
+      font-size: 1.05rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .screen p, .copy p {
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    .meta {
+      margin-top: 0.9rem;
+      color: #9ab189;
+      font-size: 0.82rem;
+      word-break: break-word;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      appearance: none;
+      min-height: 4.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 0.45rem;
+      background: linear-gradient(180deg, #313131, #171717);
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 0.45rem 0.8rem rgba(0, 0, 0, 0.24);
+    }
+
+    button:hover:not(:disabled), button:focus-visible:not(:disabled) {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    button:disabled {
+      cursor: default;
+      color: rgba(233, 228, 216, 0.28);
+      border-color: rgba(255, 255, 255, 0.06);
+      background: #171717;
+      box-shadow: none;
+    }
+
+    .digit {
+      display: block;
+      font-size: 1.45rem;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .label {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.15;
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-top: 0.65rem;
+    }
+
+    .action-row button {
+      min-height: 3.1rem;
+    }
+
+    .content {
+      display: grid;
+      align-content: center;
+      gap: 1.4rem;
+      max-width: 56rem;
+    }
+
+    .title-band {
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .copy {
+      display: grid;
+      gap: 1rem;
+      max-width: 45rem;
+    }
+
+    .path {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      min-height: 1.7rem;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.25rem 0.6rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .branches {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+
+    .branch {
+      min-height: 5.5rem;
+      padding: 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 0.45rem;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .branch strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--accent);
+    }
+
+    .branch span {
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 0.9rem;
+    }
+
+    audio {
+      width: 100%;
+      height: 2.5rem;
+      filter: sepia(0.3) saturate(0.8);
+    }
+
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+
+      .content {
+        align-content: start;
+      }
+
+      .branches {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="phone" aria-label="Telefonní ovládání">
+      <div class="speaker"></div>
+      <div class="screen">
+        <p class="kicker">Linka 1949</p>
+        <h2 id="nodeTitle"></h2>
+        <p id="nodeText"></p>
+        <p class="meta" id="nodeFile"></p>
+      </div>
+      <audio id="player" controls preload="auto"></audio>
+      <div class="keypad" id="keypad"></div>
+      <div class="action-row">
+        <button id="replay" type="button"><span class="digit">↻</span><span class="label">přehrát znovu</span></button>
+        <button id="home" type="button"><span class="digit">⌂</span><span class="label">ústředna</span></button>
+      </div>
+    </section>
+
+    <section class="content" aria-live="polite">
+      <div class="title-band">
+        <p class="kicker">Ministerstvo informací</p>
+        <h1>Telefonní strom</h1>
+      </div>
+      <div class="copy">
+        <div class="path" id="path"></div>
+        <p id="fullText"></p>
+        <div class="branches" id="branches"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const nodes = {
+      start: {
+        title: "START",
+        file: "00_start.mp3",
+        text: "Vítejte na Ministerstvu informací. Pro angličtinu stiskněte jedničku. Pro cenzurní poradnu stiskněte dvojku. Pro zásah v nakladatelství stiskněte trojku. Pro hlas ministra stiskněte čtyřku. Pro archivní chybu stiskněte pětku.",
+        options: [
+          ["1", "English line", "en"],
+          ["2", "Cenzurní poradna", "cenzura"],
+          ["3", "Zásah v nakladatelství", "zasah"],
+          ["4", "Hlas ministra", "ministr"],
+          ["5", "Archivní chyba", "archiv"]
+        ]
+      },
+      en: {
+        title: "1 - ENGLISH LINE",
+        file: "01_en_menu.mp3",
+        text: "Welcome to the Ministry of Information. You are calling from the year 1949. Press A to test whether a book may survive. Press B to hear the Minister. Press C to learn what happened to private publishers.",
+        options: [["A", "Book test", "enA"], ["B", "Minister", "enB"], ["C", "What happened", "enC"]]
+      },
+      enA: {
+        title: "1A - BOOK TEST",
+        file: "01a_en_book_test.mp3",
+        text: "Please inspect the book. Does it praise private initiative, religion, foreign democracy, or independent thought? If yes, report it. In 1949, even a harmless book could become dangerous when the state decided what readers were allowed to know."
+      },
+      enB: {
+        title: "1B - MINISTER",
+        file: "01b_en_minister.mp3",
+        text: "This is the voice of the new cultural order. Books must serve the people. But listen carefully: when one office decides what serves the people, the people are no longer choosing for themselves."
+      },
+      enC: {
+        title: "1C - WHAT HAPPENED",
+        file: "01c_en_1949.mp3",
+        text: "In 1949, private publishing houses in Czechoslovakia were liquidated by law. Editors lost their work. Families lost their businesses. Books were seized, pulped, or redirected into state control. The question is simple: who gets to decide what may be read?"
+      },
+      cenzura: {
+        title: "2 - CENZURNÍ PORADNA",
+        file: "02_cenzurni_poradna.mp3",
+        text: "Cenzurní poradna, oddělení předběžné opatrnosti. Držíte v ruce knihu? Stiskněte A, pokud je ideově bezpečná. Stiskněte B, pokud vyvolává pochybnosti. Stiskněte C, pokud přemýšlí sama.",
+        options: [["A", "Ideově bezpečná", "cenzuraA"], ["B", "Vyvolává pochybnosti", "cenzuraB"], ["C", "Přemýšlí sama", "cenzuraC"]]
+      },
+      cenzuraA: {
+        title: "2A - IDEOVĚ BEZPEČNÁ",
+        file: "02a_ideove_bezpecna.mp3",
+        text: "Kniha je schválena k dočasné existenci. Pozor: schválení neznamená svobodu. Znamená pouze, že se dnes vejde do kolonky."
+      },
+      cenzuraB: {
+        title: "2B - VYVOLÁVÁ POCHYBNOSTI",
+        file: "02b_pochybnosti.mp3",
+        text: "Pochybnost je první stupeň závadnosti. Zapište autora, nakladatele, náklad a počet stran. Pak se zeptejte: komu by tato kniha mohla dodat odvahu?"
+      },
+      cenzuraC: {
+        title: "2C - PŘEMÝŠLÍ SAMA",
+        file: "02c_premysli_sama.mp3",
+        text: "Nebezpečí potvrzeno. Kniha klade otázky, na které úřad nepřipravil odpověď. Takové knihy mají nepříjemný zvyk přežívat své úředníky."
+      },
+      zasah: {
+        title: "3 - ZÁSAH V NAKLADATELSTVÍ",
+        file: "03_zasah_menu.mp3",
+        text: "Nacházíte se v bývalém nakladatelství. Stiskněte A pro soupis majetku. Stiskněte B pro kontrolu katalogu. Stiskněte C pro rozhodnutí o likvidaci.",
+        options: [["A", "Soupis majetku", "zasahA"], ["B", "Kontrola katalogu", "zasahB"], ["C", "Likvidace", "zasahC"]]
+      },
+      zasahA: {
+        title: "3A - SOUPIS MAJETKU",
+        file: "03a_soupis_majetku.mp3",
+        text: "Zapište stoly, regály, sazbu, tiskopisy, účty a zásoby knih. Vypadá to jako administrativa. Ve skutečnosti se právě mění živá práce v položky inventáře."
+      },
+      zasahB: {
+        title: "3B - KONTROLA KATALOGU",
+        file: "03b_kontrola_katalogu.mp3",
+        text: "Katalog není jen seznam knih. Je to mapa toho, co si společnost dovolila myslet. Najděte filosofii, dějiny, náboženství, demokracii. To bývají místa, kde začíná problém."
+      },
+      zasahC: {
+        title: "3C - LIKVIDACE",
+        file: "03c_likvidace.mp3",
+        text: "Rozhodnutí přijato. Nakladatelství se ruší. Knihy odvézt. Práva převést. Jméno vymazat. Jenže dům si někdy pamatuje déle než stát."
+      },
+      ministr: {
+        title: "4 - HLAS MINISTRA",
+        file: "04_hlas_ministra_menu.mp3",
+        text: "Archivní linka ministra informací. Stiskněte A pro projev o lidu. Stiskněte B pro projev o kultuře. Stiskněte C pro ticho po projevu.",
+        options: [["A", "Projev o lidu", "ministrA"], ["B", "Projev o kultuře", "ministrB"], ["C", "Ticho po projevu", "ministrC"]]
+      },
+      ministrA: {
+        title: "4A - O LIDU",
+        file: "04a_lid.mp3",
+        text: "Soudružky a soudruzi, kniha musí patřit lidu. Otázka pro vás: patří lidu kniha víc, když ji může číst, nebo když ji za něj někdo vybere?"
+      },
+      ministrB: {
+        title: "4B - O KULTUŘE",
+        file: "04b_kultura.mp3",
+        text: "Kultura má vychovávat nového člověka. Ale kdo vychová vychovatele? A kdo napíše knihu, která se nevejde do plánu?"
+      },
+      ministrC: {
+        title: "4C - TICHO",
+        file: "04c_ticho.mp3",
+        text: "Ticho po projevu je také dokument. V něm slyšíte zavřené redakce, prázdné sklady a knihy, které už nikdo nesměl vydat."
+      },
+      archiv: {
+        title: "5 - ARCHIVNÍ CHYBA",
+        file: "05_archivni_chyba_menu.mp3",
+        text: "Chyba spojení. Do systému se dostal archiv. Stiskněte A pro zapomenuté jméno. Stiskněte B pro přeživší knihu. Stiskněte C pro otázku inspektorovi.",
+        options: [["A", "Zapomenuté jméno", "archivA"], ["B", "Přeživší kniha", "archivB"], ["C", "Otázka inspektorovi", "archivC"]]
+      },
+      archivA: {
+        title: "5A - ZAPOMENUTÉ JMÉNO",
+        file: "05a_zapomenute_jmeno.mp3",
+        text: "Na seznamu bylo téměř tři sta soukromých nakladatelů. Některá jména dnes znějí slavně. Jiná zmizela tak dokonale, že po nich zůstala jen kolonka."
+      },
+      archivB: {
+        title: "5B - PŘEŽIVŠÍ KNIHA",
+        file: "05b_prezivsi_kniha.mp3",
+        text: "Některé knihy přežily v knihovnách, na půdách, v krabicích a v paměti čtenářů. Když je dnes znovu otevřeme, nečteme jen text. Čteme i důkaz, že vymazání nebylo úplné."
+      },
+      archivC: {
+        title: "5C - OTÁZKA INSPEKTOROVI",
+        file: "05c_otazka_inspektorovi.mp3",
+        text: "Inspektore, poslední otázka. Kdybyste měl rozhodnout o jedné knize, kterou jste nikdy nečetl: poslal byste ji dál, zadržel, nebo zničil? Stiskněte něco. I nečinnost je rozhodnutí."
+      }
+    };
+
+    const keyOrder = ["1", "2", "3", "A", "4", "5", "B", "C", "0"];
+    const history = [];
+    let current = "start";
+
+    const titleEl = document.getElementById("nodeTitle");
+    const textEl = document.getElementById("nodeText");
+    const fileEl = document.getElementById("nodeFile");
+    const fullTextEl = document.getElementById("fullText");
+    const pathEl = document.getElementById("path");
+    const branchesEl = document.getElementById("branches");
+    const keypadEl = document.getElementById("keypad");
+    const player = document.getElementById("player");
+
+    function optionForKey(node, key) {
+      return (node.options || []).find(option => option[0] === key);
+    }
+
+    function renderKeypad(node) {
+      keypadEl.innerHTML = "";
+      keyOrder.forEach(key => {
+        const option = optionForKey(node, key);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.disabled = !option;
+        button.dataset.key = key;
+        button.innerHTML = `<span class="digit">${key}</span><span class="label">${option ? option[1] : "&nbsp;"}</span>`;
+        button.addEventListener("click", () => press(key));
+        keypadEl.appendChild(button);
+      });
+    }
+
+    function renderBranches(node) {
+      branchesEl.innerHTML = "";
+      (node.options || []).forEach(([key, label]) => {
+        const branch = document.createElement("div");
+        branch.className = "branch";
+        branch.innerHTML = `<strong>${key}</strong><span>${label}</span>`;
+        branchesEl.appendChild(branch);
+      });
+    }
+
+    function renderPath() {
+      pathEl.innerHTML = "";
+      ["start", ...history].forEach(id => {
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = nodes[id].title;
+        pathEl.appendChild(pill);
+      });
+    }
+
+    function loadNode(id, shouldPlay = true) {
+      current = id;
+      const node = nodes[id];
+      titleEl.textContent = node.title;
+      textEl.textContent = node.text;
+      fullTextEl.textContent = node.text;
+      fileEl.textContent = `Soubor: ${node.file}`;
+      player.src = `audio/${node.file}`;
+      renderKeypad(node);
+      renderBranches(node);
+      renderPath();
+      if (shouldPlay) {
+        player.play().catch(() => {});
+      }
+    }
+
+    function press(key) {
+      const option = optionForKey(nodes[current], key);
+      if (!option) return;
+      history.push(option[2]);
+      loadNode(option[2]);
+    }
+
+    document.getElementById("replay").addEventListener("click", () => {
+      player.currentTime = 0;
+      player.play().catch(() => {});
+    });
+
+    document.getElementById("home").addEventListener("click", () => {
+      history.length = 0;
+      loadNode("start");
+    });
+
+    window.addEventListener("keydown", event => {
+      const key = event.key.toUpperCase();
+      if (["1", "2", "3", "4", "5", "A", "B", "C"].includes(key)) press(key);
+      if (key === "0" || key === "ESCAPE") {
+        history.length = 0;
+        loadNode("start");
+      }
+      if (key === " " || key === "ENTER") {
+        event.preventDefault();
+        player.paused ? player.play().catch(() => {}) : player.pause();
+      }
+    });
+
+    loadNode("start", false);
+  </script>
+</body>
+</html>
