@@ -19,7 +19,7 @@
     "start": {
       "title": "Ústředna 1949",
       "file": "v2_00_ustredna.mp3",
-      "text": "Vítejte na Ministerstvu informací. Tlačítko jedna opakuje poslední hlášení. Tlačítko pět vás vždy vrátí na ústřednu. Pro cenzurní poradnu stiskněte dvojku. Pro zásah v nakladatelství stiskněte trojku. Pro hlas ministra stiskněte čtyřku. For English press A. Pro archivní chybu stiskněte B. Pro rychlý test knihy stiskněte C.",
+      "text": "Vítá vás Ministerstvo informací. For English press A. Tlačítko jedna opakuje poslední hlášení. Tlačítko pět vás vždy vrátí na ústřednu. Pro cenzurní poradnu stiskněte dvojku. Pro zásah v nakladatelství stiskněte trojku. Pro hlas ministra stiskněte čtyřku. Pro archivní chybu stiskněte B. Pro rychlý test knihy stiskněte C.",
       "options": {
         "2": { "label": "Cenzurní poradna", "target": "cenzura" },
         "3": { "label": "Zásah v nakladatelství", "target": "zasah" },

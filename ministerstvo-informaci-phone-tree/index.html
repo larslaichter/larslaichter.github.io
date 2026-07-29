@@ -123,14 +123,15 @@
 
     .keypad {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: repeat(5, 4.35rem);
       gap: 0.64rem;
       margin-top: 0.9rem;
     }
 
     button {
       appearance: none;
-      height: 4.35rem;
+      height: 100%;
       min-width: 0;
       border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 0.42rem;
@@ -157,18 +158,13 @@
 
     .digit {
       display: block;
-      font-size: 1.42rem;
+      font-size: 1.72rem;
       line-height: 1;
       font-weight: 750;
     }
 
     .label {
-      display: block;
-      margin-top: 0.35rem;
-      color: var(--muted);
-      font-size: 0.72rem;
-      line-height: 1.12;
-      overflow-wrap: anywhere;
+      display: none;
     }
 
     .content {
@@ -269,8 +265,8 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      button {
-        height: 4rem;
+      .keypad {
+        grid-template-rows: repeat(5, 4rem);
       }
     }
   </style>
@@ -304,8 +300,18 @@
   </main>
 
   <script>
-    const keyOrder = ["1", "2", "3", "A", "4", "5", "B", "C"];
-    const assetVersion = "fixed-keypad-v2";
+    const keyOrder = ["1", "2", "3", "4", "5", "A", "B", "C"];
+    const assetVersion = "fixed-keypad-v3";
+    const keyPositions = {
+      "1": [1, 1],
+      "2": [2, 1],
+      "3": [3, 1],
+      "4": [4, 1],
+      "5": [5, 1],
+      "A": [1, 2],
+      "B": [2, 2],
+      "C": [3, 2]
+    };
     const history = [];
     let data;
     let current;
@@ -358,6 +364,8 @@
         button.type = "button";
         button.className = `${isGlobal ? "global" : ""} ${!isGlobal && !option ? "inactive" : ""}`;
         button.dataset.key = key;
+        button.style.gridRow = keyPositions[key][0];
+        button.style.gridColumn = keyPositions[key][1];
         button.innerHTML = `<span class="digit">${key}</span><span class="label">${data.keyLabels[key]}</span>`;
         button.addEventListener("click", () => press(key));
         keypadEl.appendChild(button);
